@@ -9,13 +9,13 @@ import Register from 'components/Register';
 import MyAccount from 'components/MyAccount';
 import PageNotFound from 'components/PageNotFound';
 
-const UserRoutes = () => {
+const UserRoutes = (props) => {
     return (
         <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/shop" component={Shop} />
             <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
+            <Route path="/register" render={() => <Register {...props} />} />
             <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>

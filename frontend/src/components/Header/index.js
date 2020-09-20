@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SiFacebook, SiTwitter, SiInstagram } from "react-icons/si";
 import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
+import { getToken, removeSession } from 'utilities/Common';
 
 import './header.css';
 
-const Header = () => {
+const Header = ({ loggedInState }) => {
+
+    const [loggedIn, setLoggedIn] = useState(getToken() !== null);
+
+    const handleLogout = () => {
+        setLoggedIn(false);
+        removeSession();
+    };
+
+    useEffect(() => {
+        if (loggedInState !== null)
+            setLoggedIn(!loggedIn);
+        // eslint-disable-next-line
+    }, [loggedInState]);
+
     return (
         <>
             <div className="top-header-container">
@@ -23,15 +38,27 @@ const Header = () => {
                     </a>
                 </div>
                 <Nav>
-                    <Link className="white-nav-link nav-link" to="/login">
-                        Login
-                    </Link>
-                    <Navbar.Text style={{ color: '#9B9B9B' }}>
-                        or
-                    </Navbar.Text>
-                    <Link className="white-nav-link nav-link" to="/register">
-                        Create an Account
-                    </Link>
+                    {loggedIn ?
+                        (
+                            <>
+                                <Link className="white-nav-link nav-link" onClick={handleLogout} to="/">
+                                    Log out
+                                </Link>
+                            </>
+                        ) :
+                        (
+                            <>
+                                <Link className="white-nav-link nav-link" to="/login">
+                                    Login
+                                </Link>
+                                <Navbar.Text style={{ color: '#9B9B9B' }}>
+                                    or
+                                </Navbar.Text>
+                                <Link style={{ paddingRight: 0 }} className="white-nav-link nav-link" to="/register">
+                                    Create an Account
+                                </Link>
+                            </>
+                        )}
                 </Nav>
             </div>
 
@@ -47,7 +74,7 @@ const Header = () => {
                 <Nav>
                     <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/">HOME</NavLink>
                     <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/shop">SHOP</NavLink>
-                    <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/my_account">MY ACCOUNT</NavLink>
+                    <NavLink style={{ paddingRight: 0 }} className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/my_account">MY ACCOUNT</NavLink>
                 </Nav>
             </div>
         </>

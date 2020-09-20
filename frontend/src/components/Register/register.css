@@ -1,0 +1,28 @@
+.register-container {
+    border: 1px solid #D8D8D8;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.register-form {
+    padding: 6.5%;
+}
+
+.register-form > * {
+    margin-bottom: 30px;
+}
+
+.register-title {
+    background: #FAFAFA;
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 0.84px;
+    padding: 1.5% 0;
+}
+
+.account-exists-text {
+    color: #9B9B9B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
