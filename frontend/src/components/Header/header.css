@@ -1,0 +1,49 @@
+.top-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #252525;
+    height: 40px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.49px;
+    padding-right: 11.1%;
+    padding-left: 11.1%;
+}
+
+.bottom-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    padding-right: 11.1%;
+    padding-left: 11.1%;
+    height: 80px;
+}
+
+.bottom-header-brand {
+    font-size: 24px;
+    letter-spacing: 0.84px;
+    font-weight: lighter;
+    color: #8367D8;
+}
+
+.bottom-header-brand:hover {
+    text-decoration: none;
+    color: #8367D8;
+}
+
+.bottom-header-search {
+    width: 50%;
+    position: relative;
+}
+
+.bottom-header-search-icon {
+    position: absolute;
+    right: 8px;
+    font-size: 36px;
+    top: 9px;
+    cursor: pointer;
+}

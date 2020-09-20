@@ -1,38 +1,105 @@
-.App {
+.app-container {
+  color: #252525;
+  font-size: 16px;
+  letter-spacing: 0.56px;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  position: relative;
   min-height: 100vh;
+}
+
+/*--------------BUTTON--------------*/
+
+.btn {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  border: 3px solid #8367D8;
+  border-radius: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-right: 10%;
+  padding-left: 10%;
+}
+
+.btn:hover {
+  color: currentColor;
+}
+
+.btn-xl {
+  height: 54px;
+}
+
+.btn-xxl {
+  height: 57px;
+}
+
+.btn-flat-white {
+  color: #D8D8D8;
+  background-color: transparent;
+}
+
+/*--------------INPUT--------------*/
+
+.form-control {
+  border: 1px solid #E3E3E3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+  border-radius: 0;
+  color: #9B9B9B;
+}
+
+.form-control-xl-16 {
+  height: 54px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
+}
+
+.form-control-xl-18 {
+  height: 54px;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+/*--------------NAV LINKS--------------*/
+
+.white-nav-link {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.white-nav-link:hover {
+  color: lightgray;
+  text-decoration: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.black-nav-link {
+  color: #252525;
+}
+
+.black-nav-link:hover {
+  color: #8367D8;
+  text-decoration: none;
+}
+
+.black-active-nav-link {
+  color: #8367D8;
+  font-weight: bold;
+}
+
+/*--------------SOCIAL MEDIA--------------*/
+
+.socials-container {
+  font-size: 25px;
+  display: flex;
+}
+
+.social-link {
+  color: #919191;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.social-link:hover {
+  color: white;
 }
