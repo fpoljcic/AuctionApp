@@ -1,24 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Alert, Breadcrumb } from 'react-bootstrap';
+
 import './App.css';
 
-function App() {
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+import MyRoutes from 'utilities/MyRoutes';
+
+const App = () => {
+
+  const [loggedInState, setLoggedInState] = useState(null);
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [variant, setVariant] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const [breadcrumbItems, setBreadcrumbItems] = useState([]);
+  const [breadcrumbTitle, setBreadcrumbTitle] = useState(null);
+
+  const showMessage = (variant, message) => {
+    setMessage(message);
+    setVariant(variant);
+    setAlertVisible(true);
+  }
+
+  const setBreadcrumb = (title, items) => {
+    setBreadcrumbTitle(title);
+    setBreadcrumbItems(items);
+  }
+
+  const changeLoggedInState = () => {
+    if (loggedInState === null) {
+      setLoggedInState(false);
+      return;
+    }
+    setLoggedInState(!loggedInState);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <Router>
+        <Header loggedInState={loggedInState} />
+        <Breadcrumb style={breadcrumbTitle === null ? { display: 'none' } : null}>
+          <div className="breadcrumb-title">
+            {breadcrumbTitle}
+          </div>
+          {breadcrumbItems.map((item, i, { length }) => (
+            <Breadcrumb.Item active={length - 1 === i} href={item.href}>
+              {item.text}
+            </Breadcrumb.Item>
+          ))}
+        </Breadcrumb>
+        <Alert transition={false} show={alertVisible} variant={variant}>
+          {message}
+        </Alert>
+        <div className="route-container">
+          <MyRoutes changeLoggedInState={changeLoggedInState} setBreadcrumb={setBreadcrumb} showMessage={showMessage} />
+        </div>
+        <Footer />
+      </Router>
     </div>
   );
 }

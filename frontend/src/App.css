@@ -1,38 +1,204 @@
-.App {
+.app-container {
+  color: #252525;
+  font-size: 16px;
+  letter-spacing: 0.56px;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  position: relative;
   min-height: 100vh;
+}
+
+.route-container {
+  padding: 2.5% 11.1% calc(12.5% + 356px) 11.1%;
+}
+
+/*--------------BUTTON--------------*/
+
+.btn {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  border: 3px solid #8367D8;
+  border-radius: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-right: 10%;
+  padding-left: 10%;
+}
+
+.btn:hover {
+  color: currentColor;
+}
+
+.btn-xl {
+  height: 54px;
+}
+
+.btn-xxl {
+  height: 57px;
+}
+
+.btn-transparent-white {
+  color: #D8D8D8;
+  background-color: transparent;
+}
+
+.btn-transparent-black {
+  color: #252525;
+  background-color: transparent;
+}
+
+.btn-fill-purple {
+  color: #FFFFFF;
+  background: #8367D8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+}
+
+/*--------------FORM--------------*/
+
+.form-control {
+  border: 1px solid #E3E3E3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+  border-radius: 0;
+  color: #9B9B9B;
+}
+
+.form-control-xl-16 {
+  height: 54px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
+}
+
+.form-control-xl-18 {
+  height: 54px;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+.form-control-gray {
+  background: #FCFCFC;
+  border: 1px solid #D8D8D8;
+}
+
+.form-group, .custom-control {
+  text-align: left;
+}
+
+.form-label, .font-18, .custom-control-label {
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+.form-row {
+  justify-content: space-between;
+}
+
+/*--------------NAV LINKS--------------*/
+
+.white-nav-link {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.white-nav-link:hover {
+  color: lightgray;
+  text-decoration: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.purple-nav-link {
+  color: #8367D8;
+}
+
+.purple-nav-link:hover {
+  color: #573BAC;
+  text-decoration: none;
+}
+
+.black-nav-link {
+  color: #252525;
+}
+
+.black-nav-link:hover {
+  color: #8367D8;
+  text-decoration: none;
+}
+
+.black-active-nav-link {
+  color: #8367D8;
+  font-weight: bold;
+}
+
+/*--------------SOCIAL MEDIA--------------*/
+
+.socials-container {
+  font-size: 25px;
+  display: flex;
+}
+
+.social-link {
+  color: #919191;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.social-link:hover {
+  color: white;
+}
+
+/*--------------ALERT--------------*/
+
+.alert {
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  border: none;
+  text-align: left;
+  padding-left: 11.1%;
+  border-radius: 0;
+}
+
+.alert-warning {
+  background: #F6F2E5;
+  color: #AB944E;
+}
+
+.alert-success {
+  background: #F0F3EE;
+  font-weight: bold;
+  color: #417505;
+}
+
+/*--------------BREADCRUMB--------------*/
+
+.breadcrumb {
+  background: #FAFAFA;
+  padding-left: 11.1%;
+  padding-right: 11.1%;
+  text-align: right;
+  justify-content: end;
+  height: 60px;
+  align-items: center;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.breadcrumb-title {
+  position: absolute;
+  left: 11.1%;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+.breadcrumb-item>a {
+  font-weight: lighter;
+  color: #252525;
+}
+
+.breadcrumb-item>a:hover {
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.breadcrumb-item.active {
+  color: #252525;
 }

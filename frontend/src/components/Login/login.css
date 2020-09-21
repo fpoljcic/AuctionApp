@@ -1,0 +1,46 @@
+.login-container {
+    border: 1px solid #D8D8D8;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.login-form {
+    padding: 6.5%;
+}
+
+.login-form>* {
+    margin-bottom: 30px;
+}
+
+.login-title {
+    background: #FAFAFA;
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 0.84px;
+    padding: 1.5% 0;
+}
+
+.btn-fb-button, .btn-google-button {
+    width: 46%;
+    padding-right: 0;
+    padding-left: 0;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    color: #FFFFFF;
+    background: #475993;
+    border: 3px solid #415994;
+}
+
+.btn-fb-button:hover, .btn-google-button:hover {
+    color: lightgray;
+}
+
+.btn-fb-button {
+    background: #475993;
+    border: 3px solid #415994;
+}
+
+.btn-google-button {
+    background: #CD5542;
+    border: 3px solid #CD5542;
+}
