@@ -38,14 +38,20 @@
   height: 57px;
 }
 
-.btn-flat-white {
+.btn-transparent-white {
   color: #D8D8D8;
   background-color: transparent;
 }
 
-.btn-flat-black {
+.btn-transparent-black {
   color: #252525;
   background-color: transparent;
+}
+
+.btn-fill-purple {
+  color: #FFFFFF;
+  background: #8367D8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
 }
 
 /*--------------FORM--------------*/
@@ -74,13 +80,17 @@
   border: 1px solid #D8D8D8;
 }
 
-.form-group {
+.form-group, .custom-control {
   text-align: left;
 }
 
-.form-label, .font-18 {
+.form-label, .font-18, .custom-control-label {
   font-size: 18px;
   letter-spacing: 0.63px;
+}
+
+.form-row {
+  justify-content: space-between;
 }
 
 /*--------------NAV LINKS--------------*/

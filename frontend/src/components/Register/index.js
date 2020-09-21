@@ -71,7 +71,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                     errors,
                 }) => (
                         <Form noValidate className="register-form" onSubmit={handleSubmit}>
-                            <Form.Group controlId="validationFormik02">
+                            <Form.Group>
                                 <Form.Label>First Name</Form.Label>
                                 <Form.Control
                                     className="form-control-gray"
@@ -79,7 +79,6 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                     type="text"
                                     name="firstName"
                                     onChange={handleChange}
-                                    isValid={touched.firstName && !errors.firstName}
                                     isInvalid={touched.firstName && errors.firstName}
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -87,7 +86,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="lastName">
+                            <Form.Group>
                                 <Form.Label>Last Name</Form.Label>
                                 <Form.Control
                                     className="form-control-gray"
@@ -95,7 +94,6 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                     type="text"
                                     name="lastName"
                                     onChange={handleChange}
-                                    isValid={touched.lastName && !errors.lastName}
                                     isInvalid={touched.lastName && errors.lastName}
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -103,7 +101,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="email">
+                            <Form.Group>
                                 <Form.Label>Enter Email</Form.Label>
                                 <Form.Control
                                     className="form-control-gray"
@@ -111,7 +109,6 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                     type="email"
                                     name="email"
                                     onChange={handleChange}
-                                    isValid={touched.email && !errors.email}
                                     isInvalid={(touched.email && errors.email) || emailError}
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -119,7 +116,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="password">
+                            <Form.Group>
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control
                                     className="form-control-gray"
@@ -127,7 +124,6 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                     type="password"
                                     name="password"
                                     onChange={handleChange}
-                                    isValid={touched.password && !errors.password}
                                     isInvalid={touched.password && errors.password}
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -135,7 +131,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                            <Button disabled={loading} style={{ marginTop: 80 }} block variant="flat-black" size="xxl" type="submit">
+                            <Button disabled={loading} style={{ marginTop: 80 }} block variant="transparent-black" size="xxl" type="submit">
                                 REGISTER
                             </Button>
 

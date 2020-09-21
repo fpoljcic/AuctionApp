@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import GuestRoute from './GuestRoute';
 
 import LandingPage from 'components/LandingPage';
 import Shop from 'components/Shop';
@@ -14,8 +15,8 @@ const UserRoutes = (props) => {
         <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/shop" component={Shop} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" render={() => <Register {...props} />} />
+            <Route path="/login" render={() => <Login {...props} />} />
+            <GuestRoute path="/register" {...props} component={Register} />
             <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>

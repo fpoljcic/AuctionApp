@@ -55,7 +55,7 @@ const Footer = () => {
         </p>
         <div style={{ display: 'flex' }}>
           <Form.Control className="footer-email-input" size="xl-16" type="text" placeholder="Your Email address" />
-          <Button size="xl" variant="flat-white">
+          <Button size="xl" variant="transparent-white">
             GO
             <IoIosArrowForward style={{ fontSize: 24 }} />
           </Button>

@@ -4,13 +4,13 @@ import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import { getToken, removeSession } from 'utilities/Common';
+import { validToken, removeSession } from 'utilities/Common';
 
 import './header.css';
 
 const Header = ({ loggedInState }) => {
 
-    const [loggedIn, setLoggedIn] = useState(getToken() !== null);
+    const [loggedIn, setLoggedIn] = useState(validToken());
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -41,7 +41,7 @@ const Header = ({ loggedInState }) => {
                     {loggedIn ?
                         (
                             <>
-                                <Link className="white-nav-link nav-link" onClick={handleLogout} to="/">
+                                <Link style={{ paddingRight: 0 }} className="white-nav-link nav-link" onClick={handleLogout} to="/">
                                     Log out
                                 </Link>
                             </>
