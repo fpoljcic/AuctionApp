@@ -19,7 +19,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Category>> getCategories() {
         List<Category> categories = categoryService.getCategories();
         return ResponseEntity.ok(categories);

@@ -1,6 +1,6 @@
 package ba.atlantbh.auctionapp.repositories;
 
-import ba.atlantbh.auctionapp.models.*;
+import ba.atlantbh.auctionapp.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,12 +9,12 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    @Query(value = "SELECT * FROM product WHERE featured = true AND start_date <= now() AND end_date > now() ORDER BY RANDOM() LIMIT 4", nativeQuery = true)
+    @Query(value = "SELECT * FROM product pr INNER JOIN photo p on pr.id = p.product_id WHERE featured = true AND start_date <= now() AND end_date > now() ORDER BY RANDOM() LIMIT 5", nativeQuery = true)
     List<Product> getFeaturedRandomProducts();
 
-    @Query(value = "SELECT * FROM product WHERE start_date <= now() AND end_date > now() ORDER BY start_date DESC LIMIT 8", nativeQuery = true)
+    @Query(value = "SELECT * FROM product pr INNER JOIN photo p on pr.id = p.product_id WHERE start_date <= now() AND end_date > now() ORDER BY start_date DESC LIMIT 8", nativeQuery = true)
     List<Product> getNewProducts();
 
-    @Query(value = "SELECT * FROM product WHERE start_date <= now() AND end_date > now() ORDER BY end_date LIMIT 8", nativeQuery = true)
+    @Query(value = "SELECT * FROM product pr INNER JOIN photo p on pr.id = p.product_id WHERE start_date <= now() AND end_date > now() ORDER BY end_date LIMIT 8", nativeQuery = true)
     List<Product> getLastProducts();
 }

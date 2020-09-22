@@ -20,12 +20,7 @@ public class Photo {
     @NotBlank
     private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    public Photo(@NotBlank String url, Product product) {
+    public Photo(@NotBlank String url) {
         this.url = url;
-        this.product = product;
     }
 }

@@ -1,6 +1,7 @@
 package ba.atlantbh.auctionapp.controllers;
 
 import ba.atlantbh.auctionapp.models.Product;
+import ba.atlantbh.auctionapp.responses.EssentialProductInfoResponse;
 import ba.atlantbh.auctionapp.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +21,20 @@ public class ProductController {
     }
 
     @GetMapping("/featured/random")
-    public ResponseEntity<List<Product>> getFeaturedRandomProducts() {
-        List<Product> products = productService.getFeaturedRandomProducts();
+    public ResponseEntity<List<EssentialProductInfoResponse>> getFeaturedRandomProducts() {
+        List<EssentialProductInfoResponse> products = productService.getFeaturedRandomProducts();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/new")
-    public ResponseEntity<List<Product>> getNewProducts() {
-        List<Product> products = productService.getNewProducts();
+    public ResponseEntity<List<EssentialProductInfoResponse>> getNewProducts() {
+        List<EssentialProductInfoResponse> products = productService.getNewProducts();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/last")
-    public ResponseEntity<List<Product>> getLastProducts() {
-        List<Product> products = productService.getLastProducts();
+    public ResponseEntity<List<EssentialProductInfoResponse>> getLastProducts() {
+        List<EssentialProductInfoResponse> products = productService.getLastProducts();
         return ResponseEntity.ok(products);
     }
 }
