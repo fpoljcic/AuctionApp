@@ -31,12 +31,6 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/top")
-    public ResponseEntity<List<Product>> getTopProducts() {
-        List<Product> products = productService.getTopProducts();
-        return ResponseEntity.ok(products);
-    }
-
     @GetMapping("/last")
     public ResponseEntity<List<Product>> getLastProducts() {
         List<Product> products = productService.getLastProducts();

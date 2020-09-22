@@ -23,10 +23,6 @@ public class ProductService {
         return productRepository.getNewProducts();
     }
 
-    public List<Product> getTopProducts() {
-        return productRepository.getTopProducts();
-    }
-
     public List<Product> getLastProducts() {
         return productRepository.getLastProducts();
     }
