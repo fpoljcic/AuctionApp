@@ -57,9 +57,6 @@ public class Product {
     private Boolean shipping = false;
 
     @Column(nullable = false)
-    private Boolean active = true;
-
-    @Column(nullable = false)
     private Boolean featured = false;
 
     @ManyToOne
