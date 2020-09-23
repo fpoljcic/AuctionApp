@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/auth")
 public class PersonController {
 
     private final PersonService personService;
