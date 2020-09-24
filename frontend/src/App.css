@@ -8,7 +8,33 @@
 }
 
 .route-container {
-  padding: 2.5% 11.1% calc(12.5% + 356px) 11.1%;
+  padding: 0 11.1% calc(11.1% + 356px) 11.1%;
+}
+
+/*--------------HEADING--------------*/
+
+h1 {
+  font-size: 46px;
+  letter-spacing: 1.61px;
+  line-height: 52px;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 28px;
+  letter-spacing: 0.98px;
+  margin-bottom: 0;
+  font-weight: normal;
+  line-height: unset;
+}
+
+h3 {
+  font-size: 24px;
+  letter-spacing: 0.84px;
+  font-weight: bold;
+  margin-bottom: 0;
+  line-height: unset;
 }
 
 /*--------------BUTTON--------------*/
@@ -185,7 +211,7 @@
   height: 60px;
   align-items: center;
   border-radius: 0;
-  margin-bottom: 0;
+  margin-bottom: 40px;
 }
 
 .breadcrumb-title {
@@ -207,4 +233,13 @@
 
 .breadcrumb-item.active {
   color: #252525;
+}
+
+/*--------------MISC--------------*/
+
+.grey-line {
+  background: #ECECEC;
+  width: 100%;
+  height: 4px;
+  margin: 10px 0;
 }

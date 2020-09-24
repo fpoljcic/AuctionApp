@@ -44,12 +44,6 @@
     justify-content: space-around;
 }
 
-.featured-product-title {
-    font-size: 46px;
-    letter-spacing: 1.61px;
-    line-height: 52px;
-}
-
 .featured-product-price {
     font-size: 24px;
     color: #8367D8;
@@ -61,4 +55,62 @@
     max-width: 323px;
     max-height: 200px;
     overflow-y: hidden;
+}
+
+.featured-container {
+    margin-top: 3%;
+    text-align: left;
+}
+
+.featured-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.featured-item-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.featured-item-image-xxl, .featured-item-image-xl, .featured-item-image-lg {
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {
+    scale: 1.02;
+    transition: all 0.1s;
+}
+
+@media (max-width: 1600px) {
+    .featured-item-image-xxl {
+        width: 200px;
+        height: 200px;
+    }
+    .featured-item-image-xl {
+        width: 149px;
+        height: 200px;
+    }
+    .featured-item-image-lg {
+        width: 149px;
+        height: 149px;
+    }
+}
+
+.tabs-container {
+    display: flex;
+}
+
+.custom-tab {
+    font-size: 28px;
+    cursor: pointer;
+    letter-spacing: 0.98px;
+    width: 180px;
+    margin-bottom: -14px;
+    margin-right: 30px;
+    position: relative;
+    padding-bottom: 8px;
 }
