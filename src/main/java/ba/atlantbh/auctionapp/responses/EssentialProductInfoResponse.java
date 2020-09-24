@@ -8,4 +8,6 @@ public interface EssentialProductInfoResponse {
     Integer getStartPrice();
     String getDescription();
     String getUrl();
+    String getCategoryName();
+    String getSubcategoryName();
 }

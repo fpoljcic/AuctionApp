@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, ListGroup } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import { getCategories, getFeaturedRandomProducts, getRandomSubcategories, getNewProducts, getLastProducts } from 'utilities/ServerCalls';
 import { IoIosArrowForward } from "react-icons/io";
 
 import './landingPage.css';
 
 const LandingPage = () => {
+  const history = useHistory();
 
   const [categories, setCategories] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -32,10 +34,11 @@ const LandingPage = () => {
         <ListGroup variant="categories">
           <ListGroup.Item style={{ color: '#8367D8', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
-            <ListGroup.Item key={category.name} action>{category.name}</ListGroup.Item>
+            <ListGroup.Item key={category.name} action onClick={() => history.push("/shop/" + category.name.split(' ').join('_').toLowerCase())}>{category.name}</ListGroup.Item>
           ))}
-          <ListGroup.Item action>All Categories</ListGroup.Item>
+          <ListGroup.Item action onClick={() => history.push("/shop/all")}>All Categories</ListGroup.Item>
         </ListGroup>
+
         {featuredProducts.length !== 0 ?
           <div className="featured-product-container">
             <div className="featured-product-container-inner">
@@ -51,12 +54,19 @@ const LandingPage = () => {
                 {featuredProducts[0].description}
               </div>
 
-              <Button style={{ width: 192 }} size="xxl" variant="transparent-black-shadow">
+              <Button
+                style={{ width: 192 }}
+                size="xxl"
+                variant="transparent-black-shadow"
+                onClick={() => history.push(
+                  "/shop/" + featuredProducts[0].categoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].subcategoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].id
+                )}
+              >
                 BID NOW
                 <IoIosArrowForward style={{ fontSize: 24 }} />
               </Button>
             </div>
-            <Image width="484px" height="294px" src={featuredProducts[0].url} />
+            <Image className="featured-product-image" width="484px" height="294px" src={featuredProducts[0].url} />
           </div> : null}
       </div>
 
@@ -68,11 +78,17 @@ const LandingPage = () => {
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
             <div key={subcategory.id} className="featured-item-container">
-              <Image className="featured-item-image-xxl" width="350px" height="350px" src={subcategory.url} />
+              <Image
+                className="featured-item-image-xxl"
+                width="350px"
+                height="350px"
+                src={subcategory.url}
+                onClick={() => history.push("/shop/" + subcategory.categoryName.split(' ').join('_').toLowerCase() + "/" + subcategory.name.split(' ').join('_').toLowerCase())}
+              />
               <h3>
                 {subcategory.name}
               </h3>
-              Star from ${subcategory.startPrice}
+              Start from ${subcategory.startPrice}
             </div>
           ))}
         </div>
@@ -86,11 +102,19 @@ const LandingPage = () => {
         <div className="featured-items-container">
           {featuredProducts.slice(1).map(product => (
             <div key={product.id} className="featured-item-container">
-              <Image className="featured-item-image-xl" width="260px" height="350px" src={product.url} />
+              <Image
+                className="featured-item-image-xl"
+                width="260px"
+                height="350px"
+                src={product.url}
+                onClick={() => history.push(
+                  "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
+                )}
+              />
               <h3>
                 {product.name}
               </h3>
-              Star from ${product.startPrice}
+              Start from ${product.startPrice}
             </div>
           ))}
         </div>
@@ -109,11 +133,19 @@ const LandingPage = () => {
         <div className="featured-items-container">
           {newAndLastProducts.length !== 0 ? newAndLastProducts[activePage].map(product => (
             <div key={product.id} className="featured-item-container">
-              <Image className="featured-item-image-lg" width="260px" height="260px" src={product.url} />
+              <Image
+                className="featured-item-image-lg"
+                width="260px"
+                height="260px"
+                src={product.url}
+                onClick={() => history.push(
+                  "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
+                )}
+              />
               <h3>
                 {product.name}
               </h3>
-              Star from ${product.startPrice}
+              Start from ${product.startPrice}
             </div>
           )) : null}
         </div>

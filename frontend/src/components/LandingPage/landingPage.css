@@ -57,6 +57,22 @@
     overflow-y: hidden;
 }
 
+@media (max-width: 1200px) {
+    .featured-product-container {
+        flex-direction: column;
+    }
+    .featured-product-container-inner {
+        margin-bottom: 10px;
+    }
+    .list-group-categories {
+        width: 60%;
+    }
+    .featured-product-image {
+        width: 242px;
+        height: 147px;
+    }
+}
+
 .featured-container {
     margin-top: 3%;
     text-align: left;
