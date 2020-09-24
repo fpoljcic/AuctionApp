@@ -2,10 +2,10 @@ package ba.atlantbh.auctionapp.responses;
 
 import java.util.UUID;
 
-public interface EssentialProductInfoResponse {
+public interface EssentialSubcategoryInfoResponse {
     UUID getId();
     String getName();
-    Integer getStartPrice();
-    String getDescription();
+    String getCategoryName();
     String getUrl();
+    Integer getStartPrice();
 }
