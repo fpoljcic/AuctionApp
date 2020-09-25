@@ -1,6 +1,5 @@
 package ba.atlantbh.auctionapp.services;
 
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.repositories.BidRepository;
 import ba.atlantbh.auctionapp.responses.SimpleBidResponse;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,6 @@ public class BidService {
     }
 
     public List<SimpleBidResponse> getBidsForProduct(String id) {
-        List<SimpleBidResponse> bids = bidRepository.getBidsForProduct(id);
-        if (bids.isEmpty())
-            throw new NotFoundException("Wrong product id");
-        return bids;
+        return bidRepository.getBidsForProduct(id);
     }
 }

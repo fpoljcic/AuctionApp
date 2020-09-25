@@ -7,7 +7,7 @@ import { categoryRoute, allCategoryRoute, subcategoryRoute, productRoute } from 
 
 import './landingPage.css';
 
-const LandingPage = () => {
+const LandingPage = ({ removeBreadcrumb }) => {
   const history = useHistory();
 
   const [categories, setCategories] = useState([]);
@@ -17,6 +17,7 @@ const LandingPage = () => {
   const [activePage, setActivePage] = useState(0);
 
   useEffect(() => {
+    removeBreadcrumb();
     const fetchData = async () => {
       setCategories(await getCategories());
       setFeaturedProducts(await getFeaturedRandomProducts());
@@ -27,7 +28,7 @@ const LandingPage = () => {
     }
 
     fetchData();
-  }, [])
+  }, [removeBreadcrumb])
 
   return (
     <>

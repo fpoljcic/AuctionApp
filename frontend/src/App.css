@@ -127,13 +127,16 @@ h3 {
 
 /*--------------NAV LINKS--------------*/
 
+a:hover {
+  text-decoration: none;
+}
+
 .white-nav-link {
   color: white;
 }
 
 .white-nav-link:hover {
   color: lightgray;
-  text-decoration: none;
 }
 
 .purple-nav-link {
@@ -142,7 +145,6 @@ h3 {
 
 .purple-nav-link:hover {
   color: #573BAC;
-  text-decoration: none;
 }
 
 .black-nav-link {
@@ -151,7 +153,6 @@ h3 {
 
 .black-nav-link:hover {
   color: #8367D8;
-  text-decoration: none;
 }
 
 .black-active-nav-link {
@@ -228,7 +229,6 @@ h3 {
 }
 
 .breadcrumb-item>a:hover {
-  text-decoration: none;
   font-weight: normal;
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Alert, Breadcrumb } from 'react-bootstrap';
 
 import './App.css';
@@ -30,6 +30,10 @@ const App = () => {
     setBreadcrumbItems(items);
   }
 
+  const removeBreadcrumb = () => {
+    setBreadcrumbTitle(null);
+  }
+
   const changeLoggedInState = () => {
     if (loggedInState === null) {
       setLoggedInState(false);
@@ -47,8 +51,16 @@ const App = () => {
             {breadcrumbTitle}
           </div>
           {breadcrumbItems.map((item, i, { length }) => (
-            <Breadcrumb.Item active={length - 1 === i} href={item.href}>
-              {item.text}
+            <Breadcrumb.Item active key={item.text}>
+              {length - 1 === i ? (
+                <div style={{ color: '#252525' }}>
+                  {item.text}
+                </div>
+              ) : (
+                  <Link className="black-nav-link" to={item.href}>
+                    {item.text}
+                  </Link>
+                )}
             </Breadcrumb.Item>
           ))}
         </Breadcrumb>
@@ -56,7 +68,7 @@ const App = () => {
           {message}
         </Alert>
         <div className="route-container">
-          <MyRoutes changeLoggedInState={changeLoggedInState} setBreadcrumb={setBreadcrumb} showMessage={showMessage} />
+          <MyRoutes changeLoggedInState={changeLoggedInState} setBreadcrumb={setBreadcrumb} showMessage={showMessage} removeBreadcrumb={removeBreadcrumb} />
         </div>
         <Footer />
       </Router>
