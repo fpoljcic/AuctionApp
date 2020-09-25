@@ -4,6 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from 'utilities/ServerCalls';
 import { setSession } from 'utilities/Common';
+import { myAccountRoute } from 'utilities/AppRoutes';
 import * as yup from 'yup';
 
 import './register.css';
@@ -43,7 +44,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
             const response = await registerUser(user);
             setSession(response.data.person, response.data.token);
             setLoading(false);
-            history.push("/my_account");
+            myAccountRoute(history);
             changeLoggedInState();
             showMessage("success", "Account created successfully");
         } catch (error) {

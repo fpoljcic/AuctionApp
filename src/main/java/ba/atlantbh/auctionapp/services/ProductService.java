@@ -1,7 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
-import ba.atlantbh.auctionapp.responses.EssentialProductInfoResponse;
+import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +15,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<EssentialProductInfoResponse> getFeaturedRandomProducts() {
+    public List<SimpleProductResponse> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
     }
 
-    public List<EssentialProductInfoResponse> getNewProducts() {
+    public List<SimpleProductResponse> getNewProducts() {
         return productRepository.getNewProducts();
     }
 
-    public List<EssentialProductInfoResponse> getLastProducts() {
+    public List<SimpleProductResponse> getLastProducts() {
         return productRepository.getLastProducts();
     }
 }

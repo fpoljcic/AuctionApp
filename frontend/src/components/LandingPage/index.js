@@ -3,6 +3,7 @@ import { Button, Image, ListGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { getCategories, getFeaturedRandomProducts, getRandomSubcategories, getNewProducts, getLastProducts } from 'utilities/ServerCalls';
 import { IoIosArrowForward } from "react-icons/io";
+import { categoryRoute, allCategoryRoute, subcategoryRoute, productRoute } from "utilities/AppRoutes";
 
 import './landingPage.css';
 
@@ -34,9 +35,9 @@ const LandingPage = () => {
         <ListGroup variant="categories">
           <ListGroup.Item style={{ color: '#8367D8', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
-            <ListGroup.Item key={category.name} action onClick={() => history.push("/shop/" + category.name.split(' ').join('_').toLowerCase())}>{category.name}</ListGroup.Item>
+            <ListGroup.Item key={category.name} action onClick={() => categoryRoute(history, category)}>{category.name}</ListGroup.Item>
           ))}
-          <ListGroup.Item action onClick={() => history.push("/shop/all")}>All Categories</ListGroup.Item>
+          <ListGroup.Item action onClick={() => allCategoryRoute(history)}>All Categories</ListGroup.Item>
         </ListGroup>
 
         {featuredProducts.length !== 0 ?
@@ -58,9 +59,7 @@ const LandingPage = () => {
                 style={{ width: 192 }}
                 size="xxl"
                 variant="transparent-black-shadow"
-                onClick={() => history.push(
-                  "/shop/" + featuredProducts[0].categoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].subcategoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].id
-                )}
+                onClick={() => productRoute(history, featuredProducts[0])}
               >
                 BID NOW
                 <IoIosArrowForward style={{ fontSize: 24 }} />
@@ -83,7 +82,7 @@ const LandingPage = () => {
                 width="350px"
                 height="350px"
                 src={subcategory.url}
-                onClick={() => history.push("/shop/" + subcategory.categoryName.split(' ').join('_').toLowerCase() + "/" + subcategory.name.split(' ').join('_').toLowerCase())}
+                onClick={() => subcategoryRoute(history, subcategory)}
               />
               <h3>
                 {subcategory.name}
@@ -107,9 +106,7 @@ const LandingPage = () => {
                 width="260px"
                 height="350px"
                 src={product.url}
-                onClick={() => history.push(
-                  "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
-                )}
+                onClick={() => productRoute(history, product)}
               />
               <h3>
                 {product.name}
@@ -138,9 +135,7 @@ const LandingPage = () => {
                 width="260px"
                 height="260px"
                 src={product.url}
-                onClick={() => history.push(
-                  "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
-                )}
+                onClick={() => productRoute(history, product)}
               />
               <h3>
                 {product.name}
