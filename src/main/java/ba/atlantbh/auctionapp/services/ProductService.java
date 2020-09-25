@@ -34,7 +34,7 @@ public class ProductService {
 
     public ProductResponse getProduct(String productId, String userId) {
         List<FullProductResponse> fullProducts = productRepository.getProduct(productId, userId);
-        if (fullProducts.size() == 0)
+        if (fullProducts.isEmpty())
             throw new NotFoundException("Wrong product id");
 
         ProductResponse productResponse = new ProductResponse(
