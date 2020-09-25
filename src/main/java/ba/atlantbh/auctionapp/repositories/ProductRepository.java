@@ -1,9 +1,11 @@
 package ba.atlantbh.auctionapp.repositories;
 
 import ba.atlantbh.auctionapp.models.Product;
+import ba.atlantbh.auctionapp.responses.FullProductResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,4 +35,11 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                    "WHERE start_date <= now() AND end_date > now() AND p.featured = true " +
                    "ORDER BY end_date LIMIT 10", nativeQuery = true)
     List<SimpleProductResponse> getLastProducts();
+
+    @Query(value = "SELECT p.id, p.name, p.description, p.start_price startPrice, p.end_date endDate, " +
+            "EXISTS(SELECT * FROM wishlist " +
+            "WHERE product_id = :product_id AND person_id = :user_id) wished, ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
+            "FROM product p LEFT OUTER JOIN photo ph on p.id = ph.product_id " +
+            "WHERE p.id = :product_id", nativeQuery = true)
+    List<FullProductResponse> getProduct(@Param("product_id") String productId, @Param("user_id") String userId);
 }
