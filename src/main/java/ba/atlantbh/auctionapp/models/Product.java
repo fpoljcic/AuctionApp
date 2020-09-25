@@ -4,10 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Product {
     @Id
+    @Type(type="uuid-char")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -70,6 +73,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;
+
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<Photo> photos;
 
     public Product(@NotBlank String name, Integer startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
         this.name = name;

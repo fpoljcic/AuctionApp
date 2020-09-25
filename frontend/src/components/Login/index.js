@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { loginUser } from 'utilities/ServerCalls';
 import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/Common';
 import { SiFacebook, SiGmail } from 'react-icons/si';
+import { loginUser } from 'utilities/ServerCalls';
+import { homeRoute } from 'utilities/AppRoutes';
 import * as yup from 'yup';
 
 import './login.css';
@@ -32,7 +33,7 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
             else
                 removeRememberInfo();
             setLoading(false);
-            history.push("/");
+            homeRoute(history);
             changeLoggedInState();
             showMessage("success", "Logged in successfully");
         } catch (error) {
