@@ -7,10 +7,12 @@
     flex-wrap: wrap;
     margin-right: 40px;
     width: 50%;
+    position: relative;
 }
 
 .product-image-big {
     object-fit: contain;
+    cursor: pointer;
     /*box-shadow: 0 0px 5.3px rgba(0, 0, 0, 0.028), 0 0px 17.9px rgba(0, 0, 0, 0.042), 0 0px 80px rgba(0, 0, 0, 0.07);*/
 }
 
@@ -55,4 +57,19 @@
 .wishlist-button {
     width: 140px;
     height: 36px;
+}
+
+.fullscreen-icon {
+    position: absolute;
+    right: 0;
+    font-size: 42px;
+    color: white;
+    filter: drop-shadow(2px 2px 2px black);
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.fullscreen-icon:hover {
+    font-size: 50px;
+    transition: all 0.1s;
 }

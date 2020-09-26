@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Table } from 'react-bootstrap';
+import { Button, Form, Image, Modal, Table } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { getUserId } from 'utilities/Common';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
+import { AiOutlineFullscreen } from "react-icons/ai";
 import { getBidsForProduct, getProduct } from 'utilities/ServerCalls';
 import moment from 'moment';
 
@@ -14,6 +15,8 @@ const ItemPage = ({ match, setBreadcrumb }) => {
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
+    const [showFullscreen, setShowFullscreen] = useState(false);
+    const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
 
     useEffect(() => {
         formBreadcrumb();
@@ -39,73 +42,95 @@ const ItemPage = ({ match, setBreadcrumb }) => {
 
     return (
         <>
-            {product !== null ? (
-                <div className="product-container">
-                    <div className="images-container">
-                        <Image className="product-image-big" key={product.photos[0].id} height="438px" width="100%" src={product.photos[activePhoto].url} />
-                        {product.photos.map((photo, i) => (
-                            <Image
-                                onClick={() => setActivePhoto(i)}
-                                key={photo.id}
-                                width="110px"
-                                height="110px"
-                                src={photo.url}
-                                className="product-image-small"
-                                style={activePhoto === i ? { border: '2px solid #8367D8' } : null}
-                            />
-                        ))}
-                    </div>
 
-                    <div className="product-info-container">
-                        <div>
-                            <h1>
-                                {product.name}
-                            </h1>
-                            <div style={{ marginTop: 10 }} className="featured-product-price">
-                                Start from ${product.startPrice}
-                            </div>
+            {product !== null ? (
+                <>
+                    <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
+                        <Image onClick={() => setShowFullscreen(false)} width="100%" src={product.photos[activePhoto].url} />
+                    </Modal>
+                    <div className="product-container">
+                        <div className="images-container">
+                            <Image
+                                onClick={() => setShowFullscreen(true)}
+                                onMouseEnter={() => setShowFullscreenIcon(true)}
+                                onMouseLeave={() => setShowFullscreenIcon(false)}
+                                key={product.photos[0].id}
+                                width="100%"
+                                height="438px"
+                                src={product.photos[activePhoto].url}
+                                className="product-image-big"
+                            />
+                            <AiOutlineFullscreen
+                                onMouseEnter={() => setShowFullscreenIcon(true)}
+                                onMouseLeave={() => setShowFullscreenIcon(false)}
+                                style={!showFullscreenIcon ? { display: 'none' } : null}
+                                className="fullscreen-icon"
+                                onClick={() => setShowFullscreen(true)}
+                            />
+                            {product.photos.map((photo, i) => (
+                                <Image
+                                    onClick={() => setActivePhoto(i)}
+                                    key={photo.id}
+                                    width="110px"
+                                    height="110px"
+                                    src={photo.url}
+                                    className="product-image-small"
+                                    style={activePhoto === i ? { border: '2px solid #8367D8' } : null}
+                                />
+                            ))}
                         </div>
-                        <div className="place-bid-container">
+
+                        <div className="product-info-container">
                             <div>
-                                <Form.Control className="form-control-gray place-bid-form" size="xl-18" type="text" />
-                                <div className="place-bid-label">
-                                    Enter ${bids[0] === undefined ? product.startPrice : bids[0].price} or more
+                                <h1>
+                                    {product.name}
+                                </h1>
+                                <div style={{ marginTop: 10 }} className="featured-product-price">
+                                    Start from ${product.startPrice}
                                 </div>
                             </div>
-                            <Button style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow">
-                                PLACE BID
+                            <div className="place-bid-container">
+                                <div>
+                                    <Form.Control className="form-control-gray place-bid-form" size="xl-18" type="text" />
+                                    <div className="place-bid-label">
+                                        Enter ${bids[0] === undefined ? product.startPrice : bids[0].price} or more
+                                </div>
+                                </div>
+                                <Button style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow">
+                                    PLACE BID
                                 <IoIosArrowForward style={{ fontSize: 24 }} />
-                            </Button>
-                        </div>
-                        <div style={{ color: '#9B9B9B' }}>
-                            Highest bid: {' '}
-                            <span style={{ color: '#8367D8', fontWeight: 'bold' }}>
-                                ${bids[0] === undefined ? 0 : bids[0].price}
-                            </span>
-                            <br />
+                                </Button>
+                            </div>
+                            <div style={{ color: '#9B9B9B' }}>
+                                Highest bid: {' '}
+                                <span style={{ color: '#8367D8', fontWeight: 'bold' }}>
+                                    ${bids[0] === undefined ? 0 : bids[0].price}
+                                </span>
+                                <br />
                             No bids: {bids.length}
-                            <br />
+                                <br />
                             Time left: {moment(product.endDate).diff(moment(), 'days')} days
                         </div>
-                        <div>
-                            <Button className="wishlist-button" style={product.wished ? { borderColor: '#CD5C5C' } : null} size="xxl" variant="transparent-gray">
-                                Wishlist
+                            <div>
+                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#CD5C5C' } : null} size="xxl" variant="transparent-gray">
+                                    Wishlist
                             {product.wished ? (
-                                    <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#CD5C5C' }} />
-                                ) : (
-                                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
-                                    )}
-                            </Button>
-                            <div className="font-18" style={{ marginTop: 15 }}>
-                                Details
+                                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#CD5C5C' }} />
+                                    ) : (
+                                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                                        )}
+                                </Button>
+                                <div className="font-18" style={{ marginTop: 15 }}>
+                                    Details
                             <div className="gray-line" />
-                                <div className="font-15">
-                                    {product.description}
+                                    <div className="font-15">
+                                        {product.description}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </>
             ) : null}
             <Table variant="gray-transparent" responsive>
                 <thead>
