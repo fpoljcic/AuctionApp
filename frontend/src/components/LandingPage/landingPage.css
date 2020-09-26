@@ -1,11 +1,17 @@
 .landing-page-top-container {
     background: #FAFAFA;
-    height: 563px;
+    min-height: 563px;
     margin-left: -14.3%;
     margin-right: -14.3%;
     padding-left: 14.3%;
     padding-right: 14.3%;
     display: flex;
+}
+
+@media (max-width: 575px) {
+    .landing-page-top-container {
+        flex-wrap: wrap;
+    }
 }
 
 .list-group-categories {
@@ -65,11 +71,11 @@
         margin-bottom: 10px;
     }
     .list-group-categories {
-        width: 60%;
+        width: 50%;
     }
     .featured-product-image {
-        width: 242px;
-        height: 147px;
+        width: 278px;
+        height: 169px;
     }
 }
 
@@ -93,7 +99,6 @@
 
 .featured-item-image-xxl, .featured-item-image-xl, .featured-item-image-lg {
     cursor: pointer;
-    object-fit: cover;
 }
 
 .featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {

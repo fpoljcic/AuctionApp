@@ -17,7 +17,6 @@
 }
 
 .product-image-small {
-    object-fit: cover;
     margin-top: 10px;
     margin-right: 10px;
     cursor: pointer;
@@ -38,6 +37,7 @@
 
 .place-bid-container {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .place-bid-form {

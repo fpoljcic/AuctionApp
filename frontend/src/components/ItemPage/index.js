@@ -112,7 +112,7 @@ const ItemPage = ({ match, setBreadcrumb }) => {
                             Time left: {moment(product.endDate).diff(moment(), 'days')} days
                         </div>
                             <div>
-                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#CD5C5C' } : null} size="xxl" variant="transparent-gray">
+                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#CD5C5C' } : null} variant="transparent-gray">
                                     Wishlist
                             {product.wished ? (
                                         <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#CD5C5C' }} />
