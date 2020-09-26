@@ -4,6 +4,7 @@ import PrivateRoute from './PrivateRoute';
 import GuestRoute from './GuestRoute';
 
 import LandingPage from 'components/LandingPage';
+import AllCategories from 'components/AllCategories';
 import Shop from 'components/Shop';
 import ItemPage from 'components/ItemPage';
 import Login from 'components/Login';
@@ -15,11 +16,12 @@ const UserRoutes = (props) => {
     return (
         <Switch>
             <Route exact path="/" render={() => <LandingPage {...props} />} />
+            <Route path="/all" render={() => <AllCategories {...props} />} />
             <Route path="/shop/*/*/:id" render={() => <ItemPage {...props} />} />
             <Route path="/shop*" render={() => <Shop {...props} />} />
             <Route path="/login" render={() => <Login {...props} />} />
             <GuestRoute path="/register" {...props} component={Register} />
-            <PrivateRoute path="/my_account" component={MyAccount} />
+            <PrivateRoute path="/my_account" {...props} component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>
     );

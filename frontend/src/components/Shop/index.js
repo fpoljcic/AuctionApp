@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import './shop.css';
 
 const Shop = ({ match, setBreadcrumb }) => {
-    
+
     useEffect(() => {
         formBreadcrumb();
         // eslint-disable-next-line
@@ -12,6 +12,10 @@ const Shop = ({ match, setBreadcrumb }) => {
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1);
+        if (urlElements.length === 1) {
+            setBreadcrumb("SHOP", []);
+            return;
+        }
         setBreadcrumb("SHOP", urlElements.map((el, i) => {
             return {
                 text: el.toUpperCase().split("_").join(" "),

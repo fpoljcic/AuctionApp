@@ -19,15 +19,28 @@ const App = () => {
   const [breadcrumbItems, setBreadcrumbItems] = useState([]);
   const [breadcrumbTitle, setBreadcrumbTitle] = useState(null);
 
+  let keepFlag = false;
+
   const showMessage = (variant, message) => {
     setMessage(message);
     setVariant(variant);
     setAlertVisible(true);
+    keepFlag = true;
+  }
+
+  // Remove alert after switching page
+  const removeAlert = () => {
+    if (keepFlag === true) {
+      keepFlag = false;
+    } else {
+      setAlertVisible(false);
+    }
   }
 
   const setBreadcrumb = (title, items) => {
     setBreadcrumbTitle(title);
     setBreadcrumbItems(items);
+    removeAlert();
   }
 
   const removeBreadcrumb = () => {
@@ -64,9 +77,11 @@ const App = () => {
             </Breadcrumb.Item>
           ))}
         </Breadcrumb>
-        <Alert transition={false} show={alertVisible} variant={variant}>
-          {message}
-        </Alert>
+        <div style={alertVisible && breadcrumbTitle === null ? { marginTop: 40, marginBottom: '-1rem' } : null}>
+          <Alert dismissible onClose={() => setAlertVisible(false)} transition={false} show={alertVisible} variant={variant}>
+            {message}
+          </Alert>
+        </div>
         <div className="route-container">
           <MyRoutes changeLoggedInState={changeLoggedInState} setBreadcrumb={setBreadcrumb} showMessage={showMessage} removeBreadcrumb={removeBreadcrumb} />
         </div>
