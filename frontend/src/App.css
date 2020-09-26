@@ -86,6 +86,14 @@ h3 {
   box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
 }
 
+.btn-transparent-gray {
+  border: 3px solid #ECECEC;
+  font-size: 15px;
+  letter-spacing: 0.52px;
+  font-weight: normal;
+  padding: 0;
+}
+
 .alert-dismissible .close {
   right: 11.1%;
 }
@@ -123,6 +131,11 @@ h3 {
 .form-label, .font-18, .custom-control-label {
   font-size: 18px;
   letter-spacing: 0.63px;
+}
+
+.font-15 {
+  font-size: 15px;
+  letter-spacing: 0.53px;
 }
 
 .form-row {
@@ -240,11 +253,41 @@ a:hover {
   color: #252525;
 }
 
+/*--------------TABLE--------------*/
+
+.table-gray-transparent {
+  text-align: left;
+  border: 1px solid #D8D8D8;
+  margin-top: 200px;
+}
+
+.table-gray-transparent thead th, .table-gray-transparent td {
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  vertical-align: middle;
+  border: none;
+}
+
+.table-gray-transparent th {
+  background-color: #F0F0F0;
+  font-weight: normal;
+}
+
+.table-gray-transparent thead tr th:first-child, .table-gray-transparent tbody tr td:first-child {
+  padding-left: 50px;
+}
+
 /*--------------MISC--------------*/
 
-.grey-line {
+.gray-line {
   background: #ECECEC;
   width: 100%;
   height: 4px;
   margin: 10px 0;
+}
+
+.avatar-image-small {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
 }

@@ -1,0 +1,58 @@
+.product-container {
+    display: flex;
+}
+
+.images-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 40px;
+    width: 50%;
+}
+
+.product-image-big {
+    object-fit: contain;
+    /*box-shadow: 0 0px 5.3px rgba(0, 0, 0, 0.028), 0 0px 17.9px rgba(0, 0, 0, 0.042), 0 0px 80px rgba(0, 0, 0, 0.07);*/
+}
+
+.product-image-small {
+    object-fit: cover;
+    margin-top: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.product-image-small:hover {
+    scale: 1.02;
+    transition: all 0.1s;
+}
+
+.product-info-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    justify-content: space-around;
+    width: 50%;
+}
+
+.place-bid-container {
+    display: flex;
+}
+
+.place-bid-form {
+    text-align: center;
+    width: 176px;
+    box-shadow: none;
+    margin-right: 20px;
+}
+
+.place-bid-label {
+    font-size: 15px;
+    color: #9B9B9B;
+    letter-spacing: 0.52px;
+    margin-top: 10px;
+}
+
+.wishlist-button {
+    width: 140px;
+    height: 36px;
+}

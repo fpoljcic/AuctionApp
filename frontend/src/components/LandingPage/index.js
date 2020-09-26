@@ -74,7 +74,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <h2>
           Featured Collections
       	</h2>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
             <div key={subcategory.id} className="featured-item-container">
@@ -98,7 +98,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <h2>
           Featured Products
       	</h2>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {featuredProducts.slice(1).map(product => (
             <div key={product.id} className="featured-item-container">
@@ -127,7 +127,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
             Last Chance
           </div>
         </div>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {newAndLastProducts.length !== 0 ? newAndLastProducts[activePage].map(product => (
             <div key={product.id} className="featured-item-container">

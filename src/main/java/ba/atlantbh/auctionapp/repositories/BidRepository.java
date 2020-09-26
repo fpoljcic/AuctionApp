@@ -11,6 +11,6 @@ import java.util.UUID;
 public interface BidRepository extends JpaRepository<Bid, UUID> {
 
     @Query(value = "SELECT b.id, p.first_name firstName, p.last_name lastName, p.photo, b.date, b.price FROM bid b " +
-                   "INNER JOIN person p on p.id = b.person_id WHERE b.product_id = :id", nativeQuery = true)
+                   "INNER JOIN person p on p.id = b.person_id WHERE b.product_id = :id ORDER BY b.price DESC", nativeQuery = true)
     List<SimpleBidResponse> getBidsForProduct(String id);
 }
