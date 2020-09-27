@@ -22,6 +22,8 @@ public class Subcategory {
     @NotBlank
     private String name;
 
+    private String photoUrl;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
