@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const hostUrl = 'http://localhost:8080';
+const hostUrl = 'https://auction-atlant-app.herokuapp.com';
 
 export const registerUser = async (user) => {
     return await axios.post(hostUrl + '/auth/register', user);
