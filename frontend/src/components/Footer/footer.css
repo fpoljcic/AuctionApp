@@ -6,13 +6,14 @@
     justify-content: space-evenly;
     position: absolute;
     bottom: 0;
-    height: 356px;
+    min-height: 356px;
     padding-right: 11.1%;
     padding-left: 11.1%;
     padding-top: 3%;
     padding-bottom: 4%;
     width: 100%;
     text-align: left;
+    flex-wrap: wrap;
 }
 
 .footer-content {
@@ -34,4 +35,10 @@
     background: #3B3B3B;
     border: none;
     margin-right: 8px;
+}
+
+@media (max-width: 575px) {
+    .footer-container {
+        justify-content: space-between;
+    }
 }

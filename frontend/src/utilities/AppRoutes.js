@@ -11,7 +11,7 @@ export const categoryRoute = (history, category) => {
 }
 
 export const allCategoryRoute = (history) => {
-    history.push(history.push("/shop/all"));
+    history.push("/all");
 }
 
 export const subcategoryRoute = (history, subcategory) => {

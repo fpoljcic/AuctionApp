@@ -7,7 +7,7 @@ import { categoryRoute, allCategoryRoute, subcategoryRoute, productRoute } from 
 
 import './landingPage.css';
 
-const LandingPage = () => {
+const LandingPage = ({ removeBreadcrumb }) => {
   const history = useHistory();
 
   const [categories, setCategories] = useState([]);
@@ -17,6 +17,7 @@ const LandingPage = () => {
   const [activePage, setActivePage] = useState(0);
 
   useEffect(() => {
+    removeBreadcrumb();
     const fetchData = async () => {
       setCategories(await getCategories());
       setFeaturedProducts(await getFeaturedRandomProducts());
@@ -27,7 +28,7 @@ const LandingPage = () => {
     }
 
     fetchData();
-  }, [])
+  }, [removeBreadcrumb])
 
   return (
     <>
@@ -73,7 +74,7 @@ const LandingPage = () => {
         <h2>
           Featured Collections
       	</h2>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
             <div key={subcategory.id} className="featured-item-container">
@@ -97,7 +98,7 @@ const LandingPage = () => {
         <h2>
           Featured Products
       	</h2>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {featuredProducts.slice(1).map(product => (
             <div key={product.id} className="featured-item-container">
@@ -126,7 +127,7 @@ const LandingPage = () => {
             Last Chance
           </div>
         </div>
-        <div className="grey-line" />
+        <div className="gray-line" />
         <div className="featured-items-container">
           {newAndLastProducts.length !== 0 ? newAndLastProducts[activePage].map(product => (
             <div key={product.id} className="featured-item-container">

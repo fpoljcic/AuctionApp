@@ -20,7 +20,8 @@
     letter-spacing: 0.56px;
     padding-right: 11.1%;
     padding-left: 11.1%;
-    height: 80px;
+    min-height: 80px;
+    flex-wrap: wrap;
 }
 
 .bottom-header-brand {
@@ -31,12 +32,13 @@
 }
 
 .bottom-header-brand:hover {
-    text-decoration: none;
     color: #8367D8;
 }
 
 .bottom-header-search {
-    width: 50%;
+    min-width: 50%;
+    margin-top: 10px;
+    margin-bottom: 10px;
     position: relative;
 }
 

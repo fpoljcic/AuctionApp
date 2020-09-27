@@ -40,6 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "EXISTS(SELECT * FROM wishlist " +
             "WHERE product_id = :product_id AND person_id = :user_id) wished, ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
             "FROM product p LEFT OUTER JOIN photo ph on p.id = ph.product_id " +
-            "WHERE p.id = :product_id", nativeQuery = true)
+            "WHERE p.id = :product_id " +
+            "ORDER BY ph.featured DESC", nativeQuery = true)
     List<FullProductResponse> getProduct(@Param("product_id") String productId, @Param("user_id") String userId);
 }

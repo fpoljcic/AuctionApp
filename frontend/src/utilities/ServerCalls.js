@@ -29,3 +29,11 @@ export const getNewProducts = async () => {
 export const getLastProducts = async () => {
     return (await axios.get(hostUrl + '/products/last')).data;
 };
+
+export const getProduct = async (productId, userId) => {
+    return (await axios.get(`${hostUrl}/products/?product_id=${productId}&user_id=${userId}`)).data;
+};
+
+export const getBidsForProduct = async (id) => {
+    return (await axios.get(hostUrl + '/bids/product/?id=' + id)).data;
+};

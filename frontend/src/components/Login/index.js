@@ -118,11 +118,11 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
                             </Button>
 
                             <Form.Row>
-                                <Button variant="fb-button" size="xxl">
+                                <Button variant="fb-button">
                                     <SiFacebook style={{ fontSize: 25, marginRight: 10 }} />
                                     LOGIN WITH FACEBOOK
                                 </Button>
-                                <Button variant="google-button" size="xxl">
+                                <Button variant="google-button">
                                     <SiGmail style={{ fontSize: 25, marginRight: 10 }} />
                                     LOGIN WITH GMAIL
                                 </Button>

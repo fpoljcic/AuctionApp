@@ -37,6 +37,12 @@ export const getUser = () => {
     return user ? JSON.parse(user) : null;
 };
 
+// return user id from the local storage
+export const getUserId = () => {
+    const user = localStorage.getItem('auctionapp-user');
+    return user ? JSON.parse(user).id : null;
+};
+
 // return token from local storage
 export const getToken = () => {
     return localStorage.getItem('auctionapp-token') || null;

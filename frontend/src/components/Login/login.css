@@ -38,9 +38,11 @@
 .btn-fb-button {
     background: #475993;
     border: 3px solid #415994;
+    min-height: 57px;
 }
 
 .btn-google-button {
     background: #CD5542;
     border: 3px solid #CD5542;
+    min-height: 57px;
 }
