@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const hostUrl = 'http://localhost:8080';
+const hostUrl = process.env.REACT_APP_HOST_URL;
 
 export const registerUser = async (user) => {
     return await axios.post(hostUrl + '/auth/register', user);

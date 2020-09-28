@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+  base = "frontend"
+
+[context.production.environment]
+  REACT_APP_HOST_URL = "https://auction-atlant-app.herokuapp.com"
