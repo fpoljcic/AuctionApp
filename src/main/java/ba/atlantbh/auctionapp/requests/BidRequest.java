@@ -15,9 +15,6 @@ public class BidRequest {
     @Min(value = 0, message = "Price can't be less than 0")
     private Integer price;
 
-    @NotNull(message = "Person must be supplied")
-    private UUID personId;
-
     @NotNull(message = "Product must be supplied")
     private UUID productId;
 }

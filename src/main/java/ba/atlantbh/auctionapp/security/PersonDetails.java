@@ -7,12 +7,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Data
 public class PersonDetails implements UserDetails {
 
     private Person person;
+
+    public UUID getId() {
+        return person.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

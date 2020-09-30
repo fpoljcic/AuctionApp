@@ -10,10 +10,13 @@ import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.requests.BidRequest;
 import ba.atlantbh.auctionapp.responses.SimpleBidResponse;
+import ba.atlantbh.auctionapp.security.JwtTokenUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class BidService {
 
@@ -21,18 +24,12 @@ public class BidService {
     private final PersonRepository personRepository;
     private final ProductRepository productRepository;
 
-    public BidService(BidRepository bidRepository, PersonRepository personRepository, ProductRepository productRepository) {
-        this.bidRepository = bidRepository;
-        this.personRepository = personRepository;
-        this.productRepository = productRepository;
-    }
-
     public List<SimpleBidResponse> getBidsForProduct(String id) {
         return bidRepository.getBidsForProduct(id);
     }
 
     public void add(BidRequest bidRequest) {
-        Person person = personRepository.findById(bidRequest.getPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
         Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (product.getStartPrice() > bidRequest.getPrice())
             throw new BadRequestException("Price can't be lower than the product start price");

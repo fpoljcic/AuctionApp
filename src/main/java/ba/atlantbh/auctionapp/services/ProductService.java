@@ -6,19 +6,17 @@ import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.responses.FullProductResponse;
 import ba.atlantbh.auctionapp.responses.ProductResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public List<SimpleProductResponse> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
