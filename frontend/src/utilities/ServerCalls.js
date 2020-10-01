@@ -1,7 +1,15 @@
 import axios from 'axios';
+import { getToken } from './Common';
 
 const hostUrl = process.env.REACT_APP_HOST_URL;
 
+const config = {
+    headers: {
+        'Authorization': 'Bearer ' + getToken()
+    }
+};
+
+/*--------------POST--------------*/
 export const registerUser = async (user) => {
     return await axios.post(hostUrl + '/auth/register', user);
 };
@@ -10,6 +18,11 @@ export const loginUser = async (user) => {
     return await axios.post(hostUrl + '/auth/login', user);
 };
 
+export const bidForProduct = async (price, productId) => {
+    return (await axios.post(hostUrl + '/bids/add', { price, productId }, config));
+};
+
+/*--------------GET--------------*/
 export const getCategories = async () => {
     return (await axios.get(hostUrl + '/categories')).data;
 };

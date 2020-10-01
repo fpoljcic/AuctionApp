@@ -5,24 +5,32 @@ import { getUserId } from 'utilities/Common';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
 import { AiOutlineFullscreen } from "react-icons/ai";
-import { getBidsForProduct, getProduct } from 'utilities/ServerCalls';
+import { getBidsForProduct, getProduct, bidForProduct } from 'utilities/ServerCalls';
 import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({ match, setBreadcrumb }) => {
+const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
 
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
     const [showFullscreen, setShowFullscreen] = useState(false);
     const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [active, setActive] = useState(true);
+    const [ownProduct, setOwnProduct] = useState(false);
+    const [bidPrice, setBidPrice] = useState(null);
 
     useEffect(() => {
         formBreadcrumb();
         const fetchData = async () => {
             const productId = match.params.id;
-            setProduct(await getProduct(productId, getUserId()));
+            const personId = getUserId();
+            const productRes = await getProduct(productId, personId);
+            setActive(moment().isBetween(moment(productRes.startDate), moment(productRes.endDate), null, "[)"));
+            setOwnProduct(productRes.personId === personId);
+            setProduct(productRes);
             setBids(await getBidsForProduct(productId));
         }
 
@@ -40,9 +48,41 @@ const ItemPage = ({ match, setBreadcrumb }) => {
         }), { text: "SINGLE PRODUCT" }]);
     }
 
+    const bid = async () => {
+        setLoading(true);
+        const price = bidPrice;
+        const response = await bidForProduct(parseFloat(price), product.id);
+        if (response.status === 200) {
+            const newBids = await getBidsForProduct(product.id);
+            if (getUserId() === newBids[0].personId)
+                showMessage("success", "Congratulations! You are the highest bider!");
+            else
+                showMessage("warning", "There are higher bids than yours. You could give a second try!");
+            setBids(newBids);
+        }
+        setLoading(false);
+    }
+
+    const getTimeInfo = () => {
+        const productStartDate = moment(product.startDate)
+        if (moment().isBefore(productStartDate))
+            return (
+                <>
+                    Time start: {productStartDate.format("D MMMM YYYY [at] HH:mm")}
+                    <br />
+                    Time end: {moment(product.endDate).format("D MMMM YYYY [at] HH:mm")}
+                </>
+            );
+        const timeLeft = !active ? 0 : moment.duration(moment(product.endDate).diff(moment())).format("D [days] h [hours] m [minutes]");
+        return (
+            <>
+                Time left: {timeLeft}
+            </>
+        );
+    }
+
     return (
         <>
-
             {product !== null ? (
                 <>
                     <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
@@ -91,14 +131,14 @@ const ItemPage = ({ match, setBreadcrumb }) => {
                             </div>
                             <div className="place-bid-container">
                                 <div>
-                                    <Form.Control className="form-control-gray place-bid-form" size="xl-18" type="text" />
+                                    <Form.Control disabled={ownProduct || !active || loading} maxLength="7" className="form-control-gray place-bid-form" size="xl-18" type="text" onChange={e => setBidPrice(e.target.value)} />
                                     <div className="place-bid-label">
-                                        Enter ${bids[0] === undefined ? product.startPrice : bids[0].price} or more
+                                        Enter ${product.startPrice} or more
+                                    </div>
                                 </div>
-                                </div>
-                                <Button style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow">
+                                <Button disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < product.startPrice} style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow" onClick={bid}>
                                     PLACE BID
-                                <IoIosArrowForward style={{ fontSize: 24 }} />
+                                    <IoIosArrowForward style={{ fontSize: 24 }} />
                                 </Button>
                             </div>
                             <div style={{ color: '#9B9B9B' }}>
@@ -107,22 +147,22 @@ const ItemPage = ({ match, setBreadcrumb }) => {
                                     ${bids[0] === undefined ? 0 : bids[0].price}
                                 </span>
                                 <br />
-                            No bids: {bids.length}
+                                No bids: {bids.length}
                                 <br />
-                            Time left: {moment(product.endDate).diff(moment(), 'days')} days
-                        </div>
+                                {getTimeInfo()}
+                            </div>
                             <div>
-                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#CD5C5C' } : null} variant="transparent-gray">
+                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#8367D8' } : null} variant="transparent-gray">
                                     Wishlist
-                            {product.wished ? (
-                                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#CD5C5C' }} />
+                                    {product.wished ? (
+                                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />
                                     ) : (
                                             <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
                                         )}
                                 </Button>
                                 <div className="font-18" style={{ marginTop: 15 }}>
                                     Details
-                            <div className="gray-line" />
+                                    <div className="gray-line" />
                                     <div className="font-15">
                                         {product.description}
                                     </div>
