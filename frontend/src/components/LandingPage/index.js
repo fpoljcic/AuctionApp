@@ -19,12 +19,14 @@ const LandingPage = ({ removeBreadcrumb }) => {
   useEffect(() => {
     removeBreadcrumb();
     const fetchData = async () => {
-      setCategories(await getCategories());
-      setFeaturedProducts(await getFeaturedRandomProducts());
-      setRandomSubcategories(await getRandomSubcategories());
-      const newProducts = await getNewProducts();
-      const lastProducts = await getLastProducts();
-      setNewAndLastProducts([newProducts, lastProducts]);
+      try {
+        setCategories(await getCategories());
+        setFeaturedProducts(await getFeaturedRandomProducts());
+        setRandomSubcategories(await getRandomSubcategories());
+        const newProducts = await getNewProducts();
+        const lastProducts = await getLastProducts();
+        setNewAndLastProducts([newProducts, lastProducts]);
+      } catch (e) { }
     }
 
     fetchData();

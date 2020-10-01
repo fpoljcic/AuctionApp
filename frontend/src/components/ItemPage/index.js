@@ -12,6 +12,8 @@ import './itemPage.css';
 
 const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
 
+    const personId = getUserId();
+
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
@@ -21,17 +23,22 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const [active, setActive] = useState(true);
     const [ownProduct, setOwnProduct] = useState(false);
     const [bidPrice, setBidPrice] = useState(null);
+    const [minPrice, setMinPrice] = useState(0);
 
     useEffect(() => {
         formBreadcrumb();
         const fetchData = async () => {
             const productId = match.params.id;
-            const personId = getUserId();
-            const productRes = await getProduct(productId, personId);
-            setActive(moment().isBetween(moment(productRes.startDate), moment(productRes.endDate), null, "[)"));
-            setOwnProduct(productRes.personId === personId);
-            setProduct(productRes);
-            setBids(await getBidsForProduct(productId));
+            try {
+                const data = await getProduct(productId, personId);
+                setActive(moment().isBetween(moment(data.startDate), moment(data.endDate), null, "[)"));
+                setOwnProduct(data.personId === personId);
+                setProduct(data);
+                const bids = await getBidsForProduct(productId);
+                const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.price : 0), 0);
+                setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
+                setBids(bids);
+            } catch (e) { }
         }
 
         fetchData();
@@ -49,17 +56,22 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     }
 
     const bid = async () => {
+        if (personId === null) {
+            showMessage("warning", "You have to be logged in to place bids.");
+            return;
+        }
         setLoading(true);
         const price = bidPrice;
-        const response = await bidForProduct(parseFloat(price), product.id);
-        if (response.status === 200) {
+        try {
+            await bidForProduct(parseFloat(price), product.id);
             const newBids = await getBidsForProduct(product.id);
-            if (getUserId() === newBids[0].personId)
+            setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.price : 0), 0) + 0.01);
+            if (personId === newBids[0].personId)
                 showMessage("success", "Congratulations! You are the highest bider!");
             else
                 showMessage("warning", "There are higher bids than yours. You could give a second try!");
             setBids(newBids);
-        }
+        } catch (e) { }
         setLoading(false);
     }
 
@@ -133,10 +145,10 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                                 <div>
                                     <Form.Control disabled={ownProduct || !active || loading} maxLength="7" className="form-control-gray place-bid-form" size="xl-18" type="text" onChange={e => setBidPrice(e.target.value)} />
                                     <div className="place-bid-label">
-                                        Enter ${product.startPrice} or more
+                                        Enter ${minPrice} or more
                                     </div>
                                 </div>
-                                <Button disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < product.startPrice} style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow" onClick={bid}>
+                                <Button disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice} style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow" onClick={bid}>
                                     PLACE BID
                                     <IoIosArrowForward style={{ fontSize: 24 }} />
                                 </Button>
@@ -172,27 +184,29 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                     </div>
                 </>
             ) : null}
-            <Table variant="gray-transparent" responsive>
-                <thead>
-                    <tr>
-                        <th colSpan="2">Bider</th>
-                        <th>Date</th>
-                        <th>Bid</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bids.map((bid, i) => (
-                        <tr key={bid.id}>
-                            <td style={{ fontWeight: 'bold' }} colSpan="2">
-                                <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
-                                {bid.firstName + ' ' + bid.lastName}
-                            </td>
-                            <td>{moment(bid.date).format("D MMMM YYYY")}</td>
-                            <td style={i === 0 ? { color: '#6CC047', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
+            {bids.length !== 0 ? (
+                <Table variant="gray-transparent" responsive>
+                    <thead>
+                        <tr>
+                            <th colSpan="2">Bider</th>
+                            <th>Date</th>
+                            <th>Bid</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {bids.map((bid, i) => (
+                            <tr key={bid.id}>
+                                <td style={{ fontWeight: 'bold' }} colSpan="2">
+                                    <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
+                                    {bid.firstName + ' ' + bid.lastName}
+                                </td>
+                                <td>{moment(bid.date).format("D MMMM YYYY")}</td>
+                                <td style={i === 0 ? { color: '#6CC047', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            ) : null}
         </>
     );
 }

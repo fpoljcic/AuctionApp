@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Alert, Breadcrumb } from 'react-bootstrap';
+import axios from 'axios';
 
 import './App.css';
 
@@ -21,9 +22,16 @@ const App = () => {
 
   let keepFlag = false;
 
+  const handleError = (error) => {
+    showMessage("warning", error.response.data.message);
+    return Promise.reject(error);
+  }
+
+  axios.interceptors.response.use((response) => response, handleError);
+
   const showMessage = (variant, message) => {
-    setMessage(message);
     setVariant(variant);
+    setMessage(message);
     setAlertVisible(true);
     keepFlag = true;
   }
@@ -45,6 +53,7 @@ const App = () => {
 
   const removeBreadcrumb = () => {
     setBreadcrumbTitle(null);
+    removeAlert();
   }
 
   const changeLoggedInState = () => {

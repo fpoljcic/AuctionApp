@@ -26,22 +26,21 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
     const handleSubmit = async (user) => {
         setLoading(true);
         try {
-            const response = await loginUser(user);
-            setSession(response.data.person, response.data.token);
+            const data = await loginUser(user);
+            setSession(data.person, data.token);
             if (user.remember)
                 setRememberInfo(user.email, user.password);
             else
                 removeRememberInfo();
             setLoading(false);
-            homeRoute(history);
+            console.log(history)
+            if (history.location.pathname === "/register")
+                homeRoute(history);
+            else
+                history.goBack();
             changeLoggedInState();
-            showMessage("success", "Logged in successfully");
-        } catch (error) {
-            if (error.response.data.status === 401)
-                setLoginError(true);
-            showMessage("warning", error.response.data.message);
-            setLoading(false);
-        }
+        } catch (e) { setLoginError(true); }
+        setLoading(false);
     }
 
     const schema = yup.object().shape({

@@ -35,6 +35,8 @@
     background: #3B3B3B;
     border: none;
     margin-right: 8px;
+    width: 275px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 575px) {

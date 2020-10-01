@@ -54,8 +54,6 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 10%;
-  padding-left: 10%;
   flex-wrap: wrap;
 }
 
@@ -150,6 +148,10 @@ h3 {
 }
 
 /*--------------NAV LINKS--------------*/
+
+.nav {
+  align-items: center;
+}
 
 a:hover {
   text-decoration: none;
@@ -312,6 +314,11 @@ a:hover {
 .avatar-image-small {
   width: 60px;
   height: 60px;
+}
+
+.avatar-image-tiny {
+  width: 30px;
+  height: 30px;
 }
 
 img {

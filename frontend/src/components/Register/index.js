@@ -41,18 +41,17 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
     const handleSubmit = async (user) => {
         setLoading(true);
         try {
-            const response = await registerUser(user);
-            setSession(response.data.person, response.data.token);
+            const data = await registerUser(user);
+            setSession(data.person, data.token);
             setLoading(false);
             myAccountRoute(history);
             changeLoggedInState();
             showMessage("success", "Account created successfully");
-        } catch (error) {
-            if (error.response.data.status === 409)
+        } catch (e) {
+            if (e.response.data.status === 409)
                 setEmailError(true);
-            showMessage("warning", error.response.data.message);
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     return (

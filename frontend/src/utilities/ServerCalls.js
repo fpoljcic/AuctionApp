@@ -3,23 +3,25 @@ import { getToken } from './Common';
 
 const hostUrl = process.env.REACT_APP_HOST_URL;
 
-const config = {
-    headers: {
-        'Authorization': 'Bearer ' + getToken()
-    }
-};
+const config = () => {
+    return {
+        headers: {
+            'Authorization': 'Bearer ' + getToken()
+        }
+    };
+}
 
 /*--------------POST--------------*/
 export const registerUser = async (user) => {
-    return await axios.post(hostUrl + '/auth/register', user);
+    return (await axios.post(hostUrl + '/auth/register', user)).data;
 };
 
 export const loginUser = async (user) => {
-    return await axios.post(hostUrl + '/auth/login', user);
+    return (await axios.post(hostUrl + '/auth/login', user)).data;
 };
 
 export const bidForProduct = async (price, productId) => {
-    return (await axios.post(hostUrl + '/bids/add', { price, productId }, config));
+    return (await axios.post(hostUrl + '/bids/add', { price, productId }, config())).data;
 };
 
 /*--------------GET--------------*/
