@@ -33,7 +33,7 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private Integer startPrice;
+    private Float startPrice;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -78,7 +78,7 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<Photo> photos;
 
-    public Product(@NotBlank String name, Integer startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
+    public Product(@NotBlank String name, Float startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
         this.name = name;
         this.startPrice = startPrice;
         this.startDate = startDate;

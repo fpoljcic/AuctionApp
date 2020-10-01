@@ -13,7 +13,7 @@ public class BidRequest {
 
     @NotNull(message = "Price must be supplied")
     @Min(value = 0, message = "Price can't be less than 0")
-    private Integer price;
+    private Float price;
 
     @NotNull(message = "Product must be supplied")
     private UUID productId;

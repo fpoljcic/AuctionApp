@@ -7,5 +7,5 @@ public interface SimpleSubcategoryResponse {
     String getName();
     String getCategoryName();
     String getUrl();
-    Integer getStartPrice();
+    Float getStartPrice();
 }

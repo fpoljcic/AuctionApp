@@ -12,9 +12,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductResponse {
     private UUID id;
+    private UUID personId;
     private String name;
     private String description;
-    private Integer startPrice;
+    private Float startPrice;
+    private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Boolean wished;
     private List<Photo> photos;

@@ -5,7 +5,7 @@ import java.util.UUID;
 public interface SimpleProductResponse {
     UUID getId();
     String getName();
-    Integer getStartPrice();
+    Float getStartPrice();
     String getDescription();
     String getUrl();
     String getCategoryName();

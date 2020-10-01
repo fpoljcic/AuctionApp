@@ -36,9 +36,11 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                    "ORDER BY end_date LIMIT 10", nativeQuery = true)
     List<SimpleProductResponse> getLastProducts();
 
-    @Query(value = "SELECT p.id, p.name, p.description, p.start_price startPrice, p.end_date endDate, " +
+    @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, " +
+            "p.start_date startDate, p.end_date endDate, " +
             "EXISTS(SELECT * FROM wishlist " +
-            "WHERE product_id = :product_id AND person_id = :user_id) wished, ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
+                   "WHERE product_id = :product_id AND person_id = :user_id) wished, " +
+            "ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
             "FROM product p LEFT OUTER JOIN photo ph on p.id = ph.product_id " +
             "WHERE p.id = :product_id " +
             "ORDER BY ph.featured DESC", nativeQuery = true)

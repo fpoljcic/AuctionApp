@@ -27,7 +27,7 @@ public class Bid {
 
     @Column(nullable = false)
     @Min(value = 0)
-    private Integer price;
+    private Float price;
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
@@ -37,14 +37,14 @@ public class Bid {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Bid(LocalDateTime date, Integer price, Person person, Product product) {
+    public Bid(LocalDateTime date, Float price, Person person, Product product) {
         this.date = date;
         this.price = price;
         this.person = person;
         this.product = product;
     }
 
-    public Bid(Integer price, Person person, Product product) {
+    public Bid(Float price, Person person, Product product) {
         this.price = price;
         this.person = person;
         this.product = product;

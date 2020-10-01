@@ -37,9 +37,11 @@ public class ProductService {
 
         ProductResponse productResponse = new ProductResponse(
                 fullProducts.get(0).getId(),
+                fullProducts.get(0).getPersonId(),
                 fullProducts.get(0).getName(),
                 fullProducts.get(0).getDescription(),
                 fullProducts.get(0).getStartPrice(),
+                fullProducts.get(0).getStartDate(),
                 fullProducts.get(0).getEndDate(),
                 fullProducts.get(0).getWished(),
                 new ArrayList<>());

@@ -5,9 +5,11 @@ import java.util.UUID;
 
 public interface FullProductResponse {
     UUID getId();
+    UUID getPersonId();
     String getName();
     String getDescription();
-    Integer getStartPrice();
+    Float getStartPrice();
+    LocalDateTime getStartDate();
     LocalDateTime getEndDate();
     Boolean getWished();
     UUID getPhotoId();

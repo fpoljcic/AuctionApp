@@ -9,5 +9,6 @@ public interface SimpleBidResponse {
     String getLastName();
     String getPhoto();
     LocalDateTime getDate();
-    Integer getPrice();
+    Float getPrice();
+    UUID getPersonId();
 }
