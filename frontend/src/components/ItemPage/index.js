@@ -5,7 +5,7 @@ import { getUserId } from 'utilities/Common';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
 import { AiOutlineFullscreen } from "react-icons/ai";
-import { getBidsForProduct, getProduct, bidForProduct, getRelatedProducts } from 'utilities/ServerCalls';
+import { getBidsForProduct, getProduct, bidForProduct, getRelatedProducts, wishlistProduct, removeWishlistProduct } from 'utilities/ServerCalls';
 import moment from 'moment';
 
 import './itemPage.css';
@@ -22,6 +22,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const [showFullscreen, setShowFullscreen] = useState(false);
     const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingWish, setLoadingWish] = useState(false);
     const [active, setActive] = useState(true);
     const [ownProduct, setOwnProduct] = useState(false);
     const [bidPrice, setBidPrice] = useState("");
@@ -128,6 +129,26 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
             );
     }
 
+    const wishlist = async () => {
+        if (personId === null) {
+            showMessage("warning", "You have to be logged in to wishlist products.");
+            return;
+        }
+        setLoadingWish(true);
+        try {
+            if (product.wished) {
+                await removeWishlistProduct(personId, product.id);
+                showMessage("success", "You have removed the product from your wishlist.");
+            }
+            else {
+                await wishlistProduct(personId, product.id);
+                showMessage("success", "You have added the product to your wishlist.");
+            }
+            product.wished = !product.wished;
+        } catch (e) { }
+        setLoadingWish(false);
+    }
+
     return (
         <>
             {product !== null ? (
@@ -202,7 +223,13 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                                 {getTimeInfo()}
                             </div>
                             <div>
-                                <Button className="wishlist-button" style={product.wished ? { borderColor: '#8367D8' } : null} variant="transparent-gray">
+                                <Button
+                                    className="wishlist-button"
+                                    style={product.wished ? { borderColor: '#8367D8' } : null}
+                                    variant="transparent-gray"
+                                    onClick={wishlist}
+                                    loading={loadingWish}
+                                >
                                     Wishlist
                                     {product.wished ? (
                                         <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />

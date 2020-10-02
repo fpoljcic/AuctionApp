@@ -24,6 +24,14 @@ export const bidForProduct = async (price, productId) => {
     return (await axios.post(hostUrl + '/bids/add', { price, productId }, config())).data;
 };
 
+export const wishlistProduct = async (personId, productId) => {
+    return (await axios.post(hostUrl + '/wishlist/add', { personId, productId }, config())).data;
+};
+
+export const removeWishlistProduct = async (personId, productId) => {
+    return (await axios.post(hostUrl + '/wishlist/remove', { personId, productId }, config())).data;
+};
+
 /*--------------GET--------------*/
 export const getCategories = async () => {
     return (await axios.get(hostUrl + '/categories')).data;
