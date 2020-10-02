@@ -19,7 +19,7 @@ const UserRoutes = (props) => {
             <Route path="/all" render={() => <AllCategories {...props} />} />
             <Route path="/shop/*/*/:id" render={() => <ItemPage {...props} />} />
             <Route path="/shop*" render={() => <Shop {...props} />} />
-            <Route path="/login" render={() => <Login {...props} />} />
+            <GuestRoute path="/login" {...props} component={Login} />
             <GuestRoute path="/register" {...props} component={Register} />
             <PrivateRoute path="/my_account" {...props} component={MyAccount} />
             <Route component={PageNotFound} />

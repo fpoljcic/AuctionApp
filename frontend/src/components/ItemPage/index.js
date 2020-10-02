@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Image, Modal, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { getUserId } from 'utilities/Common';
 import { IoIosArrowForward } from "react-icons/io";
@@ -22,7 +22,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const [loading, setLoading] = useState(false);
     const [active, setActive] = useState(true);
     const [ownProduct, setOwnProduct] = useState(false);
-    const [bidPrice, setBidPrice] = useState(null);
+    const [bidPrice, setBidPrice] = useState("");
     const [minPrice, setMinPrice] = useState(0);
 
     useEffect(() => {
@@ -71,6 +71,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
             else
                 showMessage("warning", "There are higher bids than yours. You could give a second try!");
             setBids(newBids);
+            setBidPrice("");
         } catch (e) { }
         setLoading(false);
     }
@@ -91,6 +92,35 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                 Time left: {timeLeft}
             </>
         );
+    }
+
+    const renderTooltip = () => {
+        let tooltipText = "";
+        switch (true) {
+            case bidPrice === "":
+                break;
+            case ownProduct:
+                tooltipText = "You can't bid on your own product";
+                break;
+            case !active:
+                tooltipText = "Auction is yet to start for this product";
+                break;
+            case isNaN(bidPrice):
+                tooltipText = "Entered value isn't a valid number";
+                break;
+            case bidPrice < minPrice:
+                tooltipText = "Price can't be lower than $" + minPrice;
+                break;
+            default:
+                break;
+        }
+
+        return tooltipText === "" ?
+            (<div></div>) : (
+                <Tooltip>
+                    {tooltipText}
+                </Tooltip>
+            );
     }
 
     return (
@@ -123,11 +153,9 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                                 <Image
                                     onClick={() => setActivePhoto(i)}
                                     key={photo.id}
-                                    width="110px"
-                                    height="110px"
                                     src={photo.url}
                                     className="product-image-small"
-                                    style={activePhoto === i ? { border: '2px solid #8367D8' } : null}
+                                    style={activePhoto === i ? { border: '2px solid #8367D8' } : { opacity: 0.7 }}
                                 />
                             ))}
                         </div>
@@ -143,15 +171,20 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                             </div>
                             <div className="place-bid-container">
                                 <div>
-                                    <Form.Control disabled={ownProduct || !active || loading} maxLength="7" className="form-control-gray place-bid-form" size="xl-18" type="text" onChange={e => setBidPrice(e.target.value)} />
+                                    <Form.Control value={bidPrice} disabled={ownProduct || !active || loading} maxLength="7" className="form-control-gray place-bid-form" size="xl-18" type="text" onChange={e => setBidPrice(e.target.value)} />
                                     <div className="place-bid-label">
                                         Enter ${minPrice} or more
                                     </div>
                                 </div>
-                                <Button disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice} style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow" onClick={bid}>
-                                    PLACE BID
+                                <OverlayTrigger
+                                    placement="right"
+                                    overlay={renderTooltip()}
+                                >
+                                    <Button disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice} style={{ width: 192, padding: 0 }} size="xxl" variant="transparent-black-shadow" onClick={bid}>
+                                        PLACE BID
                                     <IoIosArrowForward style={{ fontSize: 24 }} />
-                                </Button>
+                                    </Button>
+                                </OverlayTrigger>
                             </div>
                             <div style={{ color: '#9B9B9B' }}>
                                 Highest bid: {' '}

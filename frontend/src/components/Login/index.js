@@ -5,12 +5,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/Common';
 import { SiFacebook, SiGmail } from 'react-icons/si';
 import { loginUser } from 'utilities/ServerCalls';
-import { homeRoute } from 'utilities/AppRoutes';
 import * as yup from 'yup';
 
 import './login.css';
 
-const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
+const Login = ({ changeLoggedInState, setBreadcrumb }) => {
     const history = useHistory();
 
     const rememberInfo = getRememberInfo();
@@ -33,14 +32,12 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
             else
                 removeRememberInfo();
             setLoading(false);
-            console.log(history)
-            if (history.location.pathname === "/register")
-                homeRoute(history);
-            else
-                history.goBack();
+            history.goBack();
             changeLoggedInState();
-        } catch (e) { setLoginError(true); }
-        setLoading(false);
+        } catch (e) {
+            setLoginError(true);
+            setLoading(false);
+        }
     }
 
     const schema = yup.object().shape({

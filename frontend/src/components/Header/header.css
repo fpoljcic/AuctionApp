@@ -49,3 +49,18 @@
     top: 9px;
     cursor: pointer;
 }
+
+@media (max-width: 575px) {
+    .top-header-nav-links .nav-link {
+        padding: 0.25rem 0.5rem;
+    }
+    .bottom-header-container {
+        flex-direction: column;
+    }
+    .bottom-header-brand {
+        padding-top: 10px;
+    }
+    .bottom-header-search {
+        width: 90%;
+    }
+}

@@ -68,7 +68,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
                 <IoIosArrowForward style={{ fontSize: 24 }} />
               </Button>
             </div>
-            <Image className="featured-product-image" width="484px" height="294px" src={featuredProducts[0].url} />
+            <Image className="featured-product-image" src={featuredProducts[0].url} />
           </div> : null}
       </div>
 
@@ -82,8 +82,6 @@ const LandingPage = ({ removeBreadcrumb }) => {
             <div key={subcategory.id} className="featured-item-container">
               <Image
                 className="featured-item-image-xxl"
-                width="350px"
-                height="350px"
                 src={subcategory.url}
                 onClick={() => subcategoryRoute(history, subcategory)}
               />
@@ -106,8 +104,6 @@ const LandingPage = ({ removeBreadcrumb }) => {
             <div key={product.id} className="featured-item-container">
               <Image
                 className="featured-item-image-xl"
-                width="260px"
-                height="350px"
                 src={product.url}
                 onClick={() => productRoute(history, product)}
               />
@@ -135,8 +131,6 @@ const LandingPage = ({ removeBreadcrumb }) => {
             <div key={product.id} className="featured-item-container">
               <Image
                 className="featured-item-image-lg"
-                width="260px"
-                height="260px"
                 src={product.url}
                 onClick={() => productRoute(history, product)}
               />

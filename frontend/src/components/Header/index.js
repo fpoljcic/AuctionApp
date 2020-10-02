@@ -39,7 +39,7 @@ const Header = ({ loggedInState }) => {
                         <SiInstagram />
                     </a>
                 </div>
-                <Nav>
+                <Nav className="top-header-nav-links">
                     {loggedIn ?
                         (
                             <>

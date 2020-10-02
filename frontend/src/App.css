@@ -13,7 +13,7 @@
 
 @media (max-width: 575px) {
   .route-container {
-    padding-bottom: calc(11.1% + 466px);
+    padding-bottom: calc(11.1% + 530px);
   }
 }
 
@@ -250,21 +250,6 @@ a:hover {
   letter-spacing: 0.63px;
 }
 
-@media (max-width: 765px) {
-  .breadcrumb-title {
-    margin: 0 auto;
-    width: max-content;
-    top: 0;
-    right: 0;
-    left: 0;
-  }
-  .breadcrumb {
-    align-items: flex-end;
-    padding-left: 1%;
-    padding-right: 1%;
-  }
-}
-
 .breadcrumb-item>a {
   font-weight: lighter;
   color: #252525;
@@ -276,6 +261,22 @@ a:hover {
 
 .breadcrumb-item.active {
   color: #252525;
+}
+
+@media (max-width: 765px) {
+  .breadcrumb-title {
+    margin: 0 auto;
+    width: max-content;
+    top: 4px;
+    right: 0;
+    left: 0;
+  }
+  .breadcrumb {
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 30px;
+    font-size: 2.2vw;
+  }
 }
 
 /*--------------TABLE--------------*/
