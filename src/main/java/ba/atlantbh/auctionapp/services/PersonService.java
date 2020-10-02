@@ -6,19 +6,16 @@ import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.requests.LoginRequest;
 import ba.atlantbh.auctionapp.requests.RegisterRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class PersonService {
 
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder) {
-        this.personRepository = personRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public Person register(RegisterRequest registerRequest) {
         if (personRepository.existsByEmail(registerRequest.getEmail()))
@@ -37,6 +34,8 @@ public class PersonService {
         Person person = personRepository.findByEmail(loginRequest.getEmail());
         if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword()))
             throw new UnauthorizedException("Wrong email or password");
+        if (!person.getActive())
+            throw new UnauthorizedException("User account disabled");
         person.setPassword(null); // No need to return password
         return person;
     }

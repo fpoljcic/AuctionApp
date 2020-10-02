@@ -2,10 +2,12 @@ package ba.atlantbh.auctionapp.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,10 +21,12 @@ public class Bid {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime date;
 
     @Column(nullable = false)
+    @Min(value = 0)
     private Integer price;
 
     @ManyToOne
@@ -35,6 +39,12 @@ public class Bid {
 
     public Bid(LocalDateTime date, Integer price, Person person, Product product) {
         this.date = date;
+        this.price = price;
+        this.person = person;
+        this.product = product;
+    }
+
+    public Bid(Integer price, Person person, Product product) {
         this.price = price;
         this.person = person;
         this.product = product;
