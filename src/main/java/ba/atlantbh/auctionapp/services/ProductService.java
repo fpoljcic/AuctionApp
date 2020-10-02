@@ -2,6 +2,7 @@ package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.models.Photo;
+import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.responses.FullProductResponse;
 import ba.atlantbh.auctionapp.responses.ProductResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -57,5 +59,12 @@ public class ProductService {
         }
 
         return productResponse;
+    }
+
+    public List<SimpleProductResponse> getRelatedProducts(String id) {
+        Product product = productRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+        return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
+                product.getSubcategory().getCategory().getId().toString());
     }
 }

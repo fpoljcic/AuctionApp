@@ -39,4 +39,9 @@ public class ProductController {
                                                       @RequestParam(name = "user_id", defaultValue = "") String userId) {
         return ResponseEntity.ok(productService.getProduct(productId, userId));
     }
+
+    @GetMapping("/related")
+    public ResponseEntity<List<SimpleProductResponse>> getRelatedProducts(@RequestParam(name = "id") String id) {
+        return ResponseEntity.ok(productService.getRelatedProducts(id));
+    }
 }

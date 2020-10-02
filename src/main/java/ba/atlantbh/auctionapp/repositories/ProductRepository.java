@@ -37,12 +37,23 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<SimpleProductResponse> getLastProducts();
 
     @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, " +
-            "p.start_date startDate, p.end_date endDate, " +
-            "EXISTS(SELECT * FROM wishlist " +
-                   "WHERE product_id = :product_id AND person_id = :user_id) wished, " +
-            "ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
-            "FROM product p LEFT OUTER JOIN photo ph on p.id = ph.product_id " +
-            "WHERE p.id = :product_id " +
-            "ORDER BY ph.featured DESC", nativeQuery = true)
+                   "p.start_date startDate, p.end_date endDate, " +
+                   "EXISTS(SELECT * FROM wishlist " +
+                          "WHERE product_id = :product_id AND person_id = :user_id) wished, " +
+                   "ph.id photoId, ph.url photoUrl, ph.featured photoFeatured " +
+                   "FROM product p LEFT OUTER JOIN photo ph on p.id = ph.product_id " +
+                   "WHERE p.id = :product_id " +
+                   "ORDER BY ph.featured DESC", nativeQuery = true)
     List<FullProductResponse> getProduct(@Param("product_id") String productId, @Param("user_id") String userId);
+
+    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
+                   "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
+                   "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+                   "INNER JOIN category c on c.id = s.category_id " +
+                   "WHERE (s.id = :subcategory_id OR c.id = :category_id) " +
+                   "AND pr.id != :product_id AND p.featured = true AND start_date <= now() AND end_date > now() " +
+                   "ORDER BY s.id = :subcategory_id DESC, RANDOM() LIMIT 4", nativeQuery = true)
+    List<SimpleProductResponse> getRelatedProducts(@Param("product_id") String productId,
+                                                   @Param("subcategory_id") String subcategoryId,
+                                                   @Param("category_id") String categoryId);
 }
