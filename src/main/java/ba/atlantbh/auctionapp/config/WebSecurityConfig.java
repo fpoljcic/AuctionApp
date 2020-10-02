@@ -34,7 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
 
     private final String[] protectedRoutes = {
-            "/bids/add"
+            "/bids/add",
+            "/wishlist/add",
+            "/wishlist/remove"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
