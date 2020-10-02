@@ -30,6 +30,11 @@ const App = () => {
   axios.interceptors.response.use((response) => response, handleError);
 
   const showMessage = (variant, message) => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
     setVariant(variant);
     setMessage(message);
     setAlertVisible(true);

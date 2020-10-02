@@ -52,3 +52,7 @@ export const getProduct = async (productId, userId) => {
 export const getBidsForProduct = async (id) => {
     return (await axios.get(hostUrl + '/bids/product/?id=' + id)).data;
 };
+
+export const getRelatedProducts = async (id) => {
+    return (await axios.get(hostUrl + '/products/related/?id=' + id)).data;
+};

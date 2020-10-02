@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Image, Modal, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import { getUserId } from 'utilities/Common';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
 import { AiOutlineFullscreen } from "react-icons/ai";
-import { getBidsForProduct, getProduct, bidForProduct } from 'utilities/ServerCalls';
+import { getBidsForProduct, getProduct, bidForProduct, getRelatedProducts } from 'utilities/ServerCalls';
 import moment from 'moment';
 
 import './itemPage.css';
+import { productRoute } from 'utilities/AppRoutes';
 
 const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
-
+    const history = useHistory();
     const personId = getUserId();
 
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
     const [showFullscreen, setShowFullscreen] = useState(false);
     const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
@@ -34,6 +36,9 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                 setActive(moment().isBetween(moment(data.startDate), moment(data.endDate), null, "[)"));
                 setOwnProduct(data.personId === personId);
                 setProduct(data);
+                if (personId === null) {
+                    setRelatedProducts(await getRelatedProducts(productId));
+                }
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.price : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
@@ -43,7 +48,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
 
         fetchData();
         // eslint-disable-next-line
-    }, [])
+    }, [match.params.id])
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1, -1);
@@ -97,13 +102,13 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const renderTooltip = () => {
         let tooltipText = "";
         switch (true) {
-            case bidPrice === "":
-                break;
             case ownProduct:
                 tooltipText = "You can't bid on your own product";
                 break;
             case !active:
                 tooltipText = "Auction is yet to start for this product";
+                break;
+            case bidPrice === "":
                 break;
             case isNaN(bidPrice):
                 tooltipText = "Entered value isn't a valid number";
@@ -217,7 +222,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                     </div>
                 </>
             ) : null}
-            {bids.length !== 0 ? (
+            {personId !== null && bids.length !== 0 ? (
                 <Table variant="gray-transparent" responsive>
                     <thead>
                         <tr>
@@ -239,6 +244,29 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                         ))}
                     </tbody>
                 </Table>
+            ) : null}
+            {personId === null && product !== null ? (
+                <div style={{ marginTop: 150 }} className="featured-container">
+                    <h2>
+                        Related products
+                    </h2>
+                    <div className="gray-line" />
+                    <div className="featured-items-container">
+                        {relatedProducts.map(product => (
+                            <div key={product.id} className="featured-item-container">
+                                <Image
+                                    className="featured-item-image-xxl"
+                                    src={product.url}
+                                    onClick={() => productRoute(history, product)}
+                                />
+                                <h3>
+                                    {product.name}
+                                </h3>
+                                Start from ${product.startPrice}
+                            </div>
+                        ))}
+                    </div>
+                </div>
             ) : null}
         </>
     );
