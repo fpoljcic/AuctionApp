@@ -36,13 +36,13 @@ public class Card {
     private Integer expirationMonth;
 
     @Column(nullable = false)
-    private Integer cvc;
+    private Short cvc;
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
-    public Card(@NotBlank String type, @NotBlank String name, @NotBlank String cardNumber, Integer expirationYear, Integer expirationMonth, Integer cvc, Person person) {
+    public Card(@NotBlank String type, @NotBlank String name, @NotBlank String cardNumber, Integer expirationYear, Integer expirationMonth, Short cvc, Person person) {
         this.type = type;
         this.name = name;
         this.cardNumber = cardNumber;

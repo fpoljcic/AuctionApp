@@ -1,5 +1,6 @@
 package ba.atlantbh.auctionapp.responses;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ public interface FullProductResponse {
     UUID getPersonId();
     String getName();
     String getDescription();
-    Float getStartPrice();
+    BigDecimal getStartPrice();
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
     Boolean getWished();
