@@ -7,7 +7,7 @@ import './App.css';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
-import MyRoutes from 'utilities/MyRoutes';
+import MyRoutes from 'routing/MyRoutes';
 
 const App = () => {
 

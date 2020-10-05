@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { registerUser } from 'utilities/ServerCalls';
-import { setSession } from 'utilities/Common';
-import { myAccountRoute } from 'utilities/AppRoutes';
+import { registerUser } from 'api/auth';
+import { setSession } from 'utilities/localStorage';
+import { loginUrl, myAccountUrl } from 'utilities/appUrls';
 import * as yup from 'yup';
 
 import './register.css';
@@ -44,7 +44,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
             const data = await registerUser(user);
             setSession(data.person, data.token);
             setLoading(false);
-            myAccountRoute(history);
+            history.push(myAccountUrl);
             changeLoggedInState();
             showMessage("success", "Account created successfully");
         } catch (e) {
@@ -137,7 +137,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
 
                             <Form.Text className="account-exists-text font-18">
                                 Already have an account?
-                                <Link className="purple-nav-link nav-link" to="/login">
+                                <Link className="purple-nav-link nav-link" to={loginUrl}>
                                     Login
                                 </Link>
                             </Form.Text>

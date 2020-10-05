@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { SiFacebook, SiTwitter, SiInstagram } from "react-icons/si";
 import { IoIosArrowForward } from "react-icons/io";
 import { Button, Form } from 'react-bootstrap';
+import { aboutUrl, privacyUrl, termsUrl } from 'utilities/appUrls';
 
 import './footer.css';
 
@@ -14,13 +15,13 @@ const Footer = () => {
         <div className="footer-content-title">
           AUCTION
         </div>
-        <Link className="white-nav-link" to="/shop/about">
+        <Link className="white-nav-link" to={aboutUrl}>
           About Us
         </Link>
-        <Link className="white-nav-link" to="/shop/terms">
+        <Link className="white-nav-link" to={termsUrl}>
           Terms and Conditions
         </Link>
-        <Link className="white-nav-link" to="/shop/privacy">
+        <Link className="white-nav-link" to={privacyUrl}>
           Privacy and Policy
         </Link>
       </div>

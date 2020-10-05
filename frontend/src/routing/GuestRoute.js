@@ -1,13 +1,14 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { validToken } from './Common';
+import { homeUrl } from 'utilities/appUrls';
+import { validToken } from 'utilities/localStorage';
 
 // handle the public routes
 const GuestRoute = ({ component: Component, path: Path, ...rest }) => {
   return (
     <Route
       path={Path}
-      render={() => !validToken() ? <Component {...rest} /> : <Redirect to="/" />}
+      render={() => !validToken() ? <Component {...rest} /> : <Redirect to={homeUrl} />}
     />
   )
 }

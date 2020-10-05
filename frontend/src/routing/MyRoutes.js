@@ -1,18 +1,18 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
-import GuestRoute from './GuestRoute';
+import PrivateRoute from 'routing/PrivateRoute';
+import GuestRoute from 'routing/GuestRoute';
 
-import LandingPage from 'components/LandingPage';
-import AllCategories from 'components/AllCategories';
-import Shop from 'components/Shop';
-import ItemPage from 'components/ItemPage';
-import Login from 'components/Login';
-import Register from 'components/Register';
-import MyAccount from 'components/MyAccount';
-import PageNotFound from 'components/PageNotFound';
+import LandingPage from 'pages/LandingPage';
+import AllCategories from 'pages/AllCategories';
+import Shop from 'pages/Shop';
+import ItemPage from 'pages/ItemPage';
+import Login from 'pages/Login';
+import Register from 'pages/Register';
+import MyAccount from 'pages/MyAccount';
+import PageNotFound from 'pages/PageNotFound';
 
-const UserRoutes = (props) => {
+const MyRoutes = (props) => {
     return (
         <Switch>
             <Route exact path="/" render={() => <LandingPage {...props} />} />
@@ -27,4 +27,4 @@ const UserRoutes = (props) => {
     );
 }
 
-export default UserRoutes;
+export default MyRoutes;

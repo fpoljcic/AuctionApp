@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Image, Modal, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
-import { useHistory, withRouter } from 'react-router-dom';
-import { getUserId } from 'utilities/Common';
+import { withRouter } from 'react-router-dom';
+import { getUserId } from 'utilities/localStorage';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
 import { AiOutlineFullscreen } from "react-icons/ai";
-import { getBidsForProduct, getProduct, bidForProduct, getRelatedProducts, wishlistProduct, removeWishlistProduct } from 'utilities/ServerCalls';
+import { getProduct, getRelatedProducts } from 'api/product';
+import { bidForProduct, getBidsForProduct } from 'api/bid';
+import { wishlistProduct, removeWishlistProduct } from 'api/wishlist';
 import moment from 'moment';
 
 import './itemPage.css';
-import { productRoute } from 'utilities/AppRoutes';
+import { productUrl } from 'utilities/appUrls';
+import ImageCard from 'components/ImageCard';
 
 const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
-    const history = useHistory();
     const personId = getUserId();
 
     const [product, setProduct] = useState(null);
@@ -228,7 +230,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                                     style={product.wished ? { borderColor: '#8367D8' } : null}
                                     variant="transparent-gray"
                                     onClick={wishlist}
-                                    loading={loadingWish}
+                                    disabled={loadingWish}
                                 >
                                     Wishlist
                                     {product.wished ? (
@@ -280,17 +282,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                     <div className="gray-line" />
                     <div className="featured-items-container">
                         {relatedProducts.map(product => (
-                            <div key={product.id} className="featured-item-container">
-                                <Image
-                                    className="featured-item-image-xxl"
-                                    src={product.url}
-                                    onClick={() => productRoute(history, product)}
-                                />
-                                <h3>
-                                    {product.name}
-                                </h3>
-                                Start from ${product.startPrice}
-                            </div>
+                            <ImageCard key={product.id} data={product} size="xxl" url={productUrl(product)} />
                         ))}
                     </div>
                 </div>

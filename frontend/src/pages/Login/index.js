@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/Common';
+import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/localStorage';
 import { SiFacebook, SiGmail } from 'react-icons/si';
-import { loginUser } from 'utilities/ServerCalls';
+import { loginUser } from 'api/auth';
 import * as yup from 'yup';
 
 import './login.css';
+import { forgotPasswordUrl } from 'utilities/appUrls';
 
 const Login = ({ changeLoggedInState, setBreadcrumb }) => {
     const history = useHistory();
@@ -125,7 +126,7 @@ const Login = ({ changeLoggedInState, setBreadcrumb }) => {
                             </Form.Row>
 
                             <Form.Text className="font-18">
-                                <Link className="purple-nav-link nav-link" to="/forgot_password">
+                                <Link className="purple-nav-link nav-link" to={forgotPasswordUrl}>
                                     Forgot password?
                                 </Link>
                             </Form.Text>
