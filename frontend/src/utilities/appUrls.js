@@ -14,13 +14,15 @@ export const privacyUrl = "/shop/privacy";
 
 
 export const productUrl = (product) => {
-    return `/shop/${product.categoryName.split(' ').join('_').toLowerCase()}/${product.subcategoryName.split(' ').join('_').toLowerCase()}/${product.id}`;
+    return `/shop/${removeSpaces(product.categoryName)}/${removeSpaces(product.subcategoryName)}/${product.id}`;
 }
 
 export const categoryUrl = (category) => {
-    return `/shop/${category.name.split(' ').join('_').toLowerCase()}`;
+    return `/shop/${removeSpaces(category.name)}`;
 }
 
 export const subcategoryUrl = (subcategory) => {
-    return `/shop/${subcategory.categoryName.split(' ').join('_').toLowerCase()}/${subcategory.name.split(' ').join('_').toLowerCase()}`;
+    return `/shop/${removeSpaces(subcategory.categoryName)}/${removeSpaces(subcategory.name)}`;
 }
+
+const removeSpaces = (name) => name.split(' ').join('_').toLowerCase();

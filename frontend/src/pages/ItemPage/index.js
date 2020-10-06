@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Modal, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
+import { Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { getUserId } from 'utilities/localStorage';
 import { IoIosArrowForward } from "react-icons/io";
 import { RiHeartFill } from "react-icons/ri";
-import { AiOutlineFullscreen } from "react-icons/ai";
 import { getProduct, getRelatedProducts } from 'api/product';
 import { bidForProduct, getBidsForProduct } from 'api/bid';
 import { wishlistProduct, removeWishlistProduct } from 'api/wishlist';
+import { productUrl } from 'utilities/appUrls';
+import ImageCard from 'components/ImageCard';
+import BidTable from 'components/BidTable';
 import moment from 'moment';
 
 import './itemPage.css';
-import { productUrl } from 'utilities/appUrls';
-import ImageCard from 'components/ImageCard';
+import ProductPhotos from 'components/ProductPhotos';
 
 const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const personId = getUserId();
@@ -20,9 +21,6 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [relatedProducts, setRelatedProducts] = useState([]);
-    const [activePhoto, setActivePhoto] = useState(0);
-    const [showFullscreen, setShowFullscreen] = useState(false);
-    const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const [active, setActive] = useState(true);
@@ -155,38 +153,8 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
         <>
             {product !== null ? (
                 <>
-                    <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
-                        <Image onClick={() => setShowFullscreen(false)} width="100%" src={product.photos[activePhoto].url} />
-                    </Modal>
                     <div className="product-container">
-                        <div className="images-container">
-                            <Image
-                                onClick={() => setShowFullscreen(true)}
-                                onMouseEnter={() => setShowFullscreenIcon(true)}
-                                onMouseLeave={() => setShowFullscreenIcon(false)}
-                                key={product.photos[0].id}
-                                width="100%"
-                                height="438px"
-                                src={product.photos[activePhoto].url}
-                                className="product-image-big"
-                            />
-                            <AiOutlineFullscreen
-                                onMouseEnter={() => setShowFullscreenIcon(true)}
-                                onMouseLeave={() => setShowFullscreenIcon(false)}
-                                style={!showFullscreenIcon ? { display: 'none' } : null}
-                                className="fullscreen-icon"
-                                onClick={() => setShowFullscreen(true)}
-                            />
-                            {product.photos.map((photo, i) => (
-                                <Image
-                                    onClick={() => setActivePhoto(i)}
-                                    key={photo.id}
-                                    src={photo.url}
-                                    className="product-image-small"
-                                    style={activePhoto === i ? { border: '2px solid #8367D8' } : { opacity: 0.7 }}
-                                />
-                            ))}
-                        </div>
+                        <ProductPhotos photos={product.photos} />
 
                         <div className="product-info-container">
                             <div>
@@ -252,27 +220,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
                 </>
             ) : null}
             {personId !== null && bids.length !== 0 ? (
-                <Table variant="gray-transparent" responsive>
-                    <thead>
-                        <tr>
-                            <th colSpan="2">Bider</th>
-                            <th>Date</th>
-                            <th>Bid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {bids.map((bid, i) => (
-                            <tr key={bid.id}>
-                                <td style={{ fontWeight: 'bold' }} colSpan="2">
-                                    <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
-                                    {bid.firstName + ' ' + bid.lastName}
-                                </td>
-                                <td>{moment(bid.date).format("D MMMM YYYY")}</td>
-                                <td style={i === 0 ? { color: '#6CC047', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                <BidTable bids={bids} />
             ) : null}
             {personId === null && product !== null ? (
                 <div style={{ marginTop: 150 }} className="featured-container">
