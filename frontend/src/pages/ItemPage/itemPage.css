@@ -10,50 +10,19 @@
     width: 50%;
 }
 
-.product-info-container {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    justify-content: space-around;
-}
-
-.place-bid-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.place-bid-form {
-    text-align: center;
-    width: 176px;
-    box-shadow: none;
-    margin-right: 20px;
-}
-
-.place-bid-label {
-    font-size: 15px;
-    color: #9B9B9B;
-    letter-spacing: 0.52px;
-    margin-top: 10px;
-}
-
-.wishlist-button {
-    width: 140px;
-    height: 36px;
-}
-
 @media (max-width: 765px) {
     .product-container>div:first-child {
         width: 100%;
         margin-right: 0;
     }
-    .product-container {
-        flex-wrap: wrap;
-    }
-    .product-info-container>div {
-        margin-bottom: 20px;
-    }
-    .product-info-container {
+    .product-container>div:nth-child(2) {
         width: 100%;
         margin-top: 20px;
+    }
+    .product-container>div:nth-child(2)>div {
+        margin-bottom: 20px;
+    }
+    .product-container {
+        flex-wrap: wrap;
     }
 }
