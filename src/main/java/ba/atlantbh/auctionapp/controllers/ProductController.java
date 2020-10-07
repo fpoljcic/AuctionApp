@@ -1,5 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.responses.ProductPageResponse;
 import ba.atlantbh.auctionapp.responses.ProductResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import ba.atlantbh.auctionapp.services.ProductService;
@@ -43,5 +44,11 @@ public class ProductController {
     @GetMapping("/related")
     public ResponseEntity<List<SimpleProductResponse>> getRelatedProducts(@RequestParam(name = "id") String id) {
         return ResponseEntity.ok(productService.getRelatedProducts(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query") String query,
+                                                      @RequestParam(name = "page", defaultValue = "0") Integer page) {
+        return ResponseEntity.ok(productService.search(query, page));
     }
 }

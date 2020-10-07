@@ -5,9 +5,12 @@ import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.responses.FullProductResponse;
+import ba.atlantbh.auctionapp.responses.ProductPageResponse;
 import ba.atlantbh.auctionapp.responses.ProductResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,5 +69,10 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Wrong product id"));
         return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
                 product.getSubcategory().getCategory().getId().toString());
+    }
+
+    public ProductPageResponse search(String query, Integer page) {
+        Slice<SimpleProductResponse> searchResult = productRepository.search(query.toLowerCase(), PageRequest.of(page, 12));
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());
     }
 }

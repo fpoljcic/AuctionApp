@@ -3,6 +3,8 @@ package ba.atlantbh.auctionapp.repositories;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.responses.FullProductResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -56,4 +58,12 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<SimpleProductResponse> getRelatedProducts(@Param("product_id") String productId,
                                                    @Param("subcategory_id") String subcategoryId,
                                                    @Param("category_id") String categoryId);
+
+    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
+            "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE lower(pr.name) LIKE %:query% " +
+            "AND p.featured = true AND start_date <= now() AND end_date > now() ORDER BY pr.name, pr.id", nativeQuery = true)
+    Slice<SimpleProductResponse> search(String query, Pageable pageable);
 }
