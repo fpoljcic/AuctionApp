@@ -61,12 +61,27 @@ h3 {
   color: currentColor;
 }
 
+.btn-lg {
+  height: 46px;
+}
+
 .btn-xl {
   height: 54px;
 }
 
 .btn-xxl {
   height: 57px;
+}
+
+.btn-transparent {
+  color: black;
+  background-color: transparent;
+  border: none;
+}
+
+.btn-transparent:hover {
+  color: white;
+  background-color: #8367D8;
 }
 
 .btn-transparent-white {
@@ -112,6 +127,12 @@ h3 {
   color: #9B9B9B;
 }
 
+.form-control-lg {
+  height: 46px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
+}
+
 .form-control-xl-16 {
   height: 54px;
   font-size: 16px;
@@ -145,6 +166,17 @@ h3 {
 
 .form-row {
   justify-content: space-between;
+}
+
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 512 512' style='font-size: 24px;' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z'></path></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 98%;
+  background-position-y: 0.5em;
+  border: 3px solid #ECECEC;
+  box-shadow: none;
 }
 
 /*--------------NAV LINKS--------------*/

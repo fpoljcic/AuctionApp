@@ -20,3 +20,7 @@ export const getLastProducts = async () => {
 export const getRelatedProducts = async (id) => {
     return (await axios.get(hostUrl + '/products/related/?id=' + id)).data;
 };
+
+export const searchProducts = async (query, page) => {
+    return (await axios.get(hostUrl + '/products/search/?query=' + query + '&page=' + page)).data;
+};

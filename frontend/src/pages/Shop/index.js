@@ -1,14 +1,41 @@
-import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import ImageCard from 'components/ImageCard';
+import React, { useEffect, useState } from 'react';
+import { useHistory, withRouter } from 'react-router-dom';
+import { productUrl } from 'utilities/appUrls';
+import { BsGrid3X3GapFill } from "react-icons/bs";
+import { FaThList } from "react-icons/fa";
+import { searchProducts } from 'api/product';
+import { Button, Form } from 'react-bootstrap';
+import CategoriesFilter from 'components/CategoriesFilter';
+import * as qs from 'query-string';
 
 import './shop.css';
 
+var page = 0;
+
 const Shop = ({ match, setBreadcrumb }) => {
+
+    const [products, setProducts] = useState([]);
+    const [filter, setFilter] = useState({ category: null, subcategory: null });
+    const [gridLayout, setGridLayout] = useState(true);
+    const [lastPage, setLastPage] = useState(true);
+
+    const history = useHistory();
+    const { query } = qs.parse(history.location.search);
 
     useEffect(() => {
         formBreadcrumb();
+        page = 0;
+        if (query === undefined)
+            return;
+        const fetchData = async () => {
+            const data = await searchProducts(query, page);
+            setProducts(data.products);
+            setLastPage(data.lastPage);
+        }
+        fetchData();
         // eslint-disable-next-line
-    }, [match.url])
+    }, [match.url, history.location.search])
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1);
@@ -24,9 +51,52 @@ const Shop = ({ match, setBreadcrumb }) => {
         }));
     }
 
+    const exploreMore = async () => {
+        page++;
+        const data = await searchProducts(query, page);
+        setProducts([...products, ...data.products]);
+        setLastPage(data.lastPage)
+    }
+
     return (
-        <div>
-            Shop
+        <div className="shop-container">
+            <div className="shop-filters-container">
+                <CategoriesFilter setFilter={setFilter} products={products} />
+            </div>
+
+            <div className="shop-products-container">
+                <div className="shop-sorting-bar">
+                    <Form.Control size="lg" as="select" style={{ width: '30%' }}>
+                        <option>Default Sorting</option>
+                        <option>Sort by Popularity</option>
+                        <option>Sort by New</option>
+                        <option>Sort by Price</option>
+                    </Form.Control>
+                    <div style={{ display: 'flex' }}>
+                        <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'white', backgroundColor: '#8367D8' } : null} size="lg" variant="transparent">
+                            <BsGrid3X3GapFill style={{ marginRight: 10 }} />
+                            Grid
+                        </Button>
+                        <Button onClick={() => setGridLayout(false)} style={gridLayout ? null : { color: 'white', backgroundColor: '#8367D8' }} size="lg" variant="transparent">
+                            <FaThList style={{ marginRight: 10 }} />
+                            List
+                        </Button>
+                    </div>
+                </div>
+
+                {products.map(product => (
+                    (filter.category === null || filter.category === product.categoryName) &&
+                        (filter.subcategory === null || filter.subcategory === product.subcategoryName) ?
+                        <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} /> : null
+                ))}
+
+                {!lastPage ?
+                    <div style={{ width: '100%', marginTop: 50 }}>
+                        <Button onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
+                            EXPLORE MORE
+                    </Button>
+                    </div> : null}
+            </div>
         </div>
     );
 }

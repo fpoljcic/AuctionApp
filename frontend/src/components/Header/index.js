@@ -3,7 +3,7 @@ import { SiFacebook, SiTwitter, SiInstagram } from "react-icons/si";
 import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { validToken, removeSession, getUser } from 'utilities/localStorage';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
 
@@ -12,8 +12,10 @@ import './header.css';
 const Header = ({ loggedInState }) => {
 
     const user = getUser();
+    const history = useHistory();
 
     const [loggedIn, setLoggedIn] = useState(validToken());
+    const [searchInput, setSearchInput] = useState("");
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -25,6 +27,13 @@ const Header = ({ loggedInState }) => {
             setLoggedIn(!loggedIn);
         // eslint-disable-next-line
     }, [loggedInState]);
+
+    const handleSearch = async () => {
+        history.push({
+            pathname: shopUrl,
+            search: '?query=' + searchInput,
+        });
+    }
 
     return (
         <>
@@ -73,8 +82,15 @@ const Header = ({ loggedInState }) => {
                     AUCTION
                 </Link>
                 <div className="bottom-header-search">
-                    <FormControl size="xl-18" type="text" placeholder="Try enter: Shoes" />
-                    <GrFormSearch className="bottom-header-search-icon" />
+                    <FormControl
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        size="xl-18"
+                        type="text"
+                        placeholder="Try enter: Shoes"
+                        onKeyUp={(e) => e.key === 'Enter' ? handleSearch() : null}
+                    />
+                    <GrFormSearch className="bottom-header-search-icon" onClick={handleSearch} />
                 </div>
                 <Nav>
                     <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={homeUrl}>HOME</NavLink>

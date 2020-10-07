@@ -1,0 +1,28 @@
+.shop-container {
+    display: flex;
+}
+
+.shop-filters-container {
+    display: flex;
+    width: 20%;
+    margin-right: 20px;
+}
+
+.shop-sorting-bar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.shop-products-container {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.shop-products-container::after {
+    content: "";
+    width: 14.4vw;
+}
