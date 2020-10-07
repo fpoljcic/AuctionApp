@@ -7,7 +7,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -27,13 +29,15 @@ public class Product {
     private LocalDateTime dateCreated;
 
     @NotBlank
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private Integer startPrice;
+    @Min(value = 0)
+    @Column(precision = 8, scale = 2, nullable = false)
+    private BigDecimal startPrice;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -42,18 +46,22 @@ public class Product {
     private LocalDateTime endDate;
 
     @NotBlank
+    @Column(nullable = false)
     private String street;
 
     @NotBlank
+    @Column(nullable = false)
     private String city;
 
     @Column(nullable = false)
     private Integer zip;
 
     @NotBlank
+    @Column(nullable = false)
     private String country;
 
     @NotBlank
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
@@ -78,7 +86,7 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<Photo> photos;
 
-    public Product(@NotBlank String name, Integer startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
+    public Product(@NotBlank String name, @Min(value = 0) BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
         this.name = name;
         this.startPrice = startPrice;
         this.startDate = startDate;

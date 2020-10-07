@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/Common';
+import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/localStorage';
 import { SiFacebook, SiGmail } from 'react-icons/si';
-import { loginUser } from 'utilities/ServerCalls';
-import { homeRoute } from 'utilities/AppRoutes';
+import { loginUser } from 'api/auth';
 import * as yup from 'yup';
 
 import './login.css';
+import { forgotPasswordUrl } from 'utilities/appUrls';
 
-const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
+const Login = ({ changeLoggedInState, setBreadcrumb }) => {
     const history = useHistory();
 
     const rememberInfo = getRememberInfo();
@@ -26,20 +26,17 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
     const handleSubmit = async (user) => {
         setLoading(true);
         try {
-            const response = await loginUser(user);
-            setSession(response.data.person, response.data.token);
+            const data = await loginUser(user);
+            setSession(data.person, data.token);
             if (user.remember)
                 setRememberInfo(user.email, user.password);
             else
                 removeRememberInfo();
             setLoading(false);
-            homeRoute(history);
+            history.goBack();
             changeLoggedInState();
-            showMessage("success", "Logged in successfully");
-        } catch (error) {
-            if (error.response.data.status === 401)
-                setLoginError(true);
-            showMessage("warning", error.response.data.message);
+        } catch (e) {
+            setLoginError(true);
             setLoading(false);
         }
     }
@@ -129,7 +126,7 @@ const Login = ({ changeLoggedInState, showMessage, setBreadcrumb, from }) => {
                             </Form.Row>
 
                             <Form.Text className="font-18">
-                                <Link className="purple-nav-link nav-link" to="/forgot_password">
+                                <Link className="purple-nav-link nav-link" to={forgotPasswordUrl}>
                                     Forgot password?
                                 </Link>
                             </Form.Text>

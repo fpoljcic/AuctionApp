@@ -13,7 +13,7 @@
 
 @media (max-width: 575px) {
   .route-container {
-    padding-bottom: calc(11.1% + 466px);
+    padding-bottom: calc(11.1% + 530px);
   }
 }
 
@@ -54,8 +54,6 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 10%;
-  padding-left: 10%;
   flex-wrap: wrap;
 }
 
@@ -150,6 +148,10 @@ h3 {
 }
 
 /*--------------NAV LINKS--------------*/
+
+.nav {
+  align-items: center;
+}
 
 a:hover {
   text-decoration: none;
@@ -248,21 +250,6 @@ a:hover {
   letter-spacing: 0.63px;
 }
 
-@media (max-width: 765px) {
-  .breadcrumb-title {
-    margin: 0 auto;
-    width: max-content;
-    top: 0;
-    right: 0;
-    left: 0;
-  }
-  .breadcrumb {
-    align-items: flex-end;
-    padding-left: 1%;
-    padding-right: 1%;
-  }
-}
-
 .breadcrumb-item>a {
   font-weight: lighter;
   color: #252525;
@@ -276,12 +263,28 @@ a:hover {
   color: #252525;
 }
 
+@media (max-width: 765px) {
+  .breadcrumb-title {
+    margin: 0 auto;
+    width: max-content;
+    top: 4px;
+    right: 0;
+    left: 0;
+  }
+  .breadcrumb {
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 30px;
+    font-size: 2.2vw;
+  }
+}
+
 /*--------------TABLE--------------*/
 
 .table-gray-transparent {
   text-align: left;
   border: 1px solid #D8D8D8;
-  margin-top: 200px;
+  margin-top: 150px;
 }
 
 .table-gray-transparent thead th, .table-gray-transparent td {
@@ -312,6 +315,11 @@ a:hover {
 .avatar-image-small {
   width: 60px;
   height: 60px;
+}
+
+.avatar-image-tiny {
+  width: 30px;
+  height: 30px;
 }
 
 img {

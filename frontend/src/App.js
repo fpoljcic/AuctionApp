@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Alert, Breadcrumb } from 'react-bootstrap';
+import axios from 'axios';
 
 import './App.css';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
-import MyRoutes from 'utilities/MyRoutes';
+import MyRoutes from 'routing/MyRoutes';
 
 const App = () => {
 
@@ -21,9 +22,21 @@ const App = () => {
 
   let keepFlag = false;
 
+  const handleError = (error) => {
+    showMessage("warning", error.response.data.message);
+    return Promise.reject(error);
+  }
+
+  axios.interceptors.response.use((response) => response, handleError);
+
   const showMessage = (variant, message) => {
-    setMessage(message);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
     setVariant(variant);
+    setMessage(message);
     setAlertVisible(true);
     keepFlag = true;
   }
@@ -45,6 +58,7 @@ const App = () => {
 
   const removeBreadcrumb = () => {
     setBreadcrumbTitle(null);
+    removeAlert();
   }
 
   const changeLoggedInState = () => {

@@ -41,7 +41,7 @@ public class Person {
     @NotBlank
     private String password;
 
-    private String photo;
+    private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
     private Boolean sex;
     private LocalDateTime dateOfBirth;
     private String phone;

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, ListGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { getCategories, getFeaturedRandomProducts, getRandomSubcategories, getNewProducts, getLastProducts } from 'utilities/ServerCalls';
+import { getFeaturedRandomProducts, getNewProducts, getLastProducts } from 'api/product';
+import { getRandomSubcategories } from 'api/subcategory';
+import { getCategories } from 'api/category';
 import { IoIosArrowForward } from "react-icons/io";
-import { categoryRoute, allCategoryRoute, subcategoryRoute, productRoute } from "utilities/AppRoutes";
+import { categoryUrl, allCategoryUrl, subcategoryUrl, productUrl } from "utilities/appUrls";
 
 import './landingPage.css';
+import ImageCard from 'components/ImageCard';
 
 const LandingPage = ({ removeBreadcrumb }) => {
   const history = useHistory();
@@ -19,12 +22,14 @@ const LandingPage = ({ removeBreadcrumb }) => {
   useEffect(() => {
     removeBreadcrumb();
     const fetchData = async () => {
-      setCategories(await getCategories());
-      setFeaturedProducts(await getFeaturedRandomProducts());
-      setRandomSubcategories(await getRandomSubcategories());
-      const newProducts = await getNewProducts();
-      const lastProducts = await getLastProducts();
-      setNewAndLastProducts([newProducts, lastProducts]);
+      try {
+        setCategories(await getCategories());
+        setFeaturedProducts(await getFeaturedRandomProducts());
+        setRandomSubcategories(await getRandomSubcategories());
+        const newProducts = await getNewProducts();
+        const lastProducts = await getLastProducts();
+        setNewAndLastProducts([newProducts, lastProducts]);
+      } catch (e) { }
     }
 
     fetchData();
@@ -36,9 +41,9 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <ListGroup variant="categories">
           <ListGroup.Item style={{ color: '#8367D8', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
-            <ListGroup.Item key={category.name} action onClick={() => categoryRoute(history, category)}>{category.name}</ListGroup.Item>
+            <ListGroup.Item key={category.name} action onClick={() => history.push(categoryUrl(category))}>{category.name}</ListGroup.Item>
           ))}
-          <ListGroup.Item action onClick={() => allCategoryRoute(history)}>All Categories</ListGroup.Item>
+          <ListGroup.Item action onClick={() => history.push(allCategoryUrl)}>All Categories</ListGroup.Item>
         </ListGroup>
 
         {featuredProducts.length !== 0 ?
@@ -60,13 +65,13 @@ const LandingPage = ({ removeBreadcrumb }) => {
                 style={{ width: 192 }}
                 size="xxl"
                 variant="transparent-black-shadow"
-                onClick={() => productRoute(history, featuredProducts[0])}
+                onClick={() => history.push(productUrl(featuredProducts[0]))}
               >
                 BID NOW
                 <IoIosArrowForward style={{ fontSize: 24 }} />
               </Button>
             </div>
-            <Image className="featured-product-image" width="484px" height="294px" src={featuredProducts[0].url} />
+            <Image className="featured-product-image" src={featuredProducts[0].url} />
           </div> : null}
       </div>
 
@@ -77,19 +82,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <div className="gray-line" />
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
-            <div key={subcategory.id} className="featured-item-container">
-              <Image
-                className="featured-item-image-xxl"
-                width="350px"
-                height="350px"
-                src={subcategory.url}
-                onClick={() => subcategoryRoute(history, subcategory)}
-              />
-              <h3>
-                {subcategory.name}
-              </h3>
-              Start from ${subcategory.startPrice}
-            </div>
+            <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} />
           ))}
         </div>
       </div>
@@ -101,19 +94,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <div className="gray-line" />
         <div className="featured-items-container">
           {featuredProducts.slice(1).map(product => (
-            <div key={product.id} className="featured-item-container">
-              <Image
-                className="featured-item-image-xl"
-                width="260px"
-                height="350px"
-                src={product.url}
-                onClick={() => productRoute(history, product)}
-              />
-              <h3>
-                {product.name}
-              </h3>
-              Start from ${product.startPrice}
-            </div>
+            <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} />
           ))}
         </div>
       </div>
@@ -130,19 +111,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
         <div className="gray-line" />
         <div className="featured-items-container">
           {newAndLastProducts.length !== 0 ? newAndLastProducts[activePage].map(product => (
-            <div key={product.id} className="featured-item-container">
-              <Image
-                className="featured-item-image-lg"
-                width="260px"
-                height="260px"
-                src={product.url}
-                onClick={() => productRoute(history, product)}
-              />
-              <h3>
-                {product.name}
-              </h3>
-              Start from ${product.startPrice}
-            </div>
+            <ImageCard key={product.id} data={product} size="lg" url={productUrl(product)} />
           )) : null}
         </div>
       </div>

@@ -14,6 +14,8 @@ import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,10 +31,19 @@ public class BidService {
     }
 
     public void add(BidRequest bidRequest) {
-        Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
         Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new UnprocessableException("Wrong product id"));
-        if (product.getStartPrice() > bidRequest.getPrice())
+        if (product.getStartPrice().compareTo(bidRequest.getPrice()) > 0)
             throw new BadRequestException("Price can't be lower than the product start price");
+        if (product.getStartDate().isAfter(LocalDateTime.now()))
+            throw new BadRequestException("Auction is yet to start for this product");
+        if (product.getEndDate().isBefore(LocalDateTime.now()))
+            throw new BadRequestException("Auction ended for this product");
+        Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        if (product.getPerson().getId() == person.getId())
+            throw new BadRequestException("You can't bid on your own product");
+        BigDecimal maxBid = bidRepository.getMaxBidFromPersonForProduct(person.getId().toString(), product.getId().toString());
+        if (maxBid != null && maxBid.compareTo(bidRequest.getPrice()) >= 0)
+            throw new BadRequestException("Price can't be lower than your previous bid of $" + maxBid);
         bidRepository.save(new Bid(bidRequest.getPrice(), person, product));
     }
 }

@@ -1,0 +1,28 @@
+.product-container {
+    display: flex;
+}
+
+.product-container>div:first-child {
+    margin-right: 40px;
+}
+
+.product-container>div {
+    width: 50%;
+}
+
+@media (max-width: 765px) {
+    .product-container>div:first-child {
+        width: 100%;
+        margin-right: 0;
+    }
+    .product-container>div:nth-child(2) {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .product-container>div:nth-child(2)>div {
+        margin-bottom: 20px;
+    }
+    .product-container {
+        flex-wrap: wrap;
+    }
+}

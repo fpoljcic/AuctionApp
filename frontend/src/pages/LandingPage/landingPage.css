@@ -8,16 +8,10 @@
     display: flex;
 }
 
-@media (max-width: 575px) {
-    .landing-page-top-container {
-        flex-wrap: wrap;
-    }
-}
-
 .list-group-categories {
     box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
     border-radius: 0;
-    width: 20%;
+    width: 25%;
     text-align: left;
     height: max-content;
     max-height: 99%;
@@ -33,9 +27,9 @@
 }
 
 .featured-product-container {
-    padding: 4.6% 0 4.6% 5.3%;
+    padding: 5% 0 5% 5%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     margin: auto 0;
     width: 100%;
@@ -63,20 +57,10 @@
     overflow-y: hidden;
 }
 
-@media (max-width: 1200px) {
-    .featured-product-container {
-        flex-direction: column;
-    }
-    .featured-product-container-inner {
-        margin-bottom: 10px;
-    }
-    .list-group-categories {
-        width: 50%;
-    }
-    .featured-product-image {
-        width: 278px;
-        height: 169px;
-    }
+.featured-product-image {
+    width: 35vw;
+    max-height: 22vw;
+    object-fit: contain;
 }
 
 .featured-container {
@@ -89,36 +73,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 20px;
-}
-
-.featured-item-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 30px;
-}
-
-.featured-item-image-xxl, .featured-item-image-xl, .featured-item-image-lg {
-    cursor: pointer;
-}
-
-.featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {
-    scale: 1.02;
-    transition: all 0.1s;
-}
-
-@media (max-width: 1600px) {
-    .featured-item-image-xxl {
-        width: 200px;
-        height: 200px;
-    }
-    .featured-item-image-xl {
-        width: 149px;
-        height: 200px;
-    }
-    .featured-item-image-lg {
-        width: 149px;
-        height: 149px;
-    }
 }
 
 .tabs-container {
@@ -134,4 +88,32 @@
     margin-right: 30px;
     position: relative;
     padding-bottom: 8px;
+}
+
+@media (max-width: 1200px) {
+    .featured-product-container {
+        flex-direction: column;
+    }
+    .featured-product-container-inner {
+        margin-bottom: 10px;
+    }
+    .list-group-categories {
+        width: 50%;
+    }
+}
+
+@media (max-width: 575px) {
+    .landing-page-top-container {
+        flex-wrap: wrap;
+    }
+    .featured-product-container {
+        padding-left: 0;
+    }
+    .featured-product-image {
+        width: 100%;
+        max-height: 82%;
+    }
+    .list-group-categories {
+        width: 100%;
+    }
 }
