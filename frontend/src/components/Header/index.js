@@ -6,6 +6,7 @@ import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { validToken, removeSession, getUser } from 'utilities/localStorage';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
+import * as qs from 'query-string';
 
 import './header.css';
 
@@ -29,9 +30,13 @@ const Header = ({ loggedInState }) => {
     }, [loggedInState]);
 
     const handleSearch = async () => {
+        const urlParams = {
+            query: searchInput,
+            sort: "default"
+        };
         history.push({
             pathname: shopUrl,
-            search: '?query=' + searchInput,
+            search: qs.stringify(urlParams)
         });
     }
 

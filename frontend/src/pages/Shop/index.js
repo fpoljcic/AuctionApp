@@ -1,7 +1,7 @@
 import ImageCard from 'components/ImageCard';
 import React, { useEffect, useState } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
-import { productUrl } from 'utilities/appUrls';
+import { productUrl, shopUrl } from 'utilities/appUrls';
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { searchProducts } from 'api/product';
@@ -21,15 +21,15 @@ const Shop = ({ match, setBreadcrumb }) => {
     const [lastPage, setLastPage] = useState(true);
 
     const history = useHistory();
-    const { query } = qs.parse(history.location.search);
+    const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
         formBreadcrumb();
         page = 0;
-        if (query === undefined)
+        if (urlParams.query === undefined)
             return;
         const fetchData = async () => {
-            const data = await searchProducts(query, page);
+            const data = await searchProducts(urlParams.query, page, urlParams.sort);
             setProducts(data.products);
             setLastPage(data.lastPage);
         }
@@ -53,9 +53,18 @@ const Shop = ({ match, setBreadcrumb }) => {
 
     const exploreMore = async () => {
         page++;
-        const data = await searchProducts(query, page);
+        const data = await searchProducts(urlParams.query, page, urlParams.sort);
         setProducts([...products, ...data.products]);
-        setLastPage(data.lastPage)
+        setLastPage(data.lastPage);
+    }
+
+    const sortBy = async (sort) => {
+        page = 0;
+        urlParams.sort = sort;
+        history.push({
+            pathname: shopUrl,
+            search: qs.stringify(urlParams)
+        });
     }
 
     return (
@@ -66,11 +75,11 @@ const Shop = ({ match, setBreadcrumb }) => {
 
             <div className="shop-products-container">
                 <div className="shop-sorting-bar">
-                    <Form.Control size="lg" as="select" style={{ width: '30%' }}>
-                        <option>Default Sorting</option>
-                        <option>Sort by Popularity</option>
-                        <option>Sort by New</option>
-                        <option>Sort by Price</option>
+                    <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg" as="select" style={{ width: '30%' }}>
+                        <option value="default">Default Sorting</option>
+                        <option value="popularity">Sort by Popularity</option>
+                        <option value="new">Sort by New</option>
+                        <option value="price">Sort by Price</option>
                     </Form.Control>
                     <div style={{ display: 'flex' }}>
                         <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'white', backgroundColor: '#8367D8' } : null} size="lg" variant="transparent">
@@ -94,7 +103,7 @@ const Shop = ({ match, setBreadcrumb }) => {
                     <div style={{ width: '100%', marginTop: 50 }}>
                         <Button onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
                             EXPLORE MORE
-                    </Button>
+                        </Button>
                     </div> : null}
             </div>
         </div>
