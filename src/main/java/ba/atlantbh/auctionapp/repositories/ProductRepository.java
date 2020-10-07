@@ -59,11 +59,15 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                                                    @Param("subcategory_id") String subcategoryId,
                                                    @Param("category_id") String categoryId);
 
-    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
+    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
+            "p.url, c.name categoryName, s.name subcategoryName, pr.date_created, count(b.id) bids " +
             "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
+            "INNER JOIN bid b on pr.id = b.product_id " +
             "WHERE lower(pr.name) LIKE %:query% " +
-            "AND p.featured = true AND start_date <= now() AND end_date > now() ORDER BY pr.name, pr.id", nativeQuery = true)
+            "AND p.featured = true AND start_date <= now() AND end_date > now() " +
+            "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, p.url, c.name, s.name, pr.date_created)",
+            nativeQuery = true)
     Slice<SimpleProductResponse> search(String query, Pageable pageable);
 }

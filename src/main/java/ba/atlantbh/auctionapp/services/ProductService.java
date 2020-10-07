@@ -11,6 +11,8 @@ import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,8 +73,24 @@ public class ProductService {
                 product.getSubcategory().getCategory().getId().toString());
     }
 
-    public ProductPageResponse search(String query, Integer page) {
-        Slice<SimpleProductResponse> searchResult = productRepository.search(query.toLowerCase(), PageRequest.of(page, 12));
+    public ProductPageResponse search(String query, Integer page, String sort) {
+        PageRequest pageRequest;
+        switch (sort) {
+            case "popularity":
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(bids)"));
+                break;
+            case "new":
+                pageRequest = PageRequest.of(page, 12, Sort.by("date_created").descending());
+                break;
+            case "price":
+                pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));
+                break;
+            default:
+                pageRequest = PageRequest.of(page, 12, Sort.by("name").and(Sort.by("id")));
+                break;
+        }
+
+        Slice<SimpleProductResponse> searchResult = productRepository.search(query.toLowerCase(), pageRequest);
         return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());
     }
 }
