@@ -1,6 +1,6 @@
 import ImageCard from 'components/ImageCard';
 import React, { useEffect, useState } from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { productUrl, shopUrl } from 'utilities/appUrls';
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
@@ -15,7 +15,7 @@ import './shop.css';
 
 var page = 0;
 
-const Shop = ({ match, setBreadcrumb }) => {
+const Shop = ({ setBreadcrumb }) => {
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({ category: null, subcategory: null });
@@ -26,48 +26,44 @@ const Shop = ({ match, setBreadcrumb }) => {
     const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
-        page = 0;
-        const fetchData = async () => {
-            const data = await searchProducts(urlParams.query, page, urlParams.sort);
-            setProducts(data.products);
-            setLastPage(data.lastPage);
-        }
-        fetchData();
-        // eslint-disable-next-line
-    }, [history.location.search])
-
-    useEffect(() => {
         formBreadcrumb();
         // eslint-disable-next-line
-    }, [match.url])
+    }, [history.location.pathname, history.location.search])
 
     const formCategoryName = (name) => {
+        if (name === undefined)
+            return null;
         name = name.split("_").join(" ");
         return name.charAt(0).toUpperCase() + name.slice(1);
     }
 
     const formBreadcrumb = () => {
-        const urlElements = match.url.split("/").slice(1);
+        const urlElements = history.location.pathname.split("/").slice(1);
         if (urlElements.length === 1) {
             setBreadcrumb("SHOP", []);
-            setFilter({ category: null, subcategory: null });
-            return;
+        } else {
+            setBreadcrumb("SHOP", urlElements.map((el, i) => {
+                return {
+                    text: el.toUpperCase().split("_").join(" "),
+                    href: qs.stringifyUrl({ url: "/" + urlElements.slice(0, i + 1).join("/"), query: urlParams })
+                }
+            }));
         }
-        setBreadcrumb("SHOP", urlElements.map((el, i) => {
-            return {
-                text: el.toUpperCase().split("_").join(" "),
-                href: qs.stringifyUrl({ url: "/" + urlElements.slice(0, i + 1).join("/"), query: urlParams })
-            }
-        }));
-        if (urlElements.length === 2)
-            setFilter({ category: formCategoryName(urlElements[1]), subcategory: null });
-        else if (urlElements.length === 3)
-            setFilter({ category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]) });
+        refreshData(urlElements);
+    }
+
+    const refreshData = async (urlElements) => {
+        page = 0;
+        const newFilter = { category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]) };
+        setFilter(newFilter);
+        const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
+        setProducts(data.products);
+        setLastPage(data.lastPage);
     }
 
     const exploreMore = async () => {
         page++;
-        const data = await searchProducts(urlParams.query, page, urlParams.sort);
+        const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
         setProducts([...products, ...data.products]);
         setLastPage(data.lastPage);
     }
@@ -97,7 +93,7 @@ const Shop = ({ match, setBreadcrumb }) => {
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
-                <CategoriesFilter filter={filter} handleClick={handleClick} products={products} />
+                <CategoriesFilter filter={filter} handleClick={handleClick} query={urlParams.query} />
             </div>
 
             <div className="shop-products-container">
@@ -120,11 +116,11 @@ const Shop = ({ match, setBreadcrumb }) => {
                     </div>
                 </div>
 
-                {products.map(product => (
-                    (filter.category === null || filter.category === product.categoryName) &&
-                        (filter.subcategory === null || filter.subcategory === product.subcategoryName) ?
-                        <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} /> : null
-                ))}
+                <div className="shop-products">
+                    {products.map(product => (
+                        <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} />
+                    ))}
+                </div>
 
                 {products.length === 0 ? <ItemNotFound /> : null}
 
@@ -139,4 +135,4 @@ const Shop = ({ match, setBreadcrumb }) => {
     );
 }
 
-export default withRouter(Shop);
+export default Shop;

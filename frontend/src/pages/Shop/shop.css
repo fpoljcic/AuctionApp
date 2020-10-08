@@ -16,13 +16,13 @@
 }
 
 .shop-products-container {
-    display: flex;
     width: 80%;
-    justify-content: space-between;
-    flex-wrap: wrap;
 }
 
-.shop-products-container::after {
-    content: "";
-    width: 14.4vw;
+.shop-products {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 14.4vw);
+    grid-gap: 5px;
+    justify-content: space-between;
 }

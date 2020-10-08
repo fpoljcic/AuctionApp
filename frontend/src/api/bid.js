@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { defaultHeader, hostUrl } from './common';
+import { defaultHeader, getParams, hostUrl } from './common';
 
 export const getBidsForProduct = async (id) => {
-    return (await axios.get(hostUrl + '/bids/product/?id=' + id)).data;
+    return (await axios.get(hostUrl + '/bids/product', getParams({ id }))).data;
 };
 
 export const bidForProduct = async (price, productId) => {

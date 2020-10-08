@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { TiPlus, TiMinus } from 'react-icons/ti';
+import { searchCountProducts } from 'api/product';
 
 import './categoriesFilter.css';
 
@@ -9,37 +10,18 @@ const activeItemStyle = {
     backgroundColor: '#ECECEC'
 };
 
-const CategoriesFilter = ({ products, filter, handleClick }) => {
+const CategoriesFilter = ({ query, filter, handleClick }) => {
 
     const [categories, setCategories] = useState([]);
     const [activeCategory, setActiveCategory] = useState("");
     const [activeSubcategory, setActiveSubcategory] = useState("");
 
     useEffect(() => {
-        let filterMap = new Map();
-        for (let i = 0; i < products.length; i++) {
-            const categoryMap = filterMap.get(products[i].categoryName);
-            if (categoryMap !== undefined) {
-                const subcategoryCount = categoryMap.sc.get(products[i].subcategoryName);
-                if (subcategoryCount === undefined)
-                    categoryMap.sc.set(products[i].subcategoryName, 1);
-                else
-                    categoryMap.sc.set(products[i].subcategoryName, subcategoryCount + 1);
-                categoryMap.count++;
-            } else
-                filterMap.set(products[i].categoryName, { count: 1, sc: new Map([[products[i].subcategoryName, 1]]) });
+        const fetchData = async () => {
+            setCategories(await searchCountProducts(query));
         }
-        const data = [...filterMap].map(([name, obj]) => (
-            {
-                name,
-                count: obj.count,
-                subcategories: [...obj.sc].map(([name, count]) => (
-                    { name, count }
-                ))
-            }
-        )).sort((a, b) => b.count - a.count);
-        setCategories(data);
-    }, [products]);
+        fetchData();
+    }, [query]);
 
     useEffect(() => {
         setActiveCategory(filter.category || "");
@@ -87,6 +69,7 @@ const CategoriesFilter = ({ products, filter, handleClick }) => {
                         style={category.name === activeCategory && activeSubcategory === "" ? activeItemStyle : { color: '#252525' }}
                     >
                         {category.name}
+                        {' (' + category.count + ')'}
                         {category.name === activeCategory ?
                             <TiMinus style={{ fontSize: 24, color: '#8367D8' }} /> : <TiPlus style={{ fontSize: 24 }} />}
                     </ListGroup.Item>
