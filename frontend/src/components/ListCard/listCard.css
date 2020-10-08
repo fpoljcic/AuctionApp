@@ -3,7 +3,6 @@
     width: 100%;
     text-align: left;
     margin-bottom: 20px;
-    flex-wrap: wrap;
 }
 
 .list-item-image {
@@ -30,6 +29,9 @@
 }
 
 @media (max-width: 575px) {
+    .list-item-container {
+        flex-wrap: wrap;
+    }
     .list-item-image {
         margin-right: 0;
         width: 100%;

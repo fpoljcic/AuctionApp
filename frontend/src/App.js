@@ -23,7 +23,7 @@ const App = () => {
   let keepFlag = false;
 
   const handleError = (error) => {
-    showMessage("warning", error.response.data.message);
+    showMessage("warning", error.response !== undefined ? error.response.data.message : error.message);
     return Promise.reject(error);
   }
 

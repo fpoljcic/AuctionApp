@@ -18,7 +18,9 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setCategories(await searchCountProducts(query));
+            try {
+                setCategories(await searchCountProducts(query));
+            } catch (e) { }
         }
         fetchData();
     }, [query]);

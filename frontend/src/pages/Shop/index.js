@@ -60,18 +60,24 @@ const Shop = ({ setBreadcrumb }) => {
         page = 0;
         const newFilter = { category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]) };
         setFilter(newFilter);
-        const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
-        setProducts(data.products);
-        setLastPage(data.lastPage);
+        try {
+            const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
+            setProducts(data.products);
+            setLastPage(data.lastPage);
+        } catch (e) { }
         setLoading(false);
     }
 
     const exploreMore = async () => {
         setLoading(true);
         page++;
-        const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
-        setProducts([...products, ...data.products]);
-        setLastPage(data.lastPage);
+        try {
+            const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
+            setProducts([...products, ...data.products]);
+            setLastPage(data.lastPage);
+        } catch (e) { 
+            page--;
+        }
         setLoading(false);
     }
 
