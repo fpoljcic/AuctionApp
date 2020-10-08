@@ -2,6 +2,7 @@ package ba.atlantbh.auctionapp.repositories;
 
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.responses.FullProductResponse;
+import ba.atlantbh.auctionapp.responses.ProductCountResponse;
 import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -60,14 +61,27 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                                                    @Param("category_id") String categoryId);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
-            "p.url, c.name categoryName, s.name subcategoryName, pr.date_created, count(b.id) bids " +
+            "p.url, c.name categoryName, s.name subcategoryName, pr.date_created, " +
+            "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids " +
             "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
-            "INNER JOIN bid b on pr.id = b.product_id " +
             "WHERE lower(pr.name) LIKE %:query% " +
+            "AND (case when :category = '' then true else lower(c.name) = :category end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = :subcategory end) " +
             "AND p.featured = true AND start_date <= now() AND end_date > now() " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, p.url, c.name, s.name, pr.date_created)",
             nativeQuery = true)
-    Slice<SimpleProductResponse> search(String query, Pageable pageable);
+    Slice<SimpleProductResponse> search(String query, String category, String subcategory, Pageable pageable);
+
+    @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
+            "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
+            "                INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "                INNER JOIN category c on c.id = s.category_id " +
+            "WHERE lower(pr.name) LIKE %:query% " +
+            "AND p.featured = true AND start_date <= now() AND end_date > now() " +
+            "GROUP BY (c.name, s.name) " +
+            "ORDER BY (c.name, s.name)",
+            nativeQuery = true)
+    List<ProductCountResponse> searchCount(String query);
 }

@@ -4,10 +4,7 @@ import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
-import ba.atlantbh.auctionapp.responses.FullProductResponse;
-import ba.atlantbh.auctionapp.responses.ProductPageResponse;
-import ba.atlantbh.auctionapp.responses.ProductResponse;
-import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
+import ba.atlantbh.auctionapp.responses.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -15,9 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -73,7 +68,7 @@ public class ProductService {
                 product.getSubcategory().getCategory().getId().toString());
     }
 
-    public ProductPageResponse search(String query, Integer page, String sort) {
+    public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort) {
         PageRequest pageRequest;
         switch (sort) {
             case "popularity":
@@ -90,7 +85,34 @@ public class ProductService {
                 break;
         }
 
-        Slice<SimpleProductResponse> searchResult = productRepository.search(query.toLowerCase(), pageRequest);
+        Slice<SimpleProductResponse> searchResult = productRepository.search(
+                query.toLowerCase(),
+                category.toLowerCase(),
+                subcategory.toLowerCase(),
+                pageRequest
+        );
         return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());
+    }
+
+    public List<CategoryCountReponse> searchCount(String query) {
+        List<ProductCountResponse> data = productRepository.searchCount(query.toLowerCase());
+        List<CategoryCountReponse> response = new ArrayList<>();
+
+        for (ProductCountResponse product : data) {
+            CategoryCountReponse newCategory = new CategoryCountReponse(product.getCategoryName(), product.getCount(), new TreeSet<>());
+            int i = response.indexOf(newCategory);
+            if (i == -1) {
+                newCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+                response.add(newCategory);
+            } else {
+                CategoryCountReponse oldCategory = response.get(i);
+                oldCategory.setCount(oldCategory.getCount() + product.getCount());
+                oldCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+            }
+        }
+
+        response.sort(Comparator.comparing(CategoryCountReponse::getCount).reversed());
+
+        return response;
     }
 }
