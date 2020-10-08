@@ -47,7 +47,7 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query") String query,
+    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query", defaultValue = "") String query,
                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(name = "sort", defaultValue = "") String sort) {
         return ResponseEntity.ok(productService.search(query, page, sort));

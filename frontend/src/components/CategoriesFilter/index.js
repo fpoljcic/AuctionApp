@@ -9,7 +9,7 @@ const activeItemStyle = {
     backgroundColor: '#ECECEC'
 };
 
-const CategoriesFilter = ({ products, setFilter }) => {
+const CategoriesFilter = ({ products, filter, handleClick }) => {
 
     const [categories, setCategories] = useState([]);
     const [activeCategory, setActiveCategory] = useState("");
@@ -41,27 +41,32 @@ const CategoriesFilter = ({ products, setFilter }) => {
         setCategories(data);
     }, [products]);
 
+    useEffect(() => {
+        setActiveCategory(filter.category || "");
+        setActiveSubcategory(filter.subcategory || "");
+    }, [filter])
+
     const allCategoryClick = () => {
         setActiveCategory("");
         setActiveSubcategory("");
-        setFilter({ category: null, subcategory: null });
+        handleClick({ category: null, subcategory: null });
     }
 
     const categoryClick = (categoryName) => {
         setActiveSubcategory("");
         if (activeCategory === categoryName) {
             setActiveCategory("");
-            setFilter({ category: null, subcategory: null });
+            handleClick({ category: null, subcategory: null });
         }
         else {
             setActiveCategory(categoryName);
-            setFilter({ category: categoryName, subcategory: null });
+            handleClick({ category: categoryName, subcategory: null });
         }
     }
 
     const subcategoryClick = (subcategoryName) => {
         setActiveSubcategory(subcategoryName);
-        setFilter({ category: activeCategory, subcategory: subcategoryName });
+        handleClick({ category: activeCategory, subcategory: subcategoryName });
     }
 
     return (

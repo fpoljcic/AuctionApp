@@ -25,6 +25,7 @@
 }
 
 .bottom-header-brand {
+    align-items: center;
     font-size: 24px;
     letter-spacing: 0.84px;
     font-weight: lighter;

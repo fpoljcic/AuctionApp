@@ -6,7 +6,9 @@ import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { searchProducts } from 'api/product';
 import { Button, Form } from 'react-bootstrap';
+import { removeSpaces } from 'utilities/appUrls';
 import CategoriesFilter from 'components/CategoriesFilter';
+import ItemNotFound from 'components/ItemNotFound';
 import * as qs from 'query-string';
 
 import './shop.css';
@@ -24,10 +26,7 @@ const Shop = ({ match, setBreadcrumb }) => {
     const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
-        formBreadcrumb();
         page = 0;
-        if (urlParams.query === undefined)
-            return;
         const fetchData = async () => {
             const data = await searchProducts(urlParams.query, page, urlParams.sort);
             setProducts(data.products);
@@ -35,20 +34,35 @@ const Shop = ({ match, setBreadcrumb }) => {
         }
         fetchData();
         // eslint-disable-next-line
-    }, [match.url, history.location.search])
+    }, [history.location.search])
+
+    useEffect(() => {
+        formBreadcrumb();
+        // eslint-disable-next-line
+    }, [match.url])
+
+    const formCategoryName = (name) => {
+        name = name.split("_").join(" ");
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1);
         if (urlElements.length === 1) {
             setBreadcrumb("SHOP", []);
+            setFilter({ category: null, subcategory: null });
             return;
         }
         setBreadcrumb("SHOP", urlElements.map((el, i) => {
             return {
                 text: el.toUpperCase().split("_").join(" "),
-                href: "/" + urlElements.slice(0, i + 1).join("/")
+                href: qs.stringifyUrl({ url: "/" + urlElements.slice(0, i + 1).join("/"), query: urlParams })
             }
         }));
+        if (urlElements.length === 2)
+            setFilter({ category: formCategoryName(urlElements[1]), subcategory: null });
+        else if (urlElements.length === 3)
+            setFilter({ category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]) });
     }
 
     const exploreMore = async () => {
@@ -67,10 +81,23 @@ const Shop = ({ match, setBreadcrumb }) => {
         });
     }
 
+    const handleClick = (selected) => {
+        let categoryPath = "";
+        let subcategoryPath = "";
+        if (selected.category !== null)
+            categoryPath = "/" + removeSpaces(selected.category);
+        if (selected.subcategory !== null)
+            subcategoryPath = "/" + removeSpaces(selected.subcategory);
+        history.push({
+            pathname: shopUrl + categoryPath + subcategoryPath,
+            search: qs.stringify(urlParams)
+        });
+    }
+
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
-                <CategoriesFilter setFilter={setFilter} products={products} />
+                <CategoriesFilter filter={filter} handleClick={handleClick} products={products} />
             </div>
 
             <div className="shop-products-container">
@@ -98,6 +125,8 @@ const Shop = ({ match, setBreadcrumb }) => {
                         (filter.subcategory === null || filter.subcategory === product.subcategoryName) ?
                         <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} /> : null
                 ))}
+
+                {products.length === 0 ? <ItemNotFound /> : null}
 
                 {!lastPage ?
                     <div style={{ width: '100%', marginTop: 50 }}>
