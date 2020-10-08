@@ -106,6 +106,12 @@ h3 {
   box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
 }
 
+.btn-fill-white {
+  color: #252525;
+  background: white;
+  border: none;
+}
+
 .btn-transparent-gray {
   border: 3px solid #ECECEC;
   font-size: 15px;

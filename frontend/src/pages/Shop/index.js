@@ -5,15 +5,24 @@ import { productUrl, shopUrl } from 'utilities/appUrls';
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { searchProducts } from 'api/product';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { removeSpaces } from 'utilities/appUrls';
 import CategoriesFilter from 'components/CategoriesFilter';
 import ItemNotFound from 'components/ItemNotFound';
 import * as qs from 'query-string';
 
 import './shop.css';
+import ListCard from 'components/ListCard';
+import ImageCardOverlay from 'components/ImageCardOverlay';
 
 var page = 0;
+
+const gridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, 14.4vw)',
+    gridGap: 5,
+    justifyContent: 'space-between'
+};
 
 const Shop = ({ setBreadcrumb }) => {
 
@@ -21,11 +30,13 @@ const Shop = ({ setBreadcrumb }) => {
     const [filter, setFilter] = useState({ category: null, subcategory: null });
     const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
+        setLoading(true);
         formBreadcrumb();
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
@@ -59,13 +70,16 @@ const Shop = ({ setBreadcrumb }) => {
         const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
         setProducts(data.products);
         setLastPage(data.lastPage);
+        setLoading(false);
     }
 
     const exploreMore = async () => {
+        setLoading(true);
         page++;
         const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
         setProducts([...products, ...data.products]);
         setLastPage(data.lastPage);
+        setLoading(false);
     }
 
     const sortBy = async (sort) => {
@@ -104,6 +118,7 @@ const Shop = ({ setBreadcrumb }) => {
                         <option value="new">Sort by New</option>
                         <option value="price">Sort by Price</option>
                     </Form.Control>
+                    {loading ? <Spinner className="shop-spinner" animation="border" /> : null}
                     <div style={{ display: 'flex' }}>
                         <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'white', backgroundColor: '#8367D8' } : null} size="lg" variant="transparent">
                             <BsGrid3X3GapFill style={{ marginRight: 10 }} />
@@ -116,17 +131,22 @@ const Shop = ({ setBreadcrumb }) => {
                     </div>
                 </div>
 
-                <div className="shop-products">
-                    {products.map(product => (
-                        <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)} />
-                    ))}
+                <div style={gridLayout ? gridStyle : null} className="shop-products">
+                    {products.map(product => gridLayout ? (
+                        <ImageCardOverlay key={product.id} data={product} url={productUrl(product)}>
+                            <ImageCard data={product} size="xl" url={productUrl(product)} />
+                        </ImageCardOverlay>
+                    ) : (
+                            <ListCard key={product.id} data={product} url={productUrl(product)} />
+                        ))}
                 </div>
 
-                {products.length === 0 ? <ItemNotFound /> : null}
+
+                {!loading && products.length === 0 ? <ItemNotFound /> : null}
 
                 {!lastPage ?
                     <div style={{ width: '100%', marginTop: 50 }}>
-                        <Button onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
+                        <Button disabled={loading} onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
                             EXPLORE MORE
                         </Button>
                     </div> : null}

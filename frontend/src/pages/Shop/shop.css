@@ -9,6 +9,7 @@
 }
 
 .shop-sorting-bar {
+    position: relative;
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -21,8 +22,11 @@
 
 .shop-products {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 14.4vw);
-    grid-gap: 5px;
-    justify-content: space-between;
+}
+
+.shop-spinner {
+    position: absolute;
+    left: 31%;
+    color: #8367D8;
+    top: 7px;
 }

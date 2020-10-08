@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { getParams, hostUrl } from './common';
+import { getUserId } from 'utilities/localStorage';
+import { defaultHeader, getParams, hostUrl } from './common';
 
 export const getProduct = async (product_id, user_id) => {
     return (await axios.get(hostUrl + '/products', getParams({ product_id, user_id }))).data;
@@ -22,7 +23,12 @@ export const getRelatedProducts = async (id) => {
 };
 
 export const searchProducts = async (query, category, subcategory, page, sort) => {
-    return (await axios.get(hostUrl + '/products/search', getParams({ query, category, subcategory, page, sort }))).data;
+    let headers;
+    if (getUserId() === null)
+        headers = getParams({ query, category, subcategory, page, sort });
+    else
+        headers = { ...defaultHeader(), ...getParams({ query, category, subcategory, page, sort }) };
+    return (await axios.get(hostUrl + '/products/search', headers)).data;
 };
 
 export const searchCountProducts = async (query) => {
