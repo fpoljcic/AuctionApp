@@ -5,6 +5,7 @@ import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.responses.*;
+import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -85,10 +86,13 @@ public class ProductService {
                 break;
         }
 
+        UUID id = JwtTokenUtil.getRequestPersonId();
+
         Slice<SimpleProductResponse> searchResult = productRepository.search(
                 query.toLowerCase(),
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
+                id == null ? "" : id.toString(),
                 pageRequest
         );
         return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());

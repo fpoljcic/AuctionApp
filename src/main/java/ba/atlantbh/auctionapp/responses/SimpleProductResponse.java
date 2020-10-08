@@ -11,4 +11,5 @@ public interface SimpleProductResponse {
     String getUrl();
     String getCategoryName();
     String getSubcategoryName();
+    Boolean getWished();
 }

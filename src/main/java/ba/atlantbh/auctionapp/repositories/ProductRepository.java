@@ -62,7 +62,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
             "p.url, c.name categoryName, s.name subcategoryName, pr.date_created, " +
-            "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids " +
+            "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids, " +
+            "(case when :id = '' then false else EXISTS (SELECT * FROM wishlist WHERE product_id = pr.id AND person_id = :id) end) wished " +
             "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
@@ -72,7 +73,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "AND p.featured = true AND start_date <= now() AND end_date > now() " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, p.url, c.name, s.name, pr.date_created)",
             nativeQuery = true)
-    Slice<SimpleProductResponse> search(String query, String category, String subcategory, Pageable pageable);
+    Slice<SimpleProductResponse> search(String query, String category, String subcategory, String id, Pageable pageable);
 
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
             "FROM product pr INNER JOIN photo p on pr.id = p.product_id " +
