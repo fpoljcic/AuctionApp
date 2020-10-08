@@ -56,7 +56,6 @@ const ImageCardOverlay = ({ children, data, url }) => {
                     </Button>
                     <Button
                         className="overlay-bid-button font-15"
-                        style={{ marginTop: 60 }}
                         variant="fill-white"
                         onClick={() => history.push(url)}
                     >

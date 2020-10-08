@@ -19,4 +19,21 @@
 .overlay-bid-button {
     width: 50%;
     height: 36px;
+    margin-top: 60px;
+}
+
+@media (max-width: 1200px) {
+    .overlay-wishlist-button {
+        width: 95%;
+    }
+    .overlay-bid-button {
+        width: 90%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 575px) {
+    .overlay-container {
+        display: none;
+    }
 }

@@ -17,13 +17,6 @@ import ImageCardOverlay from 'components/ImageCardOverlay';
 
 var page = 0;
 
-const gridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, 14.4vw)',
-    gridGap: 5,
-    justifyContent: 'space-between'
-};
-
 const Shop = ({ setBreadcrumb }) => {
 
     const [products, setProducts] = useState([]);
@@ -112,7 +105,7 @@ const Shop = ({ setBreadcrumb }) => {
 
             <div className="shop-products-container">
                 <div className="shop-sorting-bar">
-                    <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg" as="select" style={{ width: '30%' }}>
+                    <Form.Control className="sort-select" defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg" as="select" >
                         <option value="default">Default Sorting</option>
                         <option value="popularity">Sort by Popularity</option>
                         <option value="new">Sort by New</option>
@@ -131,7 +124,7 @@ const Shop = ({ setBreadcrumb }) => {
                     </div>
                 </div>
 
-                <div style={gridLayout ? gridStyle : null} className="shop-products">
+                <div style={!gridLayout ? { display: 'unset' } : null} className="shop-products">
                     {products.map(product => gridLayout ? (
                         <ImageCardOverlay key={product.id} data={product} url={productUrl(product)}>
                             <ImageCard data={product} size="xl" url={productUrl(product)} />

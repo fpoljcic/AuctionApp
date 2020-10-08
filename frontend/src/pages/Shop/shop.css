@@ -11,9 +11,14 @@
 .shop-sorting-bar {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     justify-content: space-between;
     margin-bottom: 40px;
+}
+
+.sort-select {
+    width: 30%;
 }
 
 .shop-products-container {
@@ -21,6 +26,10 @@
 }
 
 .shop-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 14.4vw);
+    gap: 5px;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -29,4 +38,38 @@
     left: 31%;
     color: #8367D8;
     top: 7px;
+}
+
+@media (max-width: 1200px) {
+    .sort-select {
+        width: 50%;
+    }
+    .shop-spinner {
+        left: 51%;
+    }
+}
+
+@media (max-width: 575px) {
+    .shop-container {
+        flex-wrap: wrap;
+    }
+    .shop-filters-container {
+        width: 100%;
+        margin-bottom: 20px;
+        margin-right: 0;
+    }
+    .sort-select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .shop-products {
+        grid-template-columns: repeat(auto-fill, 100%);
+    }
+    .shop-products-container {
+        width: 100%;
+    }
+    .shop-spinner {
+        left: 88%;
+        top: 63px;
+    }
 }
