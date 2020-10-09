@@ -25,4 +25,4 @@ export const subcategoryUrl = (subcategory) => {
     return `/shop/${removeSpaces(subcategory.categoryName)}/${removeSpaces(subcategory.name)}`;
 }
 
-const removeSpaces = (name) => name.split(' ').join('_').toLowerCase();
+export const removeSpaces = (name) => name.split(' ').join('_').toLowerCase();

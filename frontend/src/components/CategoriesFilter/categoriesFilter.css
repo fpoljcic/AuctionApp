@@ -1,0 +1,26 @@
+.list-group-categories-filter {
+    border: 1px solid #D8D8D8;
+    border-radius: 0;
+    text-align: left;
+    width: 100%;
+    height: max-content;
+    overflow-y: auto;
+}
+
+.list-group-categories-filter>.list-group-item {
+    border: none;
+    height: 51px;
+    font-size: 14px;
+    letter-spacing: 0.49px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.categories-filter-title {
+    color: #8367D8;
+    font-weight: bold;
+    border-bottom: none;
+    font-size: 14px;
+    letter-spacing: 0.49px;
+}

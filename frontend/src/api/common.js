@@ -9,3 +9,11 @@ export const defaultHeader = () => {
         }
     };
 }
+
+export const getParams = (args) => {
+    return {
+        params: {
+            ...args
+        }
+    };
+}

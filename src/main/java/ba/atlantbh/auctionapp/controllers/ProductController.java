@@ -1,7 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
-import ba.atlantbh.auctionapp.responses.ProductResponse;
-import ba.atlantbh.auctionapp.responses.SimpleProductResponse;
+import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getLastProducts());
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<ProductResponse> getProduct(@RequestParam(name = "product_id") String productId,
                                                       @RequestParam(name = "user_id", defaultValue = "") String userId) {
         return ResponseEntity.ok(productService.getProduct(productId, userId));
@@ -43,5 +42,19 @@ public class ProductController {
     @GetMapping("/related")
     public ResponseEntity<List<SimpleProductResponse>> getRelatedProducts(@RequestParam(name = "id") String id) {
         return ResponseEntity.ok(productService.getRelatedProducts(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query", defaultValue = "") String query,
+                                                      @RequestParam(name = "category", defaultValue = "") String category,
+                                                      @RequestParam(name = "subcategory", defaultValue = "") String subcategory,
+                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(name = "sort", defaultValue = "") String sort) {
+        return ResponseEntity.ok(productService.search(query, category, subcategory, page, sort));
+    }
+
+    @GetMapping("/search/count")
+    public ResponseEntity<List<CategoryCountReponse>> searchCount(@RequestParam(name = "query", defaultValue = "") String query) {
+        return ResponseEntity.ok(productService.searchCount(query));
     }
 }

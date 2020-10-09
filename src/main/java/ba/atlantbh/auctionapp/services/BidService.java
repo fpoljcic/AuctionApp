@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -38,6 +39,9 @@ public class BidService {
             throw new BadRequestException("Auction is yet to start for this product");
         if (product.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("Auction ended for this product");
+        UUID id = JwtTokenUtil.getRequestPersonId();
+        if (id == null)
+            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
         if (product.getPerson().getId() == person.getId())
             throw new BadRequestException("You can't bid on your own product");

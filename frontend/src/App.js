@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Alert, Breadcrumb } from 'react-bootstrap';
 import axios from 'axios';
 
-import './App.css';
+import './app.css';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -23,7 +23,7 @@ const App = () => {
   let keepFlag = false;
 
   const handleError = (error) => {
-    showMessage("warning", error.response.data.message);
+    showMessage("warning", error.response !== undefined ? error.response.data.message : error.message);
     return Promise.reject(error);
   }
 

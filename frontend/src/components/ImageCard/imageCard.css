@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
+    text-align: left;
 }
 
 .featured-item-image-xxl, .featured-item-image-xl, .featured-item-image-lg {
