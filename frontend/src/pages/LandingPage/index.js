@@ -33,7 +33,8 @@ const LandingPage = ({ removeBreadcrumb }) => {
     }
 
     fetchData();
-  }, [removeBreadcrumb])
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <>
@@ -71,7 +72,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
                 <IoIosArrowForward style={{ fontSize: 24 }} />
               </Button>
             </div>
-            <Image className="featured-product-image" src={featuredProducts[0].url} />
+            <Image className="featured-product-image" src={featuredProducts[0].url !== null ? featuredProducts[0].url : "/images/placeholder-image-gray.png"} />
           </div> : null}
       </div>
 

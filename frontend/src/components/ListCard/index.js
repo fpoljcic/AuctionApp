@@ -15,6 +15,8 @@ const ListCard = ({ data, url }) => {
     const [loadingWish, setLoadingWish] = useState(false);
     const [wished, setWished] = useState(data.wished);
 
+    const imagePath = data.url !== null ? data.url : "/images/placeholder-image-gray.png";
+
     const wishlist = async () => {
         setLoadingWish(true);
         if (personId === null) {
@@ -39,7 +41,7 @@ const ListCard = ({ data, url }) => {
         <div className="list-item-container">
             <Image
                 className={"list-item-image"}
-                src={data.url}
+                src={imagePath}
                 onClick={() => history.push(url)}
             />
             <div className="list-info-container">

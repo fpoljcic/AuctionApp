@@ -1,5 +1,6 @@
 .product-container {
     display: flex;
+    margin-bottom: 150px;
 }
 
 .product-container>div:first-child {

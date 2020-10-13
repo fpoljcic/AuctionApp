@@ -11,6 +11,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
     const [loading, setLoading] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const [bidPrice, setBidPrice] = useState("");
+    const maxPrice = 999999.99;
 
     const renderTooltip = () => {
         let tooltipText = "";
@@ -28,6 +29,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 break;
             case bidPrice < minPrice:
                 tooltipText = "Price can't be lower than $" + minPrice;
+                break;
+            case bidPrice > maxPrice:
+                tooltipText = "Price can't be higher than $" + maxPrice;
                 break;
             default:
                 return <div />;
@@ -86,7 +90,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     <Form.Control
                         value={bidPrice}
                         disabled={ownProduct || !active || loading}
-                        maxLength="7"
+                        maxLength="9"
                         className="form-control-gray place-bid-form"
                         size="xl-18"
                         type="text"
@@ -101,7 +105,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     overlay={renderTooltip()}
                 >
                     <Button
-                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}
+                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice || bidPrice > maxPrice}
                         style={{ width: 192, padding: 0 }}
                         size="xxl"
                         variant="transparent-black-shadow"

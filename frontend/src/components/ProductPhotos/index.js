@@ -10,19 +10,20 @@ const ProductPhotos = ({ photos }) => {
     const [showFullscreen, setShowFullscreen] = useState(false);
     const [showFullscreenIcon, setShowFullscreenIcon] = useState(false);
 
+    const imagePath = photos[activePhoto] !== undefined ? photos[activePhoto].url : "/images/placeholder-image-gray.png";
+
     return (
         <div className="images-container">
             <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
-                <Image onClick={() => setShowFullscreen(false)} width="100%" src={photos[activePhoto].url} />
+                <Image onClick={() => setShowFullscreen(false)} width="100%" src={imagePath} />
             </Modal>
             <Image
                 onClick={() => setShowFullscreen(true)}
                 onMouseEnter={() => setShowFullscreenIcon(true)}
                 onMouseLeave={() => setShowFullscreenIcon(false)}
-                key={photos[activePhoto].id}
                 width="100%"
                 height="438px"
-                src={photos[activePhoto].url}
+                src={imagePath}
                 className="product-image-big"
             />
             <AiOutlineFullscreen

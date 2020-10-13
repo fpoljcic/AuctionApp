@@ -7,11 +7,13 @@ import './imageCard.css';
 const ImageCard = ({ data, size, url }) => {
     const history = useHistory();
 
+    const imagePath = data.url !== null ? data.url : "/images/placeholder-image-gray.png";
+
     return (
         <div className="featured-item-container">
             <Image
                 className={"featured-item-image-" + size}
-                src={data.url}
+                src={imagePath}
                 onClick={() => history.push(url)}
             />
             <h3>
