@@ -23,14 +23,7 @@ const App = () => {
   let keepFlag = false;
 
   const handleError = (error) => {
-    let errorMessage;
-    if (error.response === undefined)
-      errorMessage = error.message;
-    else if (error.response.data.errors !== undefined && error.response.data.errors.length !== 0)
-      errorMessage = error.response.data.errors[0].defaultMessage;
-    else
-      errorMessage = error.response.data.message;
-    showMessage("warning", errorMessage);
+    showMessage("warning", error.response !== undefined ? error.response.data.message : error.message);
     return Promise.reject(error);
   }
 
