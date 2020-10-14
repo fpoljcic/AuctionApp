@@ -76,7 +76,7 @@ public class ProductService {
                 pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(bids)"));
                 break;
             case "new":
-                pageRequest = PageRequest.of(page, 12, Sort.by("date_created").descending());
+                pageRequest = PageRequest.of(page, 12, Sort.by("start_date").descending());
                 break;
             case "price":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));

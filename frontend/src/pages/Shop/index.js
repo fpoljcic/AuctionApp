@@ -85,7 +85,6 @@ const Shop = ({ setBreadcrumb }) => {
         page = 0;
         urlParams.sort = sort;
         history.push({
-            pathname: shopUrl,
             search: qs.stringify(urlParams)
         });
     }

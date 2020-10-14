@@ -5,6 +5,7 @@ import { getProduct, getRelatedProducts } from 'api/product';
 import { bidForProduct, getBidsForProduct } from 'api/bid';
 import { wishlistProduct, removeWishlistProduct } from 'api/wishlist';
 import { productUrl } from 'utilities/appUrls';
+import { scrollToTop } from 'utilities/common';
 import ImageCard from 'components/ImageCard';
 import BidTable from 'components/BidTable';
 import ProductPhotos from 'components/ProductPhotos';
@@ -26,6 +27,7 @@ const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
 
     useEffect(() => {
         formBreadcrumb();
+        scrollToTop();
         const fetchData = async () => {
             const productId = match.params.id;
             try {

@@ -4,7 +4,8 @@ import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
-import { validToken, removeSession, getUser } from 'utilities/localStorage';
+import { removeSession, getUser } from 'utilities/localStorage';
+import { validToken } from 'utilities/common';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
 import * as qs from 'query-string';
 
