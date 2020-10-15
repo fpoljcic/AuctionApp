@@ -11,11 +11,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BidRequest {
 
-    @NotNull(message = "Price must be supplied")
+    @NotNull(message = "Price is required")
     @DecimalMin(value = "0.01", message = "Price can't be lower than $0.01")
     @DecimalMax(value = "999999.99", message = "Price can't be higher than $999999.99")
     private BigDecimal price;
 
-    @NotNull(message = "Product must be supplied")
+    @NotNull(message = "Product id is required")
     private UUID productId;
 }

@@ -25,6 +25,8 @@ public class WishlistService {
                 .orElseThrow(() -> new NotFoundException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
                 .orElseThrow(() -> new NotFoundException("Wrong product id"));
+        if (wishlistRepository.existsByPersonAndProduct(person, product))
+            throw new BadRequestException("You already wishlisted this product");
         wishlistRepository.save(new Wishlist(person, product));
     }
 
@@ -33,9 +35,8 @@ public class WishlistService {
                 .orElseThrow(() -> new NotFoundException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
                 .orElseThrow(() -> new NotFoundException("Wrong product id"));
-        Wishlist wishlist = wishlistRepository.findByPersonAndProduct(person, product);
-        if (wishlist == null)
-            throw new BadRequestException("You didn't wishlist this product");
+        Wishlist wishlist = wishlistRepository.findByPersonAndProduct(person, product)
+                .orElseThrow(() -> new BadRequestException("You didn't wishlist this product"));
         wishlistRepository.delete(wishlist);
     }
 }

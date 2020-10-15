@@ -89,9 +89,9 @@ public class ProductService {
         UUID id = JwtTokenUtil.getRequestPersonId();
 
         Slice<SimpleProductResponse> searchResult = productRepository.search(
-                query.toLowerCase(),
-                category.toLowerCase(),
-                subcategory.toLowerCase(),
+                query,
+                category,
+                subcategory,
                 id == null ? "" : id.toString(),
                 pageRequest
         );
@@ -99,7 +99,7 @@ public class ProductService {
     }
 
     public List<CategoryCountReponse> searchCount(String query) {
-        List<ProductCountResponse> data = productRepository.searchCount(query.toLowerCase());
+        List<ProductCountResponse> data = productRepository.searchCount(query);
         List<CategoryCountReponse> response = new ArrayList<>();
 
         for (ProductCountResponse product : data) {

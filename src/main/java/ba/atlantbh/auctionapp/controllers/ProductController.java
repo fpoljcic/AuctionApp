@@ -1,5 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.requests.SearchRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -45,12 +47,14 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query", defaultValue = "") String query,
-                                                      @RequestParam(name = "category", defaultValue = "") String category,
-                                                      @RequestParam(name = "subcategory", defaultValue = "") String subcategory,
-                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                      @RequestParam(name = "sort", defaultValue = "") String sort) {
-        return ResponseEntity.ok(productService.search(query, category, subcategory, page, sort));
+    public ResponseEntity<ProductPageResponse> search(@Valid SearchRequest searchRequest) {
+        return ResponseEntity.ok(productService.search(
+                searchRequest.getQuery(),
+                searchRequest.getCategory(),
+                searchRequest.getSubcategory(),
+                searchRequest.getPage(),
+                searchRequest.getSort()
+        ));
     }
 
     @GetMapping("/search/count")

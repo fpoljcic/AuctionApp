@@ -67,9 +67,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE lower(pr.name) LIKE %:query% " +
-            "AND (case when :category = '' then true else lower(c.name) = :category end) " +
-            "AND (case when :subcategory = '' then true else lower(s.name) = :subcategory end) " +
+            "WHERE lower(pr.name) LIKE lower('%' || :query || '%') " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
             "AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, p.url, c.name, s.name, pr.date_created)",
             nativeQuery = true)
@@ -79,7 +79,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
             "                INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "                INNER JOIN category c on c.id = s.category_id " +
-            "WHERE lower(pr.name) LIKE %:query% " +
+            "WHERE lower(pr.name) LIKE lower('%' || :query || '%') " +
             "AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
             "GROUP BY (c.name, s.name) " +
             "ORDER BY (c.name, s.name)",
