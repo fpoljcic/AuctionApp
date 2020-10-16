@@ -42,16 +42,16 @@ const ImageCardOverlay = ({ children, data, url }) => {
                 <div className="overlay-container">
                     <Button
                         className="overlay-wishlist-button font-15"
-                        style={wished ? { borderColor: '#8367D8' } : null}
+                        style={wished ? { borderColor: 'var(--primary)' } : null}
                         variant="fill-white"
                         onClick={wishlist}
                         disabled={loadingWish}
                     >
                         Wishlist
                         {wished ? (
-                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />
+                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--primary)' }} />
                         ) : (
-                                <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                                <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                             )}
                     </Button>
                     <Button
@@ -60,7 +60,7 @@ const ImageCardOverlay = ({ children, data, url }) => {
                         onClick={() => history.push(url)}
                     >
                         Bid
-                        <RiAuctionFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                        <RiAuctionFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                     </Button>
                 </div>
             ) : null}

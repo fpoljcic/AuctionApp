@@ -116,9 +116,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     </Button>
                 </OverlayTrigger>
             </div>
-            <div style={{ color: '#9B9B9B' }}>
+            <div style={{ color: 'var(--text-secondary)' }}>
                 Highest bid: {' '}
-                <span style={{ color: '#8367D8', fontWeight: 'bold' }}>
+                <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
                     ${bids[0] === undefined ? 0 : bids[0].price}
                 </span>
                 <br />
@@ -129,16 +129,16 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
             <div>
                 <Button
                     className="wishlist-button"
-                    style={wished ? { borderColor: '#8367D8' } : null}
+                    style={wished ? { borderColor: 'var(--primary)' } : null}
                     variant="transparent-gray"
                     onClick={handleWishlist}
                     disabled={loadingWish}
                 >
                     Wishlist
                     {wished ? (
-                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />
+                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--primary)' }} />
                     ) : (
-                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                         )}
                 </Button>
                 <div className="font-18" style={{ marginTop: 15 }}>

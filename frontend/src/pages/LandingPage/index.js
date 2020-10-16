@@ -40,7 +40,7 @@ const LandingPage = ({ removeBreadcrumb }) => {
     <>
       <div className="landing-page-top-container">
         <ListGroup variant="categories">
-          <ListGroup.Item style={{ color: '#8367D8', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
+          <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
             <ListGroup.Item key={category.name} action onClick={() => history.push(categoryUrl(category))}>{category.name}</ListGroup.Item>
           ))}
@@ -102,10 +102,10 @@ const LandingPage = ({ removeBreadcrumb }) => {
 
       <div className="featured-container">
         <div className="tabs-container">
-          <div style={activePage === 0 ? { borderBottom: '4px solid #8367D8' } : null} className="custom-tab" onClick={() => setActivePage(0)}>
+          <div style={activePage === 0 ? { borderBottom: '4px solid var(--primary)' } : null} className="custom-tab" onClick={() => setActivePage(0)}>
             New Arrivals
           </div>
-          <div style={activePage === 1 ? { borderBottom: '4px solid #8367D8' } : null} className="custom-tab" onClick={() => setActivePage(1)}>
+          <div style={activePage === 1 ? { borderBottom: '4px solid var(--primary)' } : null} className="custom-tab" onClick={() => setActivePage(1)}>
             Last Chance
           </div>
         </div>

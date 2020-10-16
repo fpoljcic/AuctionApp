@@ -71,7 +71,7 @@ const Header = ({ loggedInState }) => {
                                 <Link className="white-nav-link nav-link" to={loginUrl}>
                                     Login
                                 </Link>
-                                <Navbar.Text style={{ color: '#9B9B9B' }}>
+                                <Navbar.Text style={{ color: 'var(--text-secondary)' }}>
                                     or
                                 </Navbar.Text>
                                 <Link style={{ paddingRight: 0 }} className="white-nav-link nav-link" to={registerUrl}>
@@ -84,7 +84,7 @@ const Header = ({ loggedInState }) => {
 
             <div className="bottom-header-container">
                 <Link className="bottom-header-brand" to={homeUrl}>
-                    <RiAuctionFill style={{ color: '#C4BFD6', marginRight: 5 }} />
+                    <RiAuctionFill style={{ color: 'var(--pale-purple)', marginRight: 5 }} />
                     AUCTION
                 </Link>
                 <div className="bottom-header-search">

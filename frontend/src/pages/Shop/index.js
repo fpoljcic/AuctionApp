@@ -118,11 +118,11 @@ const Shop = ({ setBreadcrumb }) => {
                     </Form.Control>
                     {loading ? <Spinner className="shop-spinner" animation="border" /> : null}
                     <div style={{ display: 'flex' }}>
-                        <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'white', backgroundColor: '#8367D8' } : null} size="lg" variant="transparent">
+                        <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'var(--white)', backgroundColor: 'var(--primary)' } : null} size="lg" variant="transparent">
                             <BsGrid3X3GapFill style={{ marginRight: 10 }} />
                             Grid
                         </Button>
-                        <Button onClick={() => setGridLayout(false)} style={gridLayout ? null : { color: 'white', backgroundColor: '#8367D8' }} size="lg" variant="transparent">
+                        <Button onClick={() => setGridLayout(false)} style={gridLayout ? null : { color: 'var(--white)', backgroundColor: 'var(--primary)' }} size="lg" variant="transparent">
                             <FaThList style={{ marginRight: 10 }} />
                             List
                         </Button>

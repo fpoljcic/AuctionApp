@@ -48,7 +48,7 @@ const ListCard = ({ data, url }) => {
                 <h3>
                     {data.name}
                 </h3>
-                <div style={{ color: '#9B9B9B' }}>
+                <div style={{ color: 'var(--text-secondary)' }}>
                     {data.description}
                 </div>
                 <div className="featured-product-price">
@@ -57,16 +57,16 @@ const ListCard = ({ data, url }) => {
                 <div style={{ display: 'flex' }}>
                     <Button
                         className="wishlist-button"
-                        style={wished ? { borderColor: '#8367D8' } : null}
+                        style={wished ? { borderColor: 'var(--primary)' } : null}
                         variant="transparent-gray"
                         onClick={wishlist}
                         disabled={loadingWish}
                     >
                         Wishlist
                         {wished ? (
-                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />
+                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--primary)' }} />
                         ) : (
-                                <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                                <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                             )}
                     </Button>
                     <Button
@@ -76,7 +76,7 @@ const ListCard = ({ data, url }) => {
                         onClick={() => history.push(url)}
                     >
                         Bid
-                        <RiAuctionFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                        <RiAuctionFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                     </Button>
                 </div>
             </div>

@@ -19,7 +19,7 @@
 
 .place-bid-label {
     font-size: 15px;
-    color: #9B9B9B;
+    color: var(--text-secondary);
     letter-spacing: 0.52px;
     margin-top: 10px;
 }

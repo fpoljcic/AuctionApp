@@ -28,7 +28,7 @@
     position: absolute;
     right: 0;
     font-size: 42px;
-    color: white;
+    color: var(--white);
     filter: drop-shadow(2px 2px 2px black);
     cursor: pointer;
     transition: all 0.1s;
@@ -39,7 +39,7 @@
     transition: all 0.1s;
 }
 
-@media (max-width: 765px) {
+@media (max-width: 767px) {
     .product-image-small {
         width: 85px;
         height: 85px;

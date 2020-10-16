@@ -1,5 +1,5 @@
 .register-container {
-    border: 1px solid #D8D8D8;
+    border: 1px solid var(--light-silver);
     max-width: 700px;
     margin: 0 auto;
 }
@@ -13,7 +13,7 @@
 }
 
 .register-title {
-    background: #FAFAFA;
+    background: var(--secondary-background);
     font-weight: bold;
     font-size: 24px;
     letter-spacing: 0.84px;
@@ -21,7 +21,7 @@
 }
 
 .account-exists-text {
-    color: #9B9B9B;
+    color: var(--text-secondary);
     display: flex;
     justify-content: center;
     align-items: center;

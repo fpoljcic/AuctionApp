@@ -4,7 +4,7 @@
     height: 19.4vw;
     z-index: 2;
     cursor: pointer;
-    background-color: rgba(131, 103, 216, 0.30);
+    background-color: var(--primary-a);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,7 +22,7 @@
     margin-top: 60px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
     .overlay-wishlist-button {
         width: 95%;
     }

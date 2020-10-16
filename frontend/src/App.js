@@ -67,7 +67,7 @@ const App = () => {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container purple-theme">
       <Router>
         <Header loggedInState={loggedInState} />
         <Breadcrumb style={breadcrumbTitle === null ? { display: 'none' } : null}>
@@ -77,7 +77,7 @@ const App = () => {
           {breadcrumbItems.map((item, i, { length }) => (
             <Breadcrumb.Item active key={item.text}>
               {length - 1 === i ? (
-                <div style={{ color: '#252525' }}>
+                <div style={{ color: 'var(--text-primary)' }}>
                   {item.text}
                 </div>
               ) : (

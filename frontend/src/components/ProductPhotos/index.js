@@ -39,7 +39,7 @@ const ProductPhotos = ({ photos }) => {
                     key={photo.id}
                     src={photo.url}
                     className="product-image-small"
-                    style={activePhoto === i ? { border: '2px solid #8367D8' } : { opacity: 0.7 }}
+                    style={activePhoto === i ? { border: '2px solid var(--primary)' } : { opacity: 0.7 }}
                 />
             ))}
         </div>

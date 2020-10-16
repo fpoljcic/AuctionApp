@@ -15,9 +15,9 @@
 
 .page-not-found-404 {
     font-size: 15.6vw;
-    color: #8367D8;
+    color: var(--primary);
     letter-spacing: 10.5px;
-    text-shadow: 0.4vw 0.5vw 0 #DADADA;
+    text-shadow: 0.4vw 0.5vw 0 var(--light-silver);
     line-height: normal;
 }
 

@@ -2,9 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #252525;
+    background-color: var(--nero);
     height: 40px;
-    color: white;
+    color: var(--white);
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 0.49px;
@@ -29,11 +29,11 @@
     font-size: 24px;
     letter-spacing: 0.84px;
     font-weight: lighter;
-    color: #8367D8;
+    color: var(--primary);
 }
 
 .bottom-header-brand:hover {
-    color: #8367D8;
+    color: var(--primary);
 }
 
 .bottom-header-search {
