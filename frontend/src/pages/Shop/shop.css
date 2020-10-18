@@ -41,6 +41,12 @@
 }
 
 @media (max-width: 1199px) {
+    .shop-filters-container {
+        width: 30%;
+    }
+    .shop-products-container {
+        width: 70%;
+    }
     .sort-select {
         width: 50%;
     }

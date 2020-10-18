@@ -1,5 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.projections.SimpleProductProj;
 import ba.atlantbh.auctionapp.requests.SearchRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
@@ -21,17 +22,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/featured/random")
-    public ResponseEntity<List<SimpleProductResponse>> getFeaturedRandomProducts() {
+    public ResponseEntity<List<SimpleProductProj>> getFeaturedRandomProducts() {
         return ResponseEntity.ok(productService.getFeaturedRandomProducts());
     }
 
     @GetMapping("/new")
-    public ResponseEntity<List<SimpleProductResponse>> getNewProducts() {
+    public ResponseEntity<List<SimpleProductProj>> getNewProducts() {
         return ResponseEntity.ok(productService.getNewProducts());
     }
 
     @GetMapping("/last")
-    public ResponseEntity<List<SimpleProductResponse>> getLastProducts() {
+    public ResponseEntity<List<SimpleProductProj>> getLastProducts() {
         return ResponseEntity.ok(productService.getLastProducts());
     }
 
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     @GetMapping("/related")
-    public ResponseEntity<List<SimpleProductResponse>> getRelatedProducts(@RequestParam(name = "id") String id) {
+    public ResponseEntity<List<SimpleProductProj>> getRelatedProducts(@RequestParam(name = "id") String id) {
         return ResponseEntity.ok(productService.getRelatedProducts(id));
     }
 

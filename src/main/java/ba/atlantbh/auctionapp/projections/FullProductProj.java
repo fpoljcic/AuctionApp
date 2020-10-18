@@ -1,10 +1,10 @@
-package ba.atlantbh.auctionapp.responses;
+package ba.atlantbh.auctionapp.projections;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface FullProductResponse {
+public interface FullProductProj {
     UUID getId();
     UUID getPersonId();
     String getName();
@@ -13,7 +13,4 @@ public interface FullProductResponse {
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
     Boolean getWished();
-    UUID getPhotoId();
-    String getPhotoUrl();
-    Boolean getPhotoFeatured();
 }

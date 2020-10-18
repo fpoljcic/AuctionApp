@@ -3,6 +3,10 @@ package ba.atlantbh.auctionapp.services;
 import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.models.Product;
+import ba.atlantbh.auctionapp.projections.FullProductProj;
+import ba.atlantbh.auctionapp.projections.ProductCountProj;
+import ba.atlantbh.auctionapp.projections.SimpleProductProj;
+import ba.atlantbh.auctionapp.repositories.PhotoRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -20,49 +24,28 @@ import java.util.*;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final PhotoRepository photoRepository;
 
-    public List<SimpleProductResponse> getFeaturedRandomProducts() {
+    public List<SimpleProductProj> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
     }
 
-    public List<SimpleProductResponse> getNewProducts() {
+    public List<SimpleProductProj> getNewProducts() {
         return productRepository.getNewProducts();
     }
 
-    public List<SimpleProductResponse> getLastProducts() {
+    public List<SimpleProductProj> getLastProducts() {
         return productRepository.getLastProducts();
     }
 
     public ProductResponse getProduct(String productId, String userId) {
-        List<FullProductResponse> fullProducts = productRepository.getProduct(productId, userId);
-        if (fullProducts.isEmpty())
-            throw new NotFoundException("Wrong product id");
-
-        ProductResponse productResponse = new ProductResponse(
-                fullProducts.get(0).getId(),
-                fullProducts.get(0).getPersonId(),
-                fullProducts.get(0).getName(),
-                fullProducts.get(0).getDescription(),
-                fullProducts.get(0).getStartPrice(),
-                fullProducts.get(0).getStartDate(),
-                fullProducts.get(0).getEndDate(),
-                fullProducts.get(0).getWished(),
-                new ArrayList<>());
-
-        if (fullProducts.get(0).getPhotoId() != null) {
-            for (var fullProductResponse : fullProducts) {
-                productResponse.getPhotos().add(new Photo(
-                        fullProductResponse.getPhotoId(),
-                        fullProductResponse.getPhotoUrl(),
-                        fullProductResponse.getPhotoFeatured()
-                ));
-            }
-        }
-
-        return productResponse;
+        FullProductProj product = productRepository.getProduct(productId, userId)
+                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+        List<Photo> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
+        return new ProductResponse(product, productPhotos);
     }
 
-    public List<SimpleProductResponse> getRelatedProducts(String id) {
+    public List<SimpleProductProj> getRelatedProducts(String id) {
         Product product = productRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("Wrong product id"));
         return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
@@ -88,7 +71,7 @@ public class ProductService {
 
         UUID id = JwtTokenUtil.getRequestPersonId();
 
-        Slice<SimpleProductResponse> searchResult = productRepository.search(
+        Slice<SimpleProductProj> searchResult = productRepository.search(
                 query,
                 category,
                 subcategory,
@@ -99,19 +82,16 @@ public class ProductService {
     }
 
     public List<CategoryCountReponse> searchCount(String query) {
-        List<ProductCountResponse> data = productRepository.searchCount(query);
+        List<ProductCountProj> productCounts = productRepository.searchCount(query);
         List<CategoryCountReponse> response = new ArrayList<>();
 
-        for (ProductCountResponse product : data) {
-            CategoryCountReponse newCategory = new CategoryCountReponse(product.getCategoryName(), product.getCount(), new TreeSet<>());
-            int i = response.indexOf(newCategory);
-            if (i == -1) {
-                newCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
-                response.add(newCategory);
-            } else {
-                CategoryCountReponse oldCategory = response.get(i);
-                oldCategory.setCount(oldCategory.getCount() + product.getCount());
-                oldCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+        Set<CountResponse> subcategoryCount = new TreeSet<>();
+        for (ProductCountProj productCount : productCounts) {
+            if (productCount.getSubcategoryName() != null) {
+                subcategoryCount.add(new CountResponse(productCount.getSubcategoryName(), productCount.getCount()));
+            } else if (productCount.getCategoryName() != null) {
+                response.add(new CategoryCountReponse(productCount.getCategoryName(), productCount.getCount(), subcategoryCount));
+                subcategoryCount = new TreeSet<>();
             }
         }
 

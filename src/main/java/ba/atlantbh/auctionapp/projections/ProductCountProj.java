@@ -1,6 +1,6 @@
-package ba.atlantbh.auctionapp.responses;
+package ba.atlantbh.auctionapp.projections;
 
-public interface ProductCountResponse {
+public interface ProductCountProj {
     String getCategoryName();
     String getSubcategoryName();
     Integer getCount();

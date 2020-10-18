@@ -3,6 +3,7 @@ package ba.atlantbh.auctionapp.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,11 +16,9 @@ public class CategoryCountReponse implements Comparable<CategoryCountReponse> {
 
     @Override
     public int compareTo(CategoryCountReponse o) {
-        return o.count.compareTo(this.count);
-    }
-
-    public void addSubcategory(CountResponse countResponse) {
-        subcategories.add(countResponse);
+        return Comparator.comparing(CategoryCountReponse::getCount).reversed()
+                .thenComparing(CategoryCountReponse::getName)
+                .compare(this, o);
     }
 
     @Override
