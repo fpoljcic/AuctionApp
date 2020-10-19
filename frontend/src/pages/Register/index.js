@@ -18,7 +18,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
     useEffect(() => {
         setBreadcrumb("REGISTER", []);
         // eslint-disable-next-line
-    }, []);
+    }, [])
 
     const schema = yup.object().shape({
         firstName: yup.string()

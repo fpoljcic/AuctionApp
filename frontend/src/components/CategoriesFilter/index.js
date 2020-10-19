@@ -23,7 +23,7 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
             } catch (e) { }
         }
         fetchData();
-    }, [query]);
+    }, [query])
 
     useEffect(() => {
         setActiveCategory(filter.category || "");

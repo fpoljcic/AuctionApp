@@ -28,7 +28,14 @@ const Header = ({ loggedInState }) => {
         if (loggedInState !== null)
             setLoggedIn(!loggedIn);
         // eslint-disable-next-line
-    }, [loggedInState]);
+    }, [loggedInState])
+
+    useEffect(() => {
+        const urlParams = qs.parse(history.location.search);
+        if (searchInput !== urlParams.query)
+            setSearchInput(urlParams.query);
+        // eslint-disable-next-line
+    }, [history.location.search])
 
     const handleSearch = async () => {
         const urlParams = {
@@ -89,10 +96,11 @@ const Header = ({ loggedInState }) => {
                 </Link>
                 <div className="bottom-header-search">
                     <FormControl
-                        value={searchInput}
+                        value={searchInput || ""}
                         onChange={(e) => setSearchInput(e.target.value)}
                         size="xl-18"
                         type="text"
+                        maxLength="255"
                         placeholder="Try enter: Shoes"
                         onKeyUp={(e) => e.key === 'Enter' ? handleSearch() : null}
                     />

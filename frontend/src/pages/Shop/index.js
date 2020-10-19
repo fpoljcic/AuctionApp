@@ -7,17 +7,19 @@ import { FaThList } from "react-icons/fa";
 import { searchProducts } from 'api/product';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { removeSpaces } from 'utilities/appUrls';
+import { capitalizeFirstLetter } from 'utilities/common';
 import CategoriesFilter from 'components/CategoriesFilter';
 import ItemNotFound from 'components/ItemNotFound';
+import ListCard from 'components/ListCard';
+import ImageCardOverlay from 'components/ImageCardOverlay';
 import * as qs from 'query-string';
 
 import './shop.css';
-import ListCard from 'components/ListCard';
-import ImageCardOverlay from 'components/ImageCardOverlay';
 
 var page = 0;
+var queryChanged = true;
 
-const Shop = ({ setBreadcrumb }) => {
+const Shop = ({ setBreadcrumb, showMessage }) => {
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({ category: null, subcategory: null });
@@ -34,11 +36,15 @@ const Shop = ({ setBreadcrumb }) => {
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
 
+    useEffect(() => {
+        queryChanged = true;
+    }, [urlParams.query])
+
     const formCategoryName = (name) => {
         if (name === undefined)
             return null;
         name = name.split("_").join(" ");
-        return name.charAt(0).toUpperCase() + name.slice(1);
+        return capitalizeFirstLetter(name);
     }
 
     const formBreadcrumb = () => {
@@ -64,6 +70,23 @@ const Shop = ({ setBreadcrumb }) => {
             const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
             setProducts(data.products);
             setLastPage(data.lastPage);
+            if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
+                showMessage("warning", (
+                    <>
+                        Did you mean?
+                        <span
+                            className="font-18"
+                            style={{ marginLeft: 20, color: 'var(--primary)', cursor: 'pointer' }}
+                            onClick={() => history.push({
+                                search: qs.stringify({ ...urlParams, query: data.didYouMean })
+                            })}
+                        >
+                            {capitalizeFirstLetter(data.didYouMean)}
+                        </span>
+                    </>
+                ));
+                queryChanged = false;
+            }
         } catch (e) { }
         setLoading(false);
     }
@@ -75,7 +98,7 @@ const Shop = ({ setBreadcrumb }) => {
             const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
             setProducts([...products, ...data.products]);
             setLastPage(data.lastPage);
-        } catch (e) { 
+        } catch (e) {
             page--;
         }
         setLoading(false);
