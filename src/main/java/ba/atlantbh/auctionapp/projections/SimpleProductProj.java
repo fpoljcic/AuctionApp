@@ -12,4 +12,5 @@ public interface SimpleProductProj {
     String getCategoryName();
     String getSubcategoryName();
     Boolean getWished();
+    Float getSimilarity();
 }

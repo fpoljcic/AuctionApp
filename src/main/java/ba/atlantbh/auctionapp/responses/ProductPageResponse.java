@@ -11,4 +11,5 @@ import java.util.List;
 public class ProductPageResponse {
     private List<SimpleProductProj> products;
     private Boolean lastPage;
+    private String didYouMean;
 }
