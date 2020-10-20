@@ -1,0 +1,25 @@
+.alert {
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    border: none;
+    text-align: left;
+    padding-left: 11.1%;
+    padding-right: calc(11.1% + 54px);
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.alert-warning {
+    background: var(--warning-background);
+    color: var(--warning);
+}
+
+.alert-success {
+    background: var(--success-background);
+    font-weight: bold;
+    color: var(--success);
+}
+
+.alert-dismissible .close {
+    right: 11.1%;
+}

@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { useBreadcrumbContext } from 'AppContext';
 
 import './myAccount.css';
 
-const MyAccount = ({ setBreadcrumb }) => {
+const MyAccount = () => {
+    const { setBreadcrumb } = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("MY ACCOUNT", []);

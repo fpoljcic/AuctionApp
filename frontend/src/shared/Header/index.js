@@ -5,30 +5,24 @@ import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { removeSession, getUser } from 'utilities/localStorage';
-import { validToken } from 'utilities/common';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
+import { useUserContext } from 'AppContext';
 import * as qs from 'query-string';
 
 import './header.css';
 
-const Header = ({ loggedInState }) => {
+const Header = () => {
+    const { loggedIn, setLoggedIn } = useUserContext();
 
     const user = getUser();
     const history = useHistory();
 
-    const [loggedIn, setLoggedIn] = useState(validToken());
     const [searchInput, setSearchInput] = useState("");
 
     const handleLogout = () => {
         setLoggedIn(false);
         removeSession();
     };
-
-    useEffect(() => {
-        if (loggedInState !== null)
-            setLoggedIn(!loggedIn);
-        // eslint-disable-next-line
-    }, [loggedInState])
 
     useEffect(() => {
         const urlParams = qs.parse(history.location.search);

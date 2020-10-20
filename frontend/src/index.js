@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'moment-duration-format';
 import App from './App';
+import { AppProvider } from 'AppContext';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppProvider>
+      <App />
+    </AppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

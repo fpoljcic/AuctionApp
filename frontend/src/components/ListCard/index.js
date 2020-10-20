@@ -1,8 +1,8 @@
-import { removeWishlistProduct, wishlistProduct } from 'api/wishlist';
 import React, { useEffect, useState } from 'react';
 import { Button, Image } from 'react-bootstrap';
 import { RiAuctionFill, RiHeartFill } from "react-icons/ri";
 import { useHistory } from 'react-router-dom';
+import { removeWishlistProduct, wishlistProduct } from 'api/wishlist';
 import { loginUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 

@@ -5,12 +5,15 @@ import { Link, useHistory } from 'react-router-dom';
 import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/localStorage';
 import { SiFacebook, SiGmail } from 'react-icons/si';
 import { loginUser } from 'api/auth';
+import { forgotPasswordUrl } from 'utilities/appUrls';
+import { useBreadcrumbContext, useUserContext } from 'AppContext';
 import * as yup from 'yup';
 
 import './login.css';
-import { forgotPasswordUrl } from 'utilities/appUrls';
 
-const Login = ({ changeLoggedInState, setBreadcrumb }) => {
+const Login = () => {
+    const { setBreadcrumb } = useBreadcrumbContext();
+    const { setLoggedIn } = useUserContext();
     const history = useHistory();
 
     const rememberInfo = getRememberInfo();
@@ -34,7 +37,7 @@ const Login = ({ changeLoggedInState, setBreadcrumb }) => {
                 removeRememberInfo();
             setLoading(false);
             history.goBack();
-            changeLoggedInState();
+            setLoggedIn(true);
         } catch (e) {
             setLoginError(true);
             setLoading(false);

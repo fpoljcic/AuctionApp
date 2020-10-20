@@ -6,11 +6,13 @@ import { getRandomSubcategories } from 'api/subcategory';
 import { getCategories } from 'api/category';
 import { IoIosArrowForward } from "react-icons/io";
 import { categoryUrl, allCategoryUrl, subcategoryUrl, productUrl } from "utilities/appUrls";
+import ImageCard from 'components/ImageCard';
+import { useBreadcrumbContext } from 'AppContext';
 
 import './landingPage.css';
-import ImageCard from 'components/ImageCard';
 
-const LandingPage = ({ removeBreadcrumb }) => {
+const LandingPage = () => {
+  const { removeBreadcrumb } = useBreadcrumbContext(); 
   const history = useHistory();
 
   const [categories, setCategories] = useState([]);

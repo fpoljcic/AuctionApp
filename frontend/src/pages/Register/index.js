@@ -5,11 +5,15 @@ import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from 'api/auth';
 import { setSession } from 'utilities/localStorage';
 import { loginUrl, myAccountUrl } from 'utilities/appUrls';
+import { useAlertContext, useBreadcrumbContext, useUserContext } from 'AppContext';
 import * as yup from 'yup';
 
 import './register.css';
 
-const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
+const Register = () => {
+    const { setBreadcrumb } = useBreadcrumbContext();
+    const { showMessage } = useAlertContext();
+    const { setLoggedIn } = useUserContext();
     const history = useHistory();
 
     const [emailError, setEmailError] = useState(false);
@@ -45,7 +49,7 @@ const Register = ({ changeLoggedInState, showMessage, setBreadcrumb }) => {
             setSession(data.person, data.token);
             setLoading(false);
             history.push(myAccountUrl);
-            changeLoggedInState();
+            setLoggedIn(true);
             showMessage("success", "Account created successfully");
         } catch (e) {
             if (e.response.data.status === 409)
