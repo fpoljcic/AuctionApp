@@ -14,3 +14,7 @@ spring:
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationInMs: ${JWT_EXPIRATION}
+server:
+  error:
+    include-message: always
+    include-stacktrace: never

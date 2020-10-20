@@ -1,9 +1,9 @@
-package ba.atlantbh.auctionapp.responses;
+package ba.atlantbh.auctionapp.projections;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public interface SimpleSubcategoryResponse {
+public interface SimpleSubcategoryProj {
     UUID getId();
     String getName();
     String getCategoryName();

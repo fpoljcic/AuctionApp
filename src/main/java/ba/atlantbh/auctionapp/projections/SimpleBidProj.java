@@ -1,10 +1,10 @@
-package ba.atlantbh.auctionapp.responses;
+package ba.atlantbh.auctionapp.projections;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface SimpleBidResponse {
+public interface SimpleBidProj {
     UUID getId();
     String getFirstName();
     String getLastName();

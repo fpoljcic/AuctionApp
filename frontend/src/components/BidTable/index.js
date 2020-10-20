@@ -21,7 +21,7 @@ const BidTable = ({ bids }) => {
                             {bid.firstName + ' ' + bid.lastName}
                         </td>
                         <td>{moment(bid.date).format("D MMMM YYYY")}</td>
-                        <td style={i === 0 ? { color: '#6CC047', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
+                        <td style={i === 0 ? { color: 'var(--strong-green)', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
                     </tr>
                 ))}
             </tbody>

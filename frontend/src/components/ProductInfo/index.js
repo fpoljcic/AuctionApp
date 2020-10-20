@@ -11,6 +11,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
     const [loading, setLoading] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const [bidPrice, setBidPrice] = useState("");
+    const maxPrice = 999999.99;
 
     const renderTooltip = () => {
         let tooltipText = "";
@@ -28,6 +29,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 break;
             case bidPrice < minPrice:
                 tooltipText = "Price can't be lower than $" + minPrice;
+                break;
+            case bidPrice > maxPrice:
+                tooltipText = "Price can't be higher than $" + maxPrice;
                 break;
             default:
                 return <div />;
@@ -86,7 +90,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     <Form.Control
                         value={bidPrice}
                         disabled={ownProduct || !active || loading}
-                        maxLength="7"
+                        maxLength="9"
                         className="form-control-gray place-bid-form"
                         size="xl-18"
                         type="text"
@@ -101,7 +105,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     overlay={renderTooltip()}
                 >
                     <Button
-                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}
+                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice || bidPrice > maxPrice}
                         style={{ width: 192, padding: 0 }}
                         size="xxl"
                         variant="transparent-black-shadow"
@@ -112,9 +116,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     </Button>
                 </OverlayTrigger>
             </div>
-            <div style={{ color: '#9B9B9B' }}>
+            <div style={{ color: 'var(--text-secondary)' }}>
                 Highest bid: {' '}
-                <span style={{ color: '#8367D8', fontWeight: 'bold' }}>
+                <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
                     ${bids[0] === undefined ? 0 : bids[0].price}
                 </span>
                 <br />
@@ -125,16 +129,16 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
             <div>
                 <Button
                     className="wishlist-button"
-                    style={wished ? { borderColor: '#8367D8' } : null}
+                    style={wished ? { borderColor: 'var(--primary)' } : null}
                     variant="transparent-gray"
                     onClick={handleWishlist}
                     disabled={loadingWish}
                 >
                     Wishlist
                     {wished ? (
-                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#8367D8' }} />
+                        <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--primary)' }} />
                     ) : (
-                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: '#ECECEC' }} />
+                            <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                         )}
                 </Button>
                 <div className="font-18" style={{ marginTop: 15 }}>

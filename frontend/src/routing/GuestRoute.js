@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { homeUrl } from 'utilities/appUrls';
-import { validToken } from 'utilities/localStorage';
+import { validToken } from 'utilities/common';
 
 // handle the public routes
 const GuestRoute = ({ component: Component, path: Path, ...rest }) => {

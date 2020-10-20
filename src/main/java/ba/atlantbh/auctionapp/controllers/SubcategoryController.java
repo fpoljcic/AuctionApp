@@ -1,6 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
-import ba.atlantbh.auctionapp.responses.SimpleSubcategoryResponse;
+import ba.atlantbh.auctionapp.projections.SimpleSubcategoryProj;
 import ba.atlantbh.auctionapp.services.SubcategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class SubcategoryController {
     private final SubcategoryService subcategoryService;
 
     @GetMapping("/random")
-    public ResponseEntity<List<SimpleSubcategoryResponse>> getRandomSubcategories() {
+    public ResponseEntity<List<SimpleSubcategoryProj>> getRandomSubcategories() {
         return ResponseEntity.ok(subcategoryService.getRandomSubcategories());
     }
 }

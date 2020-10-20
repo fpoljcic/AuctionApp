@@ -4,7 +4,8 @@ import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
-import { validToken, removeSession, getUser } from 'utilities/localStorage';
+import { removeSession, getUser } from 'utilities/localStorage';
+import { validToken } from 'utilities/common';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
 import * as qs from 'query-string';
 
@@ -27,7 +28,14 @@ const Header = ({ loggedInState }) => {
         if (loggedInState !== null)
             setLoggedIn(!loggedIn);
         // eslint-disable-next-line
-    }, [loggedInState]);
+    }, [loggedInState])
+
+    useEffect(() => {
+        const urlParams = qs.parse(history.location.search);
+        if (searchInput !== urlParams.query)
+            setSearchInput(urlParams.query);
+        // eslint-disable-next-line
+    }, [history.location.search])
 
     const handleSearch = async () => {
         const urlParams = {
@@ -70,7 +78,7 @@ const Header = ({ loggedInState }) => {
                                 <Link className="white-nav-link nav-link" to={loginUrl}>
                                     Login
                                 </Link>
-                                <Navbar.Text style={{ color: '#9B9B9B' }}>
+                                <Navbar.Text style={{ color: 'var(--text-secondary)' }}>
                                     or
                                 </Navbar.Text>
                                 <Link style={{ paddingRight: 0 }} className="white-nav-link nav-link" to={registerUrl}>
@@ -83,15 +91,16 @@ const Header = ({ loggedInState }) => {
 
             <div className="bottom-header-container">
                 <Link className="bottom-header-brand" to={homeUrl}>
-                    <RiAuctionFill style={{ color: '#C4BFD6', marginRight: 5 }} />
+                    <RiAuctionFill style={{ color: 'var(--pale-purple)', marginRight: 5 }} />
                     AUCTION
                 </Link>
                 <div className="bottom-header-search">
                     <FormControl
-                        value={searchInput}
+                        value={searchInput || ""}
                         onChange={(e) => setSearchInput(e.target.value)}
                         size="xl-18"
                         type="text"
+                        maxLength="255"
                         placeholder="Try enter: Shoes"
                         onKeyUp={(e) => e.key === 'Enter' ? handleSearch() : null}
                     />

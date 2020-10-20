@@ -36,11 +36,17 @@
 .shop-spinner {
     position: absolute;
     left: 31%;
-    color: #8367D8;
+    color: var(--primary);
     top: 7px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
+    .shop-filters-container {
+        width: 30%;
+    }
+    .shop-products-container {
+        width: 70%;
+    }
     .sort-select {
         width: 50%;
     }

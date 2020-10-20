@@ -7,7 +7,7 @@ import './categoriesFilter.css';
 
 const activeItemStyle = {
     fontWeight: 'bold',
-    backgroundColor: '#ECECEC'
+    backgroundColor: 'var(--lighter-silver)'
 };
 
 const CategoriesFilter = ({ query, filter, handleClick }) => {
@@ -23,7 +23,7 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
             } catch (e) { }
         }
         fetchData();
-    }, [query]);
+    }, [query])
 
     useEffect(() => {
         setActiveCategory(filter.category || "");
@@ -55,10 +55,10 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
 
     return (
         <ListGroup variant="categories-filter">
-            <ListGroup.Item className="categories-filter-title">PRODUCT CATEGORIES</ListGroup.Item>
+            <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold' }}>PRODUCT CATEGORIES</ListGroup.Item>
             <ListGroup.Item
                 action
-                style={activeCategory === "" && activeSubcategory === "" ? activeItemStyle : { color: '#252525' }}
+                style={activeCategory === "" && activeSubcategory === "" ? activeItemStyle : { color: 'var(--text-primary)' }}
                 onClick={allCategoryClick}
             >
                 All Categories
@@ -68,16 +68,16 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
                     <ListGroup.Item
                         action
                         onClick={() => categoryClick(category.name)}
-                        style={category.name === activeCategory && activeSubcategory === "" ? activeItemStyle : { color: '#252525' }}
+                        style={category.name === activeCategory && activeSubcategory === "" ? activeItemStyle : { color: 'var(--text-primary)' }}
                     >
                         {category.name}
                         {' (' + category.count + ')'}
                         {category.name === activeCategory ?
-                            <TiMinus style={{ fontSize: 24, color: '#8367D8' }} /> : <TiPlus style={{ fontSize: 24 }} />}
+                            <TiMinus style={{ fontSize: 24, color: 'var(--primary)' }} /> : <TiPlus style={{ fontSize: 24 }} />}
                     </ListGroup.Item>
                     {category.name === activeCategory ? category.subcategories.map(subcategory => (
                         <ListGroup.Item
-                            style={category.name === activeCategory && subcategory.name === activeSubcategory ? activeItemStyle : { color: '#9B9B9B' }}
+                            style={category.name === activeCategory && subcategory.name === activeSubcategory ? activeItemStyle : { color: 'var(--text-secondary)' }}
                             key={subcategory.name}
                             action
                             onClick={() => subcategoryClick(subcategory.name)}

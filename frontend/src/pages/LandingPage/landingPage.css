@@ -1,5 +1,5 @@
 .landing-page-top-container {
-    background: #FAFAFA;
+    background: var(--secondary-background);
     min-height: 563px;
     margin-left: -14.3%;
     margin-right: -14.3%;
@@ -9,7 +9,7 @@
 }
 
 .list-group-categories {
-    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+    box-shadow: 3px 3px 0 0 var(--black-a);
     border-radius: 0;
     width: 25%;
     text-align: left;
@@ -19,7 +19,9 @@
 }
 
 .list-group-categories>.list-group-item {
-    border-color: #ECECEC;
+    color: var(--text-primary);
+    background-color: var(--primary-background);
+    border-color: var(--lighter-silver);
     border-left: none;
     border-right: none;
     border-top: none;
@@ -46,7 +48,7 @@
 
 .featured-product-price {
     font-size: 24px;
-    color: #8367D8;
+    color: var(--primary);
     letter-spacing: 0.84px;
 }
 
@@ -90,7 +92,7 @@
     padding-bottom: 8px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
     .featured-product-container {
         flex-direction: column;
     }

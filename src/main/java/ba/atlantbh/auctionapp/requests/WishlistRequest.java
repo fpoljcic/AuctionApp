@@ -10,9 +10,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class WishlistRequest {
 
-    @NotNull(message = "Person must be supplied")
+    @NotNull(message = "Person id is required")
     private UUID personId;
 
-    @NotNull(message = "Product must be supplied")
+    @NotNull(message = "Product id is required")
     private UUID productId;
 }

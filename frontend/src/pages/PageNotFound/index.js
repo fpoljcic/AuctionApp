@@ -17,7 +17,7 @@ const PageNotFound = () => {
     return (
         <div className="page-not-found-container">
             <div className="bottom-header-brand">
-                <RiAuctionFill style={{ color: '#C4BFD6', marginRight: 5 }} />
+                <RiAuctionFill style={{ color: 'var(--pale-purple)', marginRight: 5 }} />
                 AUCTION
             </div>
             <div className="page-not-found-404">

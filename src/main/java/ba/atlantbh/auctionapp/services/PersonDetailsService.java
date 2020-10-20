@@ -16,9 +16,7 @@ public class PersonDetailsService implements UserDetailsService {
 
     @Override
     public PersonDetails loadUserByUsername(String email) {
-        Person person = personRepository.findByEmail(email);
-        if (person == null)
-            throw new NotFoundException();
+        Person person = personRepository.findByEmail(email).orElseThrow(NotFoundException::new);
         return new PersonDetails(person);
     }
 }

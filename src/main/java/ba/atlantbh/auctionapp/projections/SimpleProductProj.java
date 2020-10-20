@@ -1,15 +1,16 @@
-package ba.atlantbh.auctionapp.responses;
+package ba.atlantbh.auctionapp.projections;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public interface SimpleProductResponse {
+public interface SimpleProductProj {
     UUID getId();
     String getName();
-    BigDecimal getStartPrice();
     String getDescription();
+    BigDecimal getStartPrice();
     String getUrl();
     String getCategoryName();
     String getSubcategoryName();
     Boolean getWished();
+    Float getSimilarity();
 }

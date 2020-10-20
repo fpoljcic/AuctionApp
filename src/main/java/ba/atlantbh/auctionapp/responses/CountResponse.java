@@ -3,6 +3,8 @@ package ba.atlantbh.auctionapp.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Comparator;
+
 @Data
 @AllArgsConstructor
 public class CountResponse implements Comparable<CountResponse> {
@@ -11,7 +13,8 @@ public class CountResponse implements Comparable<CountResponse> {
 
     @Override
     public int compareTo(CountResponse o) {
-        int i = o.count.compareTo(count);
-        return i == 0 ? name.compareTo(o.name) : i;
+        return Comparator.comparing(CountResponse::getCount).reversed()
+                .thenComparing(CountResponse::getName)
+                .compare(this, o);
     }
 }

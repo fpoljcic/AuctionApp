@@ -1,5 +1,6 @@
 .product-container {
     display: flex;
+    margin-bottom: 150px;
 }
 
 .product-container>div:first-child {
@@ -10,7 +11,7 @@
     width: 50%;
 }
 
-@media (max-width: 765px) {
+@media (max-width: 767px) {
     .product-container>div:first-child {
         width: 100%;
         margin-right: 0;

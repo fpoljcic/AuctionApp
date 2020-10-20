@@ -21,7 +21,7 @@ const Login = ({ changeLoggedInState, setBreadcrumb }) => {
     useEffect(() => {
         setBreadcrumb("LOGIN", []);
         // eslint-disable-next-line
-    }, []);
+    }, [])
 
     const handleSubmit = async (user) => {
         setLoading(true);

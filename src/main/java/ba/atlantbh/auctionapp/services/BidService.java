@@ -9,7 +9,7 @@ import ba.atlantbh.auctionapp.repositories.BidRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.requests.BidRequest;
-import ba.atlantbh.auctionapp.responses.SimpleBidResponse;
+import ba.atlantbh.auctionapp.projections.SimpleBidProj;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class BidService {
     private final PersonRepository personRepository;
     private final ProductRepository productRepository;
 
-    public List<SimpleBidResponse> getBidsForProduct(String id) {
+    public List<SimpleBidProj> getBidsForProduct(String id) {
         return bidRepository.getBidsForProduct(id);
     }
 

@@ -31,8 +31,9 @@ public class PersonService {
     }
 
     public Person login(LoginRequest loginRequest) {
-        Person person = personRepository.findByEmail(loginRequest.getEmail());
-        if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword()))
+        Person person = personRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new UnauthorizedException("Wrong email or password"));
+        if (!passwordEncoder.matches(loginRequest.getPassword(), person.getPassword()))
             throw new UnauthorizedException("Wrong email or password");
         if (!person.getActive())
             throw new UnauthorizedException("User account disabled");

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Alert, Breadcrumb } from 'react-bootstrap';
+import { scrollToTop } from 'utilities/common';
 import axios from 'axios';
 
 import './App.css';
@@ -30,11 +31,7 @@ const App = () => {
   axios.interceptors.response.use((response) => response, handleError);
 
   const showMessage = (variant, message) => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
+    scrollToTop();
     setVariant(variant);
     setMessage(message);
     setAlertVisible(true);
@@ -70,7 +67,7 @@ const App = () => {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container purple-theme">
       <Router>
         <Header loggedInState={loggedInState} />
         <Breadcrumb style={breadcrumbTitle === null ? { display: 'none' } : null}>
@@ -80,7 +77,7 @@ const App = () => {
           {breadcrumbItems.map((item, i, { length }) => (
             <Breadcrumb.Item active key={item.text}>
               {length - 1 === i ? (
-                <div style={{ color: '#252525' }}>
+                <div style={{ color: 'var(--text-primary)' }}>
                   {item.text}
                 </div>
               ) : (
