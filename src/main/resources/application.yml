@@ -3,13 +3,14 @@ spring:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
+    initialization-mode: ${INITIALIZE_DB}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SCHEMA_DB}
     show-sql: true
 app:
   jwtSecret: ${JWT_SECRET}

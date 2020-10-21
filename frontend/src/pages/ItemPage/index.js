@@ -10,12 +10,15 @@ import ImageCard from 'components/ImageCard';
 import BidTable from 'components/BidTable';
 import ProductPhotos from 'components/ProductPhotos';
 import ProductInfo from 'components/ProductInfo';
+import { useAlertContext, useBreadcrumbContext } from 'AppContext';
 import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({ match, setBreadcrumb, showMessage }) => {
+const ItemPage = ({ match }) => {
     const personId = getUserId();
+    const { setBreadcrumb } = useBreadcrumbContext();
+    const { showMessage } = useAlertContext();
 
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);

@@ -6,6 +6,7 @@
     padding-left: 14.3%;
     padding-right: 14.3%;
     display: flex;
+    margin-top: -40px;
 }
 
 .list-group-categories {

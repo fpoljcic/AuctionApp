@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import { homeUrl } from 'utilities/appUrls'; 
+import { useBreadcrumbContext } from 'AppContext';
 
 import './allCategories.css';
 
-const AllCategories = ({ setBreadcrumb }) => {
+const AllCategories = () => {
+    const { setBreadcrumb } = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("ALL CATEGORIES", [{ text: "HOME", href: {homeUrl} }, { text: "ALL CATEGORIES" }]);
@@ -18,4 +19,4 @@ const AllCategories = ({ setBreadcrumb }) => {
     );
 }
 
-export default withRouter(AllCategories);
+export default AllCategories;

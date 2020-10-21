@@ -1,4 +1,3 @@
-import ImageCard from 'components/ImageCard';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { productUrl, shopUrl } from 'utilities/appUrls';
@@ -11,7 +10,9 @@ import { capitalizeFirstLetter } from 'utilities/common';
 import CategoriesFilter from 'components/CategoriesFilter';
 import ItemNotFound from 'components/ItemNotFound';
 import ListCard from 'components/ListCard';
+import ImageCard from 'components/ImageCard';
 import ImageCardOverlay from 'components/ImageCardOverlay';
+import { useAlertContext, useBreadcrumbContext } from 'AppContext';
 import * as qs from 'query-string';
 
 import './shop.css';
@@ -19,7 +20,9 @@ import './shop.css';
 var page = 0;
 var queryChanged = true;
 
-const Shop = ({ setBreadcrumb, showMessage }) => {
+const Shop = () => {
+    const { setBreadcrumb } = useBreadcrumbContext();
+    const { showMessage } = useAlertContext();
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({ category: null, subcategory: null });

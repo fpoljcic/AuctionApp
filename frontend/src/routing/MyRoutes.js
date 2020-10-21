@@ -12,16 +12,16 @@ import Register from 'pages/Register';
 import MyAccount from 'pages/MyAccount';
 import PageNotFound from 'pages/PageNotFound';
 
-const MyRoutes = (props) => {
+const MyRoutes = () => {
     return (
         <Switch>
-            <Route exact path="/" render={() => <LandingPage {...props} />} />
-            <Route path="/all" render={() => <AllCategories {...props} />} />
-            <Route path="/shop/*/*/:id" render={() => <ItemPage {...props} />} />
-            <Route path="/shop*" render={() => <Shop {...props} />} />
-            <GuestRoute path="/login" {...props} component={Login} />
-            <GuestRoute path="/register" {...props} component={Register} />
-            <PrivateRoute path="/my_account" {...props} component={MyAccount} />
+            <Route exact path="/" component={LandingPage} />
+            <Route path="/all" component={AllCategories} />
+            <Route path="/shop/*/*/:id" component={ItemPage} />
+            <Route path="/shop*" component={Shop} />
+            <GuestRoute path="/login" component={Login} />
+            <GuestRoute path="/register" component={Register} />
+            <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>
     );
