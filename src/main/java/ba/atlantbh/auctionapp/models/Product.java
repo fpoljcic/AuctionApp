@@ -1,5 +1,7 @@
 package ba.atlantbh.auctionapp.models;
 
+import ba.atlantbh.auctionapp.models.enums.Color;
+import ba.atlantbh.auctionapp.models.enums.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -68,6 +70,12 @@ public class Product {
 
     @Column(nullable = false)
     private Boolean featured = false;
+
+    @Enumerated(EnumType.STRING)
+    private Color color;
+
+    @Enumerated(EnumType.STRING)
+    private Size size;
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
