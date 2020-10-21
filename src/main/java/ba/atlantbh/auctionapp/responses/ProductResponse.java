@@ -1,7 +1,7 @@
 package ba.atlantbh.auctionapp.responses;
 
-import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.projections.FullProductProj;
+import ba.atlantbh.auctionapp.projections.SimplePhotoProj;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,9 +21,9 @@ public class ProductResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Boolean wished;
-    private List<Photo> photos;
+    private List<SimplePhotoProj> photos;
 
-    public ProductResponse(FullProductProj product, List<Photo> photos) {
+    public ProductResponse(FullProductProj product, List<SimplePhotoProj> photos) {
         this.id = product.getId();
         this.personId = product.getPersonId();
         this.name = product.getName();

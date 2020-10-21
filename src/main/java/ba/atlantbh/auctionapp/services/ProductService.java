@@ -1,10 +1,10 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.NotFoundException;
-import ba.atlantbh.auctionapp.models.Photo;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.projections.FullProductProj;
 import ba.atlantbh.auctionapp.projections.ProductCountProj;
+import ba.atlantbh.auctionapp.projections.SimplePhotoProj;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
 import ba.atlantbh.auctionapp.repositories.PhotoRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
@@ -46,7 +46,7 @@ public class ProductService {
     public ProductResponse getProduct(String productId, String userId) {
         FullProductProj product = productRepository.getProduct(productId, userId)
                 .orElseThrow(() -> new NotFoundException("Wrong product id"));
-        List<Photo> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
+        List<SimplePhotoProj> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
         return new ProductResponse(product, productPhotos);
     }
 
