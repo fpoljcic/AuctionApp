@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,4 +126,17 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             nativeQuery = true)
     List<SizeCountProj> sizeCount(String query, String tsquery, String category, String subcategory,
                                   @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String color);
+
+    @Query(value = "SELECT start_price FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
+            "AND start_date <= now() AND end_date > now() ORDER BY start_price",
+            nativeQuery = true)
+    List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 }

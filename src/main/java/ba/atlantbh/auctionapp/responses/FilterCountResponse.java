@@ -12,4 +12,5 @@ import java.util.List;
 public class FilterCountResponse {
     private List<ColorCountProj> colors;
     private List<SizeCountProj> sizes;
+    private PriceCountResponse price;
 }

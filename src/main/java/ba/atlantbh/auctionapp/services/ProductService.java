@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @AllArgsConstructor
@@ -151,7 +153,47 @@ public class ProductService {
                 maxPrice,
                 color == null ? "" : color.toString()
         );
-        return new FilterCountResponse(colors, sizes);
+        List<BigDecimal> prices = productRepository.prices(
+                query,
+                formTsQuery(query),
+                category,
+                subcategory,
+                color == null ? "" : color.toString(),
+                size == null ? "" : size.toString()
+        );
+        PriceCountResponse price = getPriceInfo(prices, 24);
+        return new FilterCountResponse(colors, sizes, price);
+    }
+
+    private PriceCountResponse getPriceInfo(List<BigDecimal> prices, int bars) {
+        if (prices.isEmpty())
+            return new PriceCountResponse(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, new int[bars]);
+        if (prices.size() == 1)
+            return new PriceCountResponse(prices.get(0), prices.get(0), prices.get(0), new int[bars]);
+        PriceCountResponse price = new PriceCountResponse();
+        price.setMinPrice(prices.get(0));
+        price.setMaxPrice(prices.get(prices.size() - 1));
+        price.setAvgPrice(average(prices, RoundingMode.HALF_UP));
+        price.setPrices(priceHistogram(prices, prices.get(0), prices.get(prices.size() - 1), bars));
+        return price;
+    }
+
+    private int[] priceHistogram(List<BigDecimal> prices, BigDecimal min, BigDecimal max, int bars) {
+        int[] pricesCount = new int[bars];
+        BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 16, RoundingMode.HALF_UP);
+
+        for (BigDecimal price : prices) {
+            ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.FLOOR).intValue()];
+        }
+
+        return pricesCount;
+    }
+
+    private BigDecimal average(List<BigDecimal> bigDecimals, RoundingMode roundingMode) {
+        BigDecimal sum = bigDecimals.stream()
+                .map(Objects::requireNonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sum.divide(new BigDecimal(bigDecimals.size()), roundingMode);
     }
 
     private String formTsQuery(String query) {
