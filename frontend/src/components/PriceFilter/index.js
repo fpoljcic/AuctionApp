@@ -6,8 +6,8 @@ import './priceFilter.css';
 
 const PriceFilter = ({ minPrice: minPriceSearch, maxPrice: maxPriceSearch, filterCount, handleClick }) => {
     const [price, setPrice] = useState(null);
-    const [minPrice, setMinPrice] = useState(minPriceSearch);
-    const [maxPrice, setMaxPrice] = useState(maxPriceSearch);
+    const [minPrice, setMinPrice] = useState(minPriceSearch || 0);
+    const [maxPrice, setMaxPrice] = useState(maxPriceSearch || 0);
     const [avgPrice, setAvgPrice] = useState(0);
     const [maxCount, setMaxCount] = useState(0);
     const [active, setActive] = useState(false);

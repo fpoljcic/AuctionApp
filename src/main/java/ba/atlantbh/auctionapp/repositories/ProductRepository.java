@@ -106,7 +106,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
             "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
             "AND (case when :size = '' then true else pr.size = :size end) " +
-            "AND start_date <= now() AND end_date > now() AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY color",
+            "AND start_date <= now() AND end_date > now() AND color IS NOT NULL GROUP BY color",
             nativeQuery = true)
     List<ColorCountProj> colorCount(String query, String tsquery, String category, String subcategory,
                                @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String size);
@@ -122,7 +122,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
             "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
             "AND (case when :color = '' then true else pr.color = :color end) " +
-            "AND start_date <= now() AND end_date > now() AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY pr.size",
+            "AND start_date <= now() AND end_date > now() AND pr.size IS NOT NULL GROUP BY pr.size",
             nativeQuery = true)
     List<SizeCountProj> sizeCount(String query, String tsquery, String category, String subcategory,
                                   @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String color);

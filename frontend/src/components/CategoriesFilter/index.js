@@ -16,11 +16,11 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setCategories(await searchCountProducts(query, filter.minPrice, filter.maxPrice, filter.color));
+                setCategories(await searchCountProducts(query, filter.minPrice, filter.maxPrice, filter.color, filter.size));
             } catch (e) { }
         }
         fetchData();
-    }, [query, filter.minPrice, filter.maxPrice, filter.color])
+    }, [query, filter.minPrice, filter.maxPrice, filter.color, filter.size])
 
     useEffect(() => {
         setActiveCategory(filter.category || "");
