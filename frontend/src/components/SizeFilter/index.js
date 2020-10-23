@@ -9,7 +9,7 @@ const activeItemStyle = {
 
 const SizeFilter = ({ size, filterCount, handleClick }) => {
     const [sizes, setsizes] = useState([]);
-    const [activeSize, setActiveSize] = useState(size === null ? undefined : size);
+    const [activeSize, setActiveSize] = useState(size);
 
     useEffect(() => {
         if (filterCount.sizes === undefined)
@@ -18,7 +18,6 @@ const SizeFilter = ({ size, filterCount, handleClick }) => {
     }, [filterCount.sizes])
 
     const sizeClick = (size) => {
-        console.log(size)
         if (activeSize === size) {
             setActiveSize(undefined);
             handleClick(null);

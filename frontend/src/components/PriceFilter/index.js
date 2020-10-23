@@ -16,9 +16,9 @@ const PriceFilter = ({ minPrice: minPriceSearch, maxPrice: maxPriceSearch, filte
         if (filterCount.price === undefined)
             return;
         setPrice(filterCount.price);
-        setMinPrice(minPriceSearch === undefined || minPriceSearch === null ? Math.floor(filterCount.price.minPrice) : minPriceSearch);
-        setMaxPrice(maxPriceSearch === undefined || maxPriceSearch === null ? Math.ceil(filterCount.price.maxPrice) : maxPriceSearch);
-        setActive((minPriceSearch !== undefined && minPriceSearch !== null) || (maxPriceSearch !== undefined && maxPriceSearch !== null));
+        setMinPrice(minPriceSearch === undefined ? Math.floor(filterCount.price.minPrice) : minPriceSearch);
+        setMaxPrice(maxPriceSearch === undefined ? Math.ceil(filterCount.price.maxPrice) : maxPriceSearch);
+        setActive(minPriceSearch !== undefined || maxPriceSearch !== undefined);
         setAvgPrice(filterCount.price.avgPrice);
         setMaxCount(Math.max.apply(0, filterCount.price.prices));
         // eslint-disable-next-line

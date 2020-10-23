@@ -9,7 +9,7 @@ const activeItemStyle = {
 
 const ColorFilter = ({ color, filterCount, handleClick }) => {
     const [colors, setColors] = useState([]);
-    const [activeColor, setActiveColor] = useState(color === null ? undefined : color);
+    const [activeColor, setActiveColor] = useState(color);
 
     useEffect(() => {
         if (filterCount.colors === undefined)

@@ -144,22 +144,34 @@ const Shop = () => {
     }
 
     const handlePriceClick = (selected) => {
-        urlParams.minPrice = selected.minPrice;
-        urlParams.maxPrice = selected.maxPrice;
+        if (selected.minPrice === null)
+            delete urlParams.minPrice;
+        else
+            urlParams.minPrice = selected.minPrice;
+        if (selected.maxPrice === null)
+            delete urlParams.maxPrice;
+        else
+            urlParams.maxPrice = selected.maxPrice;
         history.push({
             search: qs.stringify(urlParams)
         });
     }
 
     const handleColorClick = (color) => {
-        urlParams.color = color;
+        if (color === null)
+            delete urlParams.color;
+        else
+            urlParams.color = color;
         history.push({
             search: qs.stringify(urlParams)
         });
     }
 
     const handleSizeClick = (size) => {
-        urlParams.size = size;
+        if (size === null)
+            delete urlParams.size;
+        else
+            urlParams.size = size;
         history.push({
             search: qs.stringify(urlParams)
         });
