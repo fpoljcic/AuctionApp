@@ -22,15 +22,19 @@ export const getRelatedProducts = async (id) => {
     return (await axios.get(hostUrl + '/products/related', getParams({ id }))).data;
 };
 
-export const searchProducts = async (query, category, subcategory, page, sort) => {
+export const searchProducts = async (query, category, subcategory, minPrice, maxPrice, page, sort) => {
     let headers;
     if (getUserId() === null)
-        headers = getParams({ query, category, subcategory, page, sort });
+        headers = getParams({ query, category, subcategory, minPrice, maxPrice, page, sort });
     else
-        headers = { ...defaultHeader(), ...getParams({ query, category, subcategory, page, sort }) };
+        headers = { ...defaultHeader(), ...getParams({ query, category, subcategory, minPrice, maxPrice, page, sort }) };
     return (await axios.get(hostUrl + '/products/search', headers)).data;
 };
 
-export const searchCountProducts = async (query) => {
-    return (await axios.get(hostUrl + '/products/search/count', getParams({ query }))).data;
+export const searchCountProducts = async (query, minPrice, maxPrice) => {
+    return (await axios.get(hostUrl + '/products/search/count', getParams({ query, minPrice, maxPrice }))).data;
+};
+
+export const filterCountProducts = async (query, category, subcategory, minPrice, maxPrice) => {
+    return (await axios.get(hostUrl + '/products/filter/count', getParams({ query, category, subcategory, minPrice, maxPrice }))).data;
 };

@@ -1,0 +1,66 @@
+.price-filter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: left;
+    min-height: 200px;
+    border: 1px solid var(--light-silver);
+    padding: .75rem 1.25rem;
+}
+
+.price-range-container {
+    position: relative;
+    height: 80px;
+}
+
+.histogram-container {
+    display: flex;
+    align-items: flex-end;
+    bottom: 9px;
+    position: absolute;
+    width: 100%;
+    height: inherit;
+}
+
+.histogram-bar {
+    background-color: var(--lighter-silver-blue);
+}
+
+.price-range-slider {
+    position: absolute;
+    bottom: 0;
+}
+
+.price-range-slider>.rc-slider-track {
+    cursor: pointer;
+    background: var(--primary);
+    border-radius: 1px;
+    height: 2px;
+}
+
+.price-range-slider>.rc-slider-rail {
+    cursor: pointer;
+    background: var(--light-silver);
+    border-radius: 1px;
+    height: 2px;
+}
+
+.price-range-slider>.rc-slider-step {
+    cursor: pointer;
+    height: 2px;
+}
+
+.price-range-slider>.rc-slider-handle {
+    background-image: radial-gradient(circle, var(--primary) 40%, var(--white) 40%);
+    border-color: var(--white);
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    border: 1px solid var(--lighter-silver-blue);
+}
+
+.price-info-container {
+    font-size: 14px;
+    letter-spacing: 0.49px;
+    color: var(--text-secondary);
+}

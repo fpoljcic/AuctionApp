@@ -3,11 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { productUrl, shopUrl } from 'utilities/appUrls';
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
-import { searchProducts } from 'api/product';
+import { filterCountProducts, searchProducts } from 'api/product';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { removeSpaces } from 'utilities/appUrls';
 import { capitalizeFirstLetter } from 'utilities/common';
 import CategoriesFilter from 'components/CategoriesFilter';
+import PriceFilter from 'components/PriceFilter';
 import ItemNotFound from 'components/ItemNotFound';
 import ListCard from 'components/ListCard';
 import ImageCard from 'components/ImageCard';
@@ -25,7 +26,8 @@ const Shop = () => {
     const { showMessage } = useAlertContext();
 
     const [products, setProducts] = useState([]);
-    const [filter, setFilter] = useState({ category: null, subcategory: null });
+    const [filterCount, setFilterCount] = useState({});
+    const [filter, setFilter] = useState({ category: null, subcategory: null, minPrice: null, maxPrice: null });
     const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -67,10 +69,11 @@ const Shop = () => {
 
     const refreshData = async (urlElements) => {
         page = 0;
-        const newFilter = { category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]) };
+        const newFilter = { category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]), minPrice: urlParams.minPrice, maxPrice: urlParams.maxPrice };
         setFilter(newFilter);
         try {
-            const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
+            const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice, page, urlParams.sort);
+            setFilterCount(await filterCountProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice));
             setProducts(data.products);
             setLastPage(data.lastPage);
             if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
@@ -98,7 +101,7 @@ const Shop = () => {
         setLoading(true);
         page++;
         try {
-            const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
+            const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, filter.minPrice, filter.maxPrice, page, urlParams.sort);
             setProducts([...products, ...data.products]);
             setLastPage(data.lastPage);
         } catch (e) {
@@ -115,7 +118,7 @@ const Shop = () => {
         });
     }
 
-    const handleClick = (selected) => {
+    const handleCategoryClick = (selected) => {
         let categoryPath = "";
         let subcategoryPath = "";
         if (selected.category !== null)
@@ -128,10 +131,19 @@ const Shop = () => {
         });
     }
 
+    const handlePriceClick = (selected) => {
+        urlParams.minPrice = selected.minPrice;
+        urlParams.maxPrice = selected.maxPrice;
+        history.push({
+            search: qs.stringify(urlParams)
+        });
+    }
+
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
-                <CategoriesFilter filter={filter} handleClick={handleClick} query={urlParams.query} />
+                <CategoriesFilter filter={filter} handleClick={handleCategoryClick} query={urlParams.query} />
+                <PriceFilter minPrice={urlParams.minPrice} maxPrice={urlParams.maxPrice} filterCount={filterCount} handleClick={handlePriceClick} />
             </div>
 
             <div className="shop-products-container">

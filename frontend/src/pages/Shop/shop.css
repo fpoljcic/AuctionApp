@@ -4,8 +4,13 @@
 
 .shop-filters-container {
     display: flex;
-    width: 20%;
+    flex-direction: column;
+    width: 22%;
     margin-right: 20px;
+}
+
+.shop-filters-container>div {
+    margin-bottom: 20px;
 }
 
 .shop-sorting-bar {
@@ -22,7 +27,7 @@
 }
 
 .shop-products-container {
-    width: 80%;
+    width: 78%;
 }
 
 .shop-products {
