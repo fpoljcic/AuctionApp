@@ -9,6 +9,7 @@ import { removeSpaces } from 'utilities/appUrls';
 import { capitalizeFirstLetter } from 'utilities/common';
 import CategoriesFilter from 'components/CategoriesFilter';
 import PriceFilter from 'components/PriceFilter';
+import ColorFilter from 'components/ColorFilter';
 import ItemNotFound from 'components/ItemNotFound';
 import ListCard from 'components/ListCard';
 import ImageCard from 'components/ImageCard';
@@ -27,7 +28,7 @@ const Shop = () => {
 
     const [products, setProducts] = useState([]);
     const [filterCount, setFilterCount] = useState({});
-    const [filter, setFilter] = useState({ category: null, subcategory: null, minPrice: null, maxPrice: null });
+    const [filter, setFilter] = useState({ category: null, subcategory: null, minPrice: null, maxPrice: null, color: null });
     const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -69,11 +70,18 @@ const Shop = () => {
 
     const refreshData = async (urlElements) => {
         page = 0;
-        const newFilter = { category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2]), minPrice: urlParams.minPrice, maxPrice: urlParams.maxPrice };
+        const newFilter = {
+            category: formCategoryName(urlElements[1]),
+            subcategory: formCategoryName(urlElements[2]),
+            minPrice: urlParams.minPrice,
+            maxPrice: urlParams.maxPrice,
+            color: urlParams.color
+        };
         setFilter(newFilter);
         try {
-            const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice, page, urlParams.sort);
-            setFilterCount(await filterCountProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice));
+            const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory,
+                newFilter.minPrice, newFilter.maxPrice, newFilter.color, page, urlParams.sort);
+            setFilterCount(await filterCountProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice, newFilter.color));
             setProducts(data.products);
             setLastPage(data.lastPage);
             if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
@@ -101,7 +109,7 @@ const Shop = () => {
         setLoading(true);
         page++;
         try {
-            const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, filter.minPrice, filter.maxPrice, page, urlParams.sort);
+            const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, filter.minPrice, filter.maxPrice, filter.color, page, urlParams.sort);
             setProducts([...products, ...data.products]);
             setLastPage(data.lastPage);
         } catch (e) {
@@ -139,11 +147,19 @@ const Shop = () => {
         });
     }
 
+    const handleColorClick = (color) => {
+        urlParams.color = color;
+        history.push({
+            search: qs.stringify(urlParams)
+        });
+    }
+
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
                 <CategoriesFilter filter={filter} handleClick={handleCategoryClick} query={urlParams.query} />
                 <PriceFilter minPrice={urlParams.minPrice} maxPrice={urlParams.maxPrice} filterCount={filterCount} handleClick={handlePriceClick} />
+                <ColorFilter color={urlParams.color} filterCount={filterCount} handleClick={handleColorClick} />
             </div>
 
             <div className="shop-products-container">

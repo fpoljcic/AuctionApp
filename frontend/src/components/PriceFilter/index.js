@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Range } from 'rc-slider';
+import { MdClear } from 'react-icons/md';
 
 import './priceFilter.css';
 
@@ -9,13 +10,15 @@ const PriceFilter = ({ minPrice: minPriceSearch, maxPrice: maxPriceSearch, filte
     const [maxPrice, setMaxPrice] = useState(maxPriceSearch);
     const [avgPrice, setAvgPrice] = useState(0);
     const [maxCount, setMaxCount] = useState(0);
+    const [active, setActive] = useState(false);
 
     useEffect(() => {
         if (filterCount.price === undefined)
             return;
         setPrice(filterCount.price);
-        setMinPrice(minPriceSearch === undefined ? Math.floor(filterCount.price.minPrice) : minPriceSearch);
-        setMaxPrice(maxPriceSearch === undefined ? Math.ceil(filterCount.price.maxPrice) : maxPriceSearch);
+        setMinPrice(minPriceSearch === undefined || minPriceSearch === null ? Math.floor(filterCount.price.minPrice) : minPriceSearch);
+        setMaxPrice(maxPriceSearch === undefined || maxPriceSearch === null ? Math.ceil(filterCount.price.maxPrice) : maxPriceSearch);
+        setActive((minPriceSearch !== undefined && minPriceSearch !== null) || (maxPriceSearch !== undefined && maxPriceSearch !== null));
         setAvgPrice(filterCount.price.avgPrice);
         setMaxCount(Math.max.apply(0, filterCount.price.prices));
         // eslint-disable-next-line
@@ -27,13 +30,24 @@ const PriceFilter = ({ minPrice: minPriceSearch, maxPrice: maxPriceSearch, filte
     }
 
     const handleAfterChange = (price) => {
+        setActive(true);
         handleClick({ minPrice: price[0], maxPrice: price[1] });
+    }
+
+    const clearPrice = () => {
+        setActive(false);
+        handleClick({ minPrice: null, maxPrice: null });
+        setMinPrice(Math.floor(price.minPrice));
+        setMaxPrice(Math.floor(price.maxPrice));
     }
 
     return (
         <div className="price-filter-container">
-            <div style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
+            <div className="price-filter-title">
                 FILTER BY PRICE
+                {active ?
+                    <MdClear onClick={clearPrice} className="list-clear-icon" />
+                    : null}
             </div>
             <div className="price-range-container">
                 {price !== null ?
