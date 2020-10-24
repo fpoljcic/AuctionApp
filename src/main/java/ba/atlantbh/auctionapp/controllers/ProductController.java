@@ -1,13 +1,12 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.models.enums.Color;
+import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
 import ba.atlantbh.auctionapp.requests.FilterCountRequest;
 import ba.atlantbh.auctionapp.requests.SearchCountRequest;
 import ba.atlantbh.auctionapp.requests.SearchRequest;
-import ba.atlantbh.auctionapp.responses.CategoryCountReponse;
-import ba.atlantbh.auctionapp.responses.FilterCountResponse;
-import ba.atlantbh.auctionapp.responses.ProductPageResponse;
-import ba.atlantbh.auctionapp.responses.ProductResponse;
+import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +88,10 @@ public class ProductController {
                 filterCountRequest.getColor(),
                 filterCountRequest.getSize()
         ));
+    }
+
+    @GetMapping("/filters")
+    public ResponseEntity<FilterResponse> getFilters() {
+        return ResponseEntity.ok(new FilterResponse(Color.values(), Size.values()));
     }
 }
