@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { SiFacebook, SiTwitter, SiInstagram } from "react-icons/si";
 import { RiAuctionFill } from "react-icons/ri";
 import { GrFormSearch } from "react-icons/gr";
-import { FormControl, Image, Nav, Navbar } from 'react-bootstrap';
+import { FormControl, Image, ListGroup, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { removeSession, getUser } from 'utilities/localStorage';
-import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl } from 'utilities/appUrls';
+import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl } from 'utilities/appUrls';
 import { useUserContext } from 'AppContext';
 import * as qs from 'query-string';
 
@@ -18,6 +18,7 @@ const Header = () => {
     const history = useHistory();
 
     const [searchInput, setSearchInput] = useState("");
+    const [accountListVisible, setAccountListVisible] = useState(false);
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -100,10 +101,32 @@ const Header = () => {
                     />
                     <GrFormSearch className="bottom-header-search-icon" onClick={handleSearch} />
                 </div>
-                <Nav>
+                <Nav style={{ position: 'relative' }}>
                     <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={homeUrl}>HOME</NavLink>
                     <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={shopUrl}>SHOP</NavLink>
-                    <NavLink style={{ paddingRight: 0 }} className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={myAccountUrl}>MY ACCOUNT</NavLink>
+                    <NavLink
+                        style={{ paddingRight: 0, paddingTop: 28, paddingBottom: 28 }}
+                        className={"black-nav-link nav-link"}
+                        activeClassName="black-active-nav-link"
+                        to={myAccountUrl}
+                        onMouseEnter={() => setAccountListVisible(true)}
+                        onMouseLeave={() => setAccountListVisible(false)}
+                    >
+                        MY ACCOUNT
+                    </NavLink>
+                    {accountListVisible ?
+                        <ListGroup
+                            className="account-list"
+                            variant="filter"
+                            onMouseEnter={() => setAccountListVisible(true)}
+                            onMouseLeave={() => setAccountListVisible(false)}
+                        >
+                            <ListGroup.Item onClick={() => history.push(myAccountUrl)}>Profile</ListGroup.Item>
+                            <ListGroup.Item onClick={() => history.push(myAccountSellerUrl)}>Become Seller</ListGroup.Item>
+                            <ListGroup.Item onClick={() => history.push(myAccountBidsUrl)}>Your Bids</ListGroup.Item>
+                            <ListGroup.Item onClick={() => history.push(myAccountWishlistUrl)}>Wishlist</ListGroup.Item>
+                            <ListGroup.Item onClick={() => history.push(myAccountSettingsUrl)}>Settings</ListGroup.Item>
+                        </ListGroup> : null}
                 </Nav>
             </div>
         </>
