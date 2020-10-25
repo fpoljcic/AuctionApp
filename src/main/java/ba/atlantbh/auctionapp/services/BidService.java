@@ -39,10 +39,11 @@ public class BidService {
             throw new BadRequestException("Auction is yet to start for this product");
         if (product.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("Auction ended for this product");
-        UUID id = JwtTokenUtil.getRequestPersonId();
-        if (id == null)
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        if (personId == null)
             throw new UnprocessableException("Invalid JWT signature");
-        Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
         if (product.getPerson().getId() == person.getId())
             throw new BadRequestException("You can't bid on your own product");
         BigDecimal maxBid = bidRepository.getMaxBidFromPersonForProduct(person.getId().toString(), product.getId().toString());

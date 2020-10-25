@@ -4,16 +4,14 @@ import ba.atlantbh.auctionapp.models.enums.Color;
 import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
 import ba.atlantbh.auctionapp.requests.FilterCountRequest;
+import ba.atlantbh.auctionapp.requests.ProductRequest;
 import ba.atlantbh.auctionapp.requests.SearchCountRequest;
 import ba.atlantbh.auctionapp.requests.SearchRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -93,5 +91,11 @@ public class ProductController {
     @GetMapping("/filters")
     public ResponseEntity<FilterResponse> getFilters() {
         return ResponseEntity.ok(new FilterResponse(Color.values(), Size.values()));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> add(@RequestBody @Valid ProductRequest productRequest) {
+        productService.add(productRequest);
+        return ResponseEntity.ok("Product added");
     }
 }

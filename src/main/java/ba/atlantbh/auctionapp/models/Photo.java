@@ -31,7 +31,8 @@ public class Photo {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Photo(@NotBlank String url) {
+    public Photo(@NotBlank String url, Product product) {
         this.url = url;
+        this.product = product;
     }
 }

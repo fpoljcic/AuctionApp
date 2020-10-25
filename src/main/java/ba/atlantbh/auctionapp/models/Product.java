@@ -54,8 +54,9 @@ public class Product {
     @Column(nullable = false)
     private String city;
 
+    @NotBlank
     @Column(nullable = false)
-    private Integer zip;
+    private String zip;
 
     @NotBlank
     @Column(nullable = false)
@@ -89,7 +90,7 @@ public class Product {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    public Product(@NotBlank String name, @Min(value = 0) BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, Integer zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
+    public Product(@NotBlank String name, @Min(value = 0) BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, @NotBlank String zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
         this.name = name;
         this.startPrice = startPrice;
         this.startDate = startDate;

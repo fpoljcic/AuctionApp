@@ -47,15 +47,14 @@ public class Card {
     private Short cvc;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private Person person;
 
-    public Card(@NotBlank String name, @NotBlank String cardNumber, Integer expirationYear, Integer expirationMonth, Short cvc, Person person) {
+    public Card(@NotBlank String name, @NotBlank @Size(max = 16) String cardNumber, @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(12) Integer expirationMonth, @Min(100) @Max(9999) Short cvc) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.cvc = cvc;
-        this.person = person;
     }
 }
