@@ -9,8 +9,8 @@ import Shop from 'pages/Shop';
 import ItemPage from 'pages/ItemPage';
 import Login from 'pages/Login';
 import Register from 'pages/Register';
+import Sell from 'pages/Sell';
 import MyAccount from 'pages/MyAccount';
-import BecomeSeller from 'pages/BecomeSeller';
 import PageNotFound from 'pages/PageNotFound';
 
 const MyRoutes = () => {
@@ -22,7 +22,7 @@ const MyRoutes = () => {
             <Route path="/shop*" component={Shop} />
             <GuestRoute path="/login" component={Login} />
             <GuestRoute path="/register" component={Register} />
-            <PrivateRoute path="/my_account/seller" component={BecomeSeller} />
+            <PrivateRoute path="/my_account/seller/sell" component={Sell} />
             <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>

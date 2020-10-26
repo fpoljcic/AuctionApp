@@ -113,7 +113,7 @@ const Login = () => {
                                 onChange={handleChange}
                             />
 
-                            <Button disabled={loading} block variant="fill-purple" size="xxl" type="submit">
+                            <Button disabled={loading} block variant="fill-purple-shadow" size="xxl" type="submit">
                                 LOGIN
                             </Button>
 

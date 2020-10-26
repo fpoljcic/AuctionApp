@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useBreadcrumbContext } from 'AppContext';
-import { myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
+import { myAccountSellerSellUrl, myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
 import { Step, Stepper } from 'react-form-stepper';
 import SellerTab1 from 'components/SellerTabs/SellerTab1';
 import SellerTab2 from 'components/SellerTabs/SellerTab2';
 import SellerTab3 from 'components/SellerTabs/SellerTab3';
 
-import './becomeSeller.css';
+import './sell.css';
 
-const BecomeSeller = () => {
+const Sell = () => {
     const { setBreadcrumb } = useBreadcrumbContext();
 
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
-        setBreadcrumb("MY ACCOUNT", [{ text: "MY ACCOUNT", href: myAccountUrl }, { text: "BECOME SELLER", href: myAccountSellerUrl }]);
+        setBreadcrumb("MY ACCOUNT", [
+            { text: "MY ACCOUNT", href: myAccountUrl },
+            { text: "SELLER", href: myAccountSellerUrl },
+            { text: "SELL", href: myAccountSellerSellUrl }
+        ]);
         // eslint-disable-next-line 
     }, [])
 
@@ -73,4 +77,4 @@ const BecomeSeller = () => {
     );
 }
 
-export default BecomeSeller;
+export default Sell;

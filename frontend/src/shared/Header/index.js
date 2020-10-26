@@ -122,7 +122,7 @@ const Header = () => {
                             onMouseLeave={() => setAccountListVisible(false)}
                         >
                             <ListGroup.Item onClick={() => history.push(myAccountUrl)}>Profile</ListGroup.Item>
-                            <ListGroup.Item onClick={() => history.push(myAccountSellerUrl)}>Become Seller</ListGroup.Item>
+                            <ListGroup.Item onClick={() => history.push(myAccountSellerUrl)}>Your Products</ListGroup.Item>
                             <ListGroup.Item onClick={() => history.push(myAccountBidsUrl)}>Your Bids</ListGroup.Item>
                             <ListGroup.Item onClick={() => history.push(myAccountWishlistUrl)}>Wishlist</ListGroup.Item>
                             <ListGroup.Item onClick={() => history.push(myAccountSettingsUrl)}>Settings</ListGroup.Item>

@@ -64,6 +64,8 @@ h3 {
 
 .btn-lg {
   height: 46px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
 }
 
 .btn-xl {
@@ -104,7 +106,22 @@ h3 {
 .btn-fill-purple {
   color: var(--white);
   background: var(--primary);
+}
+
+.btn-fill-purple-shadow {
+  color: var(--white);
+  background: var(--primary);
   box-shadow: 3px 3px 0 0 var(--primary-a);
+}
+
+.btn-fill-purple:hover, .btn-fill-purple-shadow:hover {
+  color: var(--white);
+}
+
+.btn-fill-gray {
+  color: var(--text-primary);
+  background: var(--white-smoke);
+  border: none;
 }
 
 .btn-fill-white {

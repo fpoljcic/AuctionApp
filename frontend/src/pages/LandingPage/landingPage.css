@@ -32,8 +32,8 @@
 .featured-product-container {
     padding: 5% 0 5% 5%;
     display: flex;
+    align-items: stretch;
     justify-content: space-between;
-    align-items: center;
     margin: auto 0;
     width: 100%;
     height: 100%;
@@ -43,8 +43,9 @@
     display: flex;
     flex-direction: column;
     text-align: left;
-    height: 70%;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
 }
 
 .featured-product-price {
