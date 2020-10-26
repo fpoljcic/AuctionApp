@@ -12,6 +12,13 @@ const Sell = () => {
     const { setBreadcrumb } = useBreadcrumbContext();
 
     const [activeTab, setActiveTab] = useState(0);
+    const [product, setProduct] = useState({});
+
+    const tabs = [
+        <SellerTab1 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
+        <SellerTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
+        <SellerTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />
+    ];
 
     useEffect(() => {
         setBreadcrumb("MY ACCOUNT", [
@@ -21,25 +28,6 @@ const Sell = () => {
         ]);
         // eslint-disable-next-line 
     }, [])
-
-    const renderTab = () => {
-        switch (activeTab) {
-            case 0:
-                return (
-                    <SellerTab1 />
-                )
-            case 1:
-                return (
-                    <SellerTab2 />
-                )
-            case 2:
-                return (
-                    <SellerTab3 />
-                )
-            default:
-                return null;
-        }
-    }
 
     const renderStep = (active) => (
         <Step>
@@ -67,12 +55,13 @@ const Sell = () => {
                     disabledColor: 'var(--lighter-silver)',
                     size: '5px'
                 }}
+                className="sell-stepper"
             >
                 {renderStep(activeTab >= 0)}
                 {renderStep(activeTab >= 1)}
                 {renderStep(activeTab >= 2)}
             </Stepper>
-            {renderTab()}
+            {tabs[activeTab]}
         </>
     );
 }

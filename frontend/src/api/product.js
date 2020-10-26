@@ -38,3 +38,7 @@ export const searchCountProducts = async (query, minPrice, maxPrice, color, size
 export const filterCountProducts = async (query, category, subcategory, minPrice, maxPrice, color, size) => {
     return (await axios.get(hostUrl + '/products/filter/count', getParams({ query, category, subcategory, minPrice, maxPrice, color, size }))).data;
 };
+
+export const getProductFilters = async () => {
+    return (await axios.get(hostUrl + '/products/filters')).data;
+};

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './sellerTabs.css';
 
-const SellerTab3 = () => {
+const SellerTab3 = ({ product, setProduct, setActiveTab }) => {
     return (
         <div>
             SellerTab3

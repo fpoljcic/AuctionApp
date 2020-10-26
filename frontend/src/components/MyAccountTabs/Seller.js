@@ -11,7 +11,7 @@ const Seller = () => {
     const history = useHistory();
 
     return (
-        <div style={{ width: 707 }} className="tab-container">
+        <div className="tab-container">
             <div className="tab-title">
                 SELL
             </div>

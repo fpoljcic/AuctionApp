@@ -1,0 +1,32 @@
+.tab-container {
+    border: 1px solid var(--light-silver);
+    margin: 0 auto;
+    width: 40vw;
+    min-width: 320px;
+}
+
+.tab-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--secondary-background);
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 0.7px;
+    height: 60px;
+}
+
+.tab-content {
+    padding: 40px;
+}
+
+.form-control-description {
+    text-align: right;
+    color: var(--text-secondary);
+    font-size: 16px;
+    letter-spacing: 0.56px;
+}
+
+.form-sell-select {
+    width: 48%;
+}

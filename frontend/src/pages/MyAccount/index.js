@@ -21,7 +21,7 @@ const MyAccount = () => {
 
     const [activeTab, setActiveTab] = useState(0);
 
-    const tabs = [<Profile />, <Seller />, <Bids />, <Wishlist />, <Settings />, <PageNotFound />];
+    const tabs = [<></>, <Profile />, <Seller />, <Bids />, <Wishlist />, <Settings />, <PageNotFound />];
 
     useEffect(() => {
         formBreadcrumb();
@@ -32,7 +32,7 @@ const MyAccount = () => {
         const urlElements = history.location.pathname.split("/").slice(1);
         if (urlElements.length === 1) {
             setBreadcrumb("MY ACCOUNT", []);
-            setActiveTab(0);
+            setActiveTab(1);
         } else {
             setBreadcrumb("MY ACCOUNT", urlElements.map((el, i) => {
                 return {
@@ -42,19 +42,19 @@ const MyAccount = () => {
             }));
             switch (urlElements[1]) {
                 case "seller":
-                    setActiveTab(1);
-                    break;
-                case "bids":
                     setActiveTab(2);
                     break;
-                case "wishlist":
+                case "bids":
                     setActiveTab(3);
                     break;
-                case "settings":
+                case "wishlist":
                     setActiveTab(4);
                     break;
-                default:
+                case "settings":
                     setActiveTab(5);
+                    break;
+                default:
+                    setActiveTab(6);
             }
         }
     }
@@ -62,23 +62,23 @@ const MyAccount = () => {
     return (
         <div>
             <div className="account-tabs-container">
-                <Button onClick={() => history.push(myAccountUrl)} variant={activeTab === 0 ? "fill-purple" : "fill-gray"} size="lg">
+                <Button onClick={() => history.push(myAccountUrl)} variant={activeTab === 1 ? "fill-purple" : "fill-gray"} size="lg">
                     <FaUser style={{ marginRight: 5 }} />
                     Profile
                 </Button>
-                <Button onClick={() => history.push(myAccountSellerUrl)} variant={activeTab === 1 ? "fill-purple" : "fill-gray"} size="lg">
+                <Button onClick={() => history.push(myAccountSellerUrl)} variant={activeTab === 2 ? "fill-purple" : "fill-gray"} size="lg">
                     <FaList style={{ marginRight: 5 }} />
                     Seller
                 </Button>
-                <Button onClick={() => history.push(myAccountBidsUrl)} variant={activeTab === 2 ? "fill-purple" : "fill-gray"} size="lg">
+                <Button onClick={() => history.push(myAccountBidsUrl)} variant={activeTab === 3 ? "fill-purple" : "fill-gray"} size="lg">
                     <ImHammer2 style={{ marginRight: 5 }} />
                     Bids
                 </Button>
-                <Button onClick={() => history.push(myAccountWishlistUrl)} variant={activeTab === 3 ? "fill-purple" : "fill-gray"} size="lg">
+                <Button onClick={() => history.push(myAccountWishlistUrl)} variant={activeTab === 4 ? "fill-purple" : "fill-gray"} size="lg">
                     <FaGift style={{ marginRight: 5 }} />
                     Wishlist
                 </Button>
-                <Button onClick={() => history.push(myAccountSettingsUrl)} variant={activeTab === 4 ? "fill-purple" : "fill-gray"} size="lg">
+                <Button onClick={() => history.push(myAccountSettingsUrl)} variant={activeTab === 5 ? "fill-purple" : "fill-gray"} size="lg">
                     <RiSettings5Fill style={{ fontSize: 20, marginRight: 5 }} />
                     Settings
                 </Button>

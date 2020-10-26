@@ -25,6 +25,7 @@
   --pale-purple: #C4BFD6;
   --white: #FFF;
   --black-a: rgba(0, 0, 0, 0.11);
+  --black-a-2: rgba(0, 0, 0, 0.05);
   --nero: #252525;
 }
 
@@ -55,6 +56,7 @@
   --pale-purple: #C4BFD6;
   --white: #FFF;
   --black-a: rgba(0, 0, 0, 0.11);
+  --black-a-2: rgba(0, 0, 0, 0.05);
   --nero: #0e0e0e;
 }
 
