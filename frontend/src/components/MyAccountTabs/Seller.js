@@ -27,7 +27,7 @@ const Seller = () => {
                     onClick={() => history.push(myAccountSellerSellUrl)}
                 >
                     START SELLING
-                    <IoIosArrowForward style={{ fontSize: 24, marginLeft: 5 }} />
+                    <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
                 </Button>
             </div>
         </div>

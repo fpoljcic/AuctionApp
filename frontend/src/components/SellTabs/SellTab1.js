@@ -1,62 +1,53 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from 'react-bootstrap';
-import { getCategories } from 'api/category';
-import { getSubcategoriesForCategory } from 'api/subcategory';
-import { getProductFilters } from 'api/product';
-import SubmitButtons from './SubmitButtons';
 import { myAccountSellerUrl } from 'utilities/appUrls';
-import { useHistory } from 'react-router-dom';
+import SubmitButtons from './SubmitButtons';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
 
-const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
+const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcategories, selectCategory, filters, product, setProduct, setActiveTab }) => {
     const history = useHistory();
 
-    const [categories, setCategories] = useState([]);
-    const [subcategories, setSubcategories] = useState([]);
-    const [colors, setColors] = useState([]);
-    const [sizes, setSizes] = useState([]);
+    const [categories, setCategories] = useState(loadedCategories);
+    const [categoryChanged, setCategoryChanged] = useState(false);
+    const [subcategories, setSubcategories] = useState(loadedSubcategories);
+    const [colors, setColors] = useState(filters.colors);
+    const [sizes, setSizes] = useState(filters.sizes);
 
     const [nameLength, setNameLength] = useState(0);
     const [descriptionLength, setDescriptionLength] = useState(0);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setCategories(await getCategories());
-                const filters = await getProductFilters();
-                setColors(filters.colors);
-                setSizes(filters.sizes);
-            } catch (e) { }
-        }
+        setCategories(loadedCategories);
+    }, [loadedCategories])
 
-        fetchData();
-    }, [])
+    useEffect(() => {
+        setSubcategories(loadedSubcategories);
+    }, [loadedSubcategories])
+
+    useEffect(() => {
+        setColors(filters.colors);
+        setSizes(filters.sizes);
+    }, [filters])
 
     const schema = yup.object().shape({
         name: yup.string()
             .required("*Product name is required")
             .max(60, "*Product name must be less than 60 characters"),
-        category: yup.string()
+        categoryId: yup.string()
             .notOneOf(["Select Category"], "*Category is required"),
-        subcategory: yup.string()
-            .notOneOf(["Select Subcategory"], "*Subcategory is required"),
+        subcategoryId: yup.string()
+            .notOneOf(["Select Subcategory"], "*Subcategory is required")
+            .test("category-changed-test", "*Subcategory is required", () => !categoryChanged),
         description: yup.string()
             .max(700, "*Product description must be less than 700 characters"),
     });
 
-    const selectCategory = async (e, handleChange) => {
-        handleChange(e);
-        setSubcategories([]);
-        setSubcategories(await getSubcategoriesForCategory(e.target.value));
-    }
-
     const handleSubmit = (data) => {
-        const submitData = data;
-        delete submitData.categoryId;
-        setProduct({ ...product, ...submitData });
+        setProduct({ ...product, ...data });
         setActiveTab(1);
     }
 
@@ -88,7 +79,7 @@ const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
                                 <Form.Group>
                                     <Form.Label>What do you sell?</Form.Label>
                                     <Form.Control
-                                        className="form-control-gray"
+                                        className="form-control-gray-no-shadow"
                                         size="xl-18"
                                         name="name"
                                         defaultValue={product.name || ""}
@@ -110,7 +101,10 @@ const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
                                         <Form.Control
                                             defaultValue={product.categoryId || "Select Category"}
                                             name="categoryId"
-                                            onChange={e => selectCategory(e, handleChange)}
+                                            onChange={e => {
+                                                selectCategory(e, handleChange);
+                                                setCategoryChanged(true);
+                                            }}
                                             size="xl-18"
                                             as="select"
                                             isInvalid={touched.categoryId && errors.categoryId}
@@ -129,12 +123,15 @@ const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
                                         <Form.Control
                                             defaultValue={product.subcategoryId || "Select Subcategory"}
                                             name="subcategoryId"
-                                            onChange={handleChange}
+                                            onChange={e => {
+                                                handleChange(e);
+                                                setCategoryChanged(false);
+                                            }}
                                             size="xl-18"
                                             as="select"
                                             isInvalid={touched.subcategoryId && errors.subcategoryId}
                                         >
-                                            <option value="Select Subcategory" disabled hidden>Select Subcategory</option>
+                                            <option value="Select Subcategory" hidden>Select Subcategory</option>
                                             {subcategories.map(subcategory => (
                                                 <option key={subcategory.id} value={subcategory.id}>{subcategory.name}</option>
                                             ))}
@@ -149,7 +146,7 @@ const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
                                         as="textarea"
-                                        className="form-control-gray"
+                                        className="form-control-gray-no-shadow"
                                         size="xl-18"
                                         name="description"
                                         defaultValue={product.description || ""}
@@ -208,4 +205,4 @@ const SellerTab1 = ({ product, setProduct, setActiveTab }) => {
     );
 }
 
-export default SellerTab1;
+export default SellTab1;

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useBreadcrumbContext } from 'AppContext';
-import { myAccountSellerSellUrl, myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
 import { Step, Stepper } from 'react-form-stepper';
-import SellerTab1 from 'components/SellerTabs/SellerTab1';
-import SellerTab2 from 'components/SellerTabs/SellerTab2';
-import SellerTab3 from 'components/SellerTabs/SellerTab3';
+import { myAccountSellerSellUrl, myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
+import { getCategories } from 'api/category';
+import { getSubcategoriesForCategory } from 'api/subcategory';
+import { getProductFilters } from 'api/product';
+import SellTab1 from 'components/SellTabs/SellTab1';
+import SellTab2 from 'components/SellTabs/SellTab2';
+import SellTab3 from 'components/SellTabs/SellTab3';
 
 import './sell.css';
 
@@ -14,10 +17,28 @@ const Sell = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [product, setProduct] = useState({});
 
+    const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [filters, setFilters] = useState({ colors: [], sizes: [] });
+
+    const selectCategory = async (e, handleChange) => {
+        handleChange(e);
+        setSubcategories([]);
+        setSubcategories(await getSubcategoriesForCategory(e.target.value));
+    }
+
     const tabs = [
-        <SellerTab1 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
-        <SellerTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
-        <SellerTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />
+        <SellTab1
+            categories={categories}
+            filters={filters}
+            subcategories={subcategories}
+            selectCategory={selectCategory}
+            product={product}
+            setProduct={setProduct}
+            setActiveTab={setActiveTab}
+        />,
+        <SellTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
+        <SellTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />
     ];
 
     useEffect(() => {
@@ -26,6 +47,15 @@ const Sell = () => {
             { text: "SELLER", href: myAccountSellerUrl },
             { text: "SELL", href: myAccountSellerSellUrl }
         ]);
+
+        const fetchData = async () => {
+            try {
+                setCategories(await getCategories());
+                setFilters(await getProductFilters());
+            } catch (e) { }
+        }
+
+        fetchData();
         // eslint-disable-next-line 
     }, [])
 

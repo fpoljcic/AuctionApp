@@ -11,7 +11,7 @@ const SubmitButtons = ({ onBack }) => {
                 variant="transparent-black-shadow-disabled"
                 onClick={onBack}
             >
-                <IoIosArrowBack style={{ fontSize: 24, marginRight: 5 }} />
+                <IoIosArrowBack style={{ fontSize: 24, marginLeft: -5, marginRight: 5 }} />
                 BACK
             </Button>
             <Button
@@ -21,7 +21,7 @@ const SubmitButtons = ({ onBack }) => {
                 variant="transparent-black-shadow"
             >
                 NEXT
-                <IoIosArrowForward style={{ fontSize: 24, marginLeft: 5 }} />
+                <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
             </Button>
         </div>
     );

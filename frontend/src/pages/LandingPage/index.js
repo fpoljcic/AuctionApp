@@ -12,7 +12,7 @@ import { useBreadcrumbContext } from 'AppContext';
 import './landingPage.css';
 
 const LandingPage = () => {
-  const { removeBreadcrumb } = useBreadcrumbContext(); 
+  const { removeBreadcrumb } = useBreadcrumbContext();
   const history = useHistory();
 
   const [categories, setCategories] = useState([]);
@@ -71,7 +71,7 @@ const LandingPage = () => {
                 onClick={() => history.push(productUrl(featuredProducts[0]))}
               >
                 BID NOW
-                <IoIosArrowForward style={{ fontSize: 24, marginLeft: 5 }} />
+                <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
               </Button>
             </div>
             <Image className="featured-product-image" src={featuredProducts[0].url !== null ? featuredProducts[0].url : "/images/placeholder-image-gray.png"} />
