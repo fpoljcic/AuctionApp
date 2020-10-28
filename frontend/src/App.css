@@ -265,6 +265,47 @@ a:hover {
   padding-left: 50px;
 }
 
+/*--------------LIST--------------*/
+
+.list-group-filter {
+  border: 1px solid var(--light-silver);
+  border-radius: 0;
+  text-align: left;
+  width: 100%;
+  height: max-content;
+  overflow-y: auto;
+}
+
+.list-group-filter>.list-group-item {
+  color: var(--text-primary);
+  background-color: var(--primary-background);
+  border: none;
+  height: 51px;
+  font-size: 14px;
+  letter-spacing: 0.49px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-group-filter>.filter-list-title {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.list-group-filter>.list-group-item:hover {
+  background-color: var(--lighter-silver);
+}
+
+.list-group-filter>.filter-list-title:hover {
+  background-color: initial;
+}
+
+.list-clear-icon {
+  cursor: pointer;
+  font-size: 24px;
+}
+
 /*--------------MISC--------------*/
 
 .gray-line {

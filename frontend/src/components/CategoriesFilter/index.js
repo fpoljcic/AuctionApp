@@ -3,15 +3,12 @@ import { ListGroup } from 'react-bootstrap';
 import { TiPlus, TiMinus } from 'react-icons/ti';
 import { searchCountProducts } from 'api/product';
 
-import './categoriesFilter.css';
-
 const activeItemStyle = {
     fontWeight: 'bold',
     backgroundColor: 'var(--lighter-silver)'
 };
 
 const CategoriesFilter = ({ query, filter, handleClick }) => {
-
     const [categories, setCategories] = useState([]);
     const [activeCategory, setActiveCategory] = useState("");
     const [activeSubcategory, setActiveSubcategory] = useState("");
@@ -19,11 +16,11 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setCategories(await searchCountProducts(query));
+                setCategories(await searchCountProducts(query, filter.minPrice, filter.maxPrice, filter.color, filter.size));
             } catch (e) { }
         }
         fetchData();
-    }, [query])
+    }, [query, filter.minPrice, filter.maxPrice, filter.color, filter.size])
 
     useEffect(() => {
         setActiveCategory(filter.category || "");
@@ -54,8 +51,8 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
     }
 
     return (
-        <ListGroup variant="categories-filter">
-            <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold' }}>PRODUCT CATEGORIES</ListGroup.Item>
+        <ListGroup variant="filter">
+            <ListGroup.Item className="filter-list-title">PRODUCT CATEGORIES</ListGroup.Item>
             <ListGroup.Item
                 action
                 style={activeCategory === "" && activeSubcategory === "" ? activeItemStyle : { color: 'var(--text-primary)' }}

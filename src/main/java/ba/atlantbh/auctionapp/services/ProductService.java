@@ -180,10 +180,10 @@ public class ProductService {
 
     private int[] priceHistogram(List<BigDecimal> prices, BigDecimal min, BigDecimal max, int bars) {
         int[] pricesCount = new int[bars];
-        BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 16, RoundingMode.HALF_UP);
+        BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 8, RoundingMode.HALF_UP);
 
         for (BigDecimal price : prices) {
-            ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.FLOOR).intValue()];
+            ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.HALF_UP).intValue()];
         }
 
         return pricesCount;
