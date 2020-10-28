@@ -2,16 +2,12 @@ package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.models.Product;
-import ba.atlantbh.auctionapp.projections.FullProductProj;
-import ba.atlantbh.auctionapp.projections.ProductCountProj;
-import ba.atlantbh.auctionapp.projections.SimplePhotoProj;
-import ba.atlantbh.auctionapp.projections.SimpleProductProj;
+import ba.atlantbh.auctionapp.models.enums.Color;
+import ba.atlantbh.auctionapp.models.enums.Size;
+import ba.atlantbh.auctionapp.projections.*;
 import ba.atlantbh.auctionapp.repositories.PhotoRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
-import ba.atlantbh.auctionapp.responses.CategoryCountReponse;
-import ba.atlantbh.auctionapp.responses.CountResponse;
-import ba.atlantbh.auctionapp.responses.ProductPageResponse;
-import ba.atlantbh.auctionapp.responses.ProductResponse;
+import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlascopco.hunspell.Hunspell;
 import lombok.AllArgsConstructor;
@@ -21,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @AllArgsConstructor
@@ -73,7 +71,8 @@ public class ProductService {
         return String.join(" ", suggestedWords);
     }
 
-    public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort) {
+    public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort,
+                                      Integer minPrice, Integer maxPrice, Color color, Size size) {
         PageRequest pageRequest;
         switch (sort) {
             case "popularity":
@@ -95,17 +94,28 @@ public class ProductService {
 
         Slice<SimpleProductProj> searchResult = productRepository.search(
                 query,
-                query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & "),
+                formTsQuery(query),
                 category,
                 subcategory,
                 id == null ? "" : id.toString(),
+                minPrice,
+                maxPrice,
+                color == null ? "" : color.toString(),
+                size == null ? "" : size.toString(),
                 pageRequest
         );
         return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), getSuggestion(query));
     }
 
-    public List<CategoryCountReponse> searchCount(String query) {
-        List<ProductCountProj> productCounts = productRepository.searchCount(query, query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & "));
+    public List<CategoryCountReponse> searchCount(String query, Integer minPrice, Integer maxPrice, Color color, Size size) {
+        List<ProductCountProj> productCounts = productRepository.categoryCount(
+                query,
+                formTsQuery(query),
+                minPrice,
+                maxPrice,
+                color == null ? "" : color.toString(),
+                size == null ? "" : size.toString()
+        );
         List<CategoryCountReponse> response = new ArrayList<>();
 
         Set<CountResponse> subcategoryCount = new TreeSet<>();
@@ -121,5 +131,72 @@ public class ProductService {
         response.sort(Comparator.comparing(CategoryCountReponse::getCount).reversed());
 
         return response;
+    }
+
+    public FilterCountResponse filterCount(String query, String category, String subcategory,
+                                           Integer minPrice, Integer maxPrice, Color color, Size size) {
+        List<ColorCountProj> colors = productRepository.colorCount(
+                query,
+                formTsQuery(query),
+                category,
+                subcategory,
+                minPrice,
+                maxPrice,
+                size == null ? "" : size.toString()
+        );
+        List<SizeCountProj> sizes = productRepository.sizeCount(
+                query,
+                formTsQuery(query),
+                category,
+                subcategory,
+                minPrice,
+                maxPrice,
+                color == null ? "" : color.toString()
+        );
+        List<BigDecimal> prices = productRepository.prices(
+                query,
+                formTsQuery(query),
+                category,
+                subcategory,
+                color == null ? "" : color.toString(),
+                size == null ? "" : size.toString()
+        );
+        PriceCountResponse price = getPriceInfo(prices, 24);
+        return new FilterCountResponse(colors, sizes, price);
+    }
+
+    private PriceCountResponse getPriceInfo(List<BigDecimal> prices, int bars) {
+        if (prices.isEmpty())
+            return new PriceCountResponse(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, new int[bars]);
+        if (prices.size() == 1)
+            return new PriceCountResponse(prices.get(0), prices.get(0), prices.get(0), new int[bars]);
+        PriceCountResponse price = new PriceCountResponse();
+        price.setMinPrice(prices.get(0));
+        price.setMaxPrice(prices.get(prices.size() - 1));
+        price.setAvgPrice(average(prices, RoundingMode.HALF_UP));
+        price.setPrices(priceHistogram(prices, prices.get(0), prices.get(prices.size() - 1), bars));
+        return price;
+    }
+
+    private int[] priceHistogram(List<BigDecimal> prices, BigDecimal min, BigDecimal max, int bars) {
+        int[] pricesCount = new int[bars];
+        BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 16, RoundingMode.HALF_UP);
+
+        for (BigDecimal price : prices) {
+            ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.FLOOR).intValue()];
+        }
+
+        return pricesCount;
+    }
+
+    private BigDecimal average(List<BigDecimal> bigDecimals, RoundingMode roundingMode) {
+        BigDecimal sum = bigDecimals.stream()
+                .map(Objects::requireNonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sum.divide(new BigDecimal(bigDecimals.size()), roundingMode);
+    }
+
+    private String formTsQuery(String query) {
+        return query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & ");
     }
 }

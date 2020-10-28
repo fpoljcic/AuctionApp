@@ -1,15 +1,13 @@
 package ba.atlantbh.auctionapp.models;
 
+import ba.atlantbh.auctionapp.models.enums.Gender;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -42,7 +40,8 @@ public class Person {
     private String password;
 
     private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
-    private Boolean sex;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private LocalDateTime dateOfBirth;
     private String phone;
 

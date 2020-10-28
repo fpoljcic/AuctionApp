@@ -2,8 +2,8 @@ import axios from 'axios';
 import { getUserId } from 'utilities/localStorage';
 import { defaultHeader, getParams, hostUrl } from './common';
 
-export const getProduct = async (product_id, user_id) => {
-    return (await axios.get(hostUrl + '/products', getParams({ product_id, user_id }))).data;
+export const getProduct = async (productId, userId) => {
+    return (await axios.get(hostUrl + '/products', getParams({ productId, userId }))).data;
 };
 
 export const getFeaturedRandomProducts = async () => {

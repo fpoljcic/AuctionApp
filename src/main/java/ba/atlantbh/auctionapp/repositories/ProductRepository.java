@@ -1,15 +1,14 @@
 package ba.atlantbh.auctionapp.repositories;
 
 import ba.atlantbh.auctionapp.models.Product;
-import ba.atlantbh.auctionapp.projections.FullProductProj;
-import ba.atlantbh.auctionapp.projections.ProductCountProj;
-import ba.atlantbh.auctionapp.projections.SimpleProductProj;
+import ba.atlantbh.auctionapp.projections.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -70,18 +69,74 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
             "AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, p.url, c.name, s.name, pr.date_created)",
             nativeQuery = true)
-    Slice<SimpleProductProj> search(String query, String tsquery, String category, String subcategory, String id, Pageable pageable);
+    Slice<SimpleProductProj> search(String query, String tsquery, String category, String subcategory, String id,
+                                    @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice,
+                                    String color, String size, Pageable pageable);
 
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
             "FROM product pr INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
             "AND start_date <= now() AND end_date > now() " +
             "GROUP BY ROLLUP (c.name, s.name) ORDER BY (c.name, s.name)",
             nativeQuery = true)
-    List<ProductCountProj> searchCount(String query, String tsquery);
+    List<ProductCountProj> categoryCount(String query, String tsquery, @Param("min_price") Integer minPrice,
+                                         @Param("max_price") Integer maxPrice, String color, String size);
+
+    @Query(value = "SELECT color, count(color) " +
+            "FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
+            "AND start_date <= now() AND end_date > now() AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY color",
+            nativeQuery = true)
+    List<ColorCountProj> colorCount(String query, String tsquery, String category, String subcategory,
+                               @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String size);
+
+    @Query(value = "SELECT pr.size, count(pr.size) " +
+            "FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND start_date <= now() AND end_date > now() AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY pr.size",
+            nativeQuery = true)
+    List<SizeCountProj> sizeCount(String query, String tsquery, String category, String subcategory,
+                                  @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String color);
+
+    @Query(value = "SELECT start_price FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
+            "AND start_date <= now() AND end_date > now() ORDER BY start_price",
+            nativeQuery = true)
+    List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 }
