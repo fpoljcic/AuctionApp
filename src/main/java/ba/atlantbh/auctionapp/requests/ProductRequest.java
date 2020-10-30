@@ -5,10 +5,7 @@ import ba.atlantbh.auctionapp.models.enums.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,22 +39,29 @@ public class ProductRequest {
     private LocalDateTime endDate;
 
     @NotBlank(message = "Street can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Address can't be longer than 255 characters")
     private String street;
 
     @NotBlank(message = "City can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "City can't be longer than 255 characters")
     private String city;
 
     @NotBlank(message = "Country can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Country can't be longer than 255 characters")
     private String country;
 
     @NotNull(message = "Zip can't be blank")
+    @javax.validation.constraints.Size(max = 32, message = "Zip code can't be longer than 32 characters")
     private String zip;
 
     @NotBlank(message = "Phone can't be blank")
+    @javax.validation.constraints.Size(max = 100, message = "Phone can't be longer than 255 characters")
     private String phone;
 
     private Boolean shipping = false;
     private Boolean featured = false;
 
     private CardRequest card;
+
+    private PayPalRequest payPal;
 }

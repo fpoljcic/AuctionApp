@@ -9,6 +9,7 @@ import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.*;
 import ba.atlantbh.auctionapp.repositories.*;
 import ba.atlantbh.auctionapp.requests.CardRequest;
+import ba.atlantbh.auctionapp.requests.PayPalRequest;
 import ba.atlantbh.auctionapp.requests.ProductRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -35,6 +36,7 @@ public class ProductService {
     private final SubcategoryRepository subcategoryRepository;
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
+    private final PayPalRepository payPalRepository;
     private final Hunspell speller;
 
     public List<SimpleProductProj> getFeaturedRandomProducts() {
@@ -225,12 +227,16 @@ public class ProductService {
             throw new BadRequestException("End date must be after start date");
 
         CardRequest cardRequest = productRequest.getCard();
-        if (productRequest.getFeatured() && cardRequest == null)
-            throw new BadRequestException("Featured products must have card details");
-        if (productRequest.getShipping() && cardRequest == null)
-            throw new BadRequestException("Products with shipping must have card details");
+        PayPalRequest payPalRequest = productRequest.getPayPal();
+        if (productRequest.getFeatured() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Featured products must have payment details");
+        if (productRequest.getShipping() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Products with shipping must have payment details");
+        if (cardRequest != null && payPalRequest != null)
+            throw new BadRequestException("Conflicting payment details");
 
         Card card = getAndSaveCard(cardRequest);
+        PayPal payPal = getAndSavePayPal(payPalRequest);
 
         Product product = new Product(
                 productRequest.getName(),
@@ -251,6 +257,7 @@ public class ProductService {
         product.setFeatured(productRequest.getFeatured());
         product.setShipping(productRequest.getShipping());
         product.setCard(card);
+        product.setPayPal(payPal);
 
         Product savedProduct = productRepository.save(product);
         savePhotos(productRequest.getPhotos(), savedProduct);
@@ -282,6 +289,14 @@ public class ProductService {
             });
         }
         return card;
+    }
+
+    private PayPal getAndSavePayPal(PayPalRequest payPalRequest) {
+        PayPal payPal = null;
+        if (payPalRequest != null) {
+            payPal = payPalRepository.save(new PayPal(payPalRequest.getOrderId()));
+        }
+        return payPal;
     }
 
     private void savePhotos(List<String> photoUrls, Product product) {

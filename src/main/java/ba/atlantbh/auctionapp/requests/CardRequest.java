@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 public class CardRequest {
 
     @NotBlank(message = "Name can't be blank")
+    @Size(max = 255, message = "Name can't be longer than 255 characters")
     private String name;
 
     @NotBlank(message = "Card number can't be blank")
