@@ -101,8 +101,8 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             defaultValue={product.categoryId || "Select Category"}
                                             name="categoryId"
                                             onChange={e => {
+                                                setFieldValue("subcategoryId", "Select Subcategory");
                                                 selectCategory(e, handleChange);
-                                                setFieldValue("subcategoryId", "Select Subcategory")
                                             }}
                                             size="xl-18"
                                             as="select"

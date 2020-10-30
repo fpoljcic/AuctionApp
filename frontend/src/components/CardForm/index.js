@@ -1,43 +1,54 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Formik } from 'formik';
+import React, { useState } from 'react';
+import { getIn } from 'formik';
 import { Form, Image } from 'react-bootstrap';
 import moment, { months } from 'moment';
 import { getNextYears } from 'utilities/common';
+import { PayPalButton } from 'react-paypal-button-v2';
 import * as yup from 'yup';
 
-import './cardForm.css';
+export const cardFormSchema = yup.object().shape({
+    name: yup.string()
+        .required("*Name is required")
+        .max(255, "*Name can't be longer than 255 characters"),
+    cardNumber: yup.string()
+        .required("*Card number is required")
+        .max(16, "*Card number can't be longer than 16 characters"),
+    expirationYear: yup.number()
+        .required("*Expiration year is required"),
+    expirationMonth: yup.number()
+        .required("*Expiration month is required"),
+    cvc: yup.string()
+        .required("*CVC is required")
+        .min(3, "*CVC must have at least 3 characters")
+        .max(4, "*CVC can't be longer than 4 characters")
+});
 
-const CardForm = ({ card, payPalDisabled, submit, onSubmit }) => {
+export const payPalFormSchema = yup.object().shape({
+    orderId: yup.string()
+        .required("*Finnish the payment checkout with PayPal")
+});
 
-    const cardFormRef = useRef();
+export const cardFormInitialValues = (card) => {
+    return {
+        name: card.name || "",
+        cardNumber: card.cardNumber || "",
+        expirationYear: card.expirationYear || "",
+        expirationMonth: card.expirationMonth || "",
+        cvc: card.cvc || ""
+    };
+};
+
+export const payPalInitialValues = (paypal) => {
+    return {
+        orderId: paypal.orderId || ""
+    };
+};
+
+const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handleChange, touched, errors, price, setPayPal: setPayPalType, setFieldValue }) => {
 
     const [currentMonth, setCurrentMonth] = useState(0);
-    const [payPal, setPayPal] = useState(false);
-    const [creditCard, setCreditCard] = useState(payPalDisabled);
-
-    const schema = yup.object().shape({
-        name: yup.string()
-            .required("*Name is required")
-            .max(255, "*Name can't be longer than 255 characters"),
-        cardNumber: yup.string()
-            .required("*Card number is required")
-            .max(16, "*Card number can't be longer than 16 characters"),
-        expirationYear: yup.number()
-            .required("*Expiration year is required"),
-        expirationMonth: yup.number()
-            .required("*Expiration month is required"),
-        cvc: yup.string()
-            .required("*CVC is required")
-            .min(3, "*CVC must have at least 3 characters")
-            .max(4, "*CVC can't be longer than 4 characters")
-    });
-
-    useEffect(() => {
-        if (submit !== null && cardFormRef.current) {
-            cardFormRef.current.handleSubmit()
-        }
-        // eslint-disable-next-line
-    }, [submit])
+    const [payPal, setPayPal] = useState(Object.keys(payPalObj).length !== 0 || false);
+    const [creditCard, setCreditCard] = useState(payPalDisabled || Object.keys(card).length !== 0);
 
     return (
         <>
@@ -50,6 +61,7 @@ const CardForm = ({ card, payPalDisabled, submit, onSubmit }) => {
                 checked={payPal}
                 onChange={e => {
                     setPayPal(e.target.checked);
+                    setPayPalType(e.target.checked);
                     if (e.target.checked)
                         setCreditCard(false);
                 }}
@@ -68,9 +80,11 @@ const CardForm = ({ card, payPalDisabled, submit, onSubmit }) => {
                         return;
                     }
                     setCreditCard(e.target.checked);
+                    setPayPalType(!e.target.checked);
                     if (e.target.checked)
                         setPayPal(false);
                 }}
+                disabled={cardDisabled}
                 style={{ marginBottom: 10 }}
             />
             {!creditCard && !payPal ?
@@ -78,134 +92,121 @@ const CardForm = ({ card, payPalDisabled, submit, onSubmit }) => {
                     *Choose a payment option
             </Form.Control.Feedback> : null}
             {creditCard ?
-                <Formik
-                    validationSchema={schema}
-                    initialValues={{
-                        name: card.name || "",
-                        cardNumber: card.cardNumber || "",
-                        expirationYear: card.expirationYear || "",
-                        expirationMonth: card.expirationMonth || "",
-                        cvc: card.cvc || "",
-                    }}
-                    innerRef={cardFormRef}
-                    onSubmit={onSubmit}
-                >
-                    {({
-                        handleChange,
-                        touched,
-                        errors,
-                    }) => (
-                            <>
-                                <Form.Text style={{ textAlign: 'left', paddingLeft: '1.5rem' }} className="form-control-description">
-                                    We accept the following credit cards.
-                                    <div style={{ marginTop: 5 }}>
-                                        <Image style={{ width: 250 }} src="/images/cards.png" />
-                                    </div>
-                                </Form.Text>
+                <>
+                    <Form.Text style={{ textAlign: 'left', paddingLeft: '1.5rem' }} className="form-control-description">
+                        We accept the following credit cards.
+                        <div style={{ marginTop: 5 }}>
+                            <Image style={{ width: 250 }} src="/images/cards.png" />
+                        </div>
+                    </Form.Text>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
-                                    <Form.Group className="form-half-width">
-                                        <Form.Label>Name on card</Form.Label>
-                                        <Form.Control
-                                            className="form-control-gray-no-shadow"
-                                            size="xl-18"
-                                            name="name"
-                                            defaultValue={card.name || ""}
-                                            placeholder="e.g. Lionel Messi"
-                                            onChange={handleChange}
-                                            maxLength={255}
-                                            isInvalid={touched.name && errors.name}
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.name}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
+                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
+                        <Form.Group className="form-half-width">
+                            <Form.Label>Name on card</Form.Label>
+                            <Form.Control
+                                className="form-control-gray-no-shadow"
+                                size="xl-18"
+                                name="card.name"
+                                defaultValue={card.name || ""}
+                                placeholder="e.g. Lionel Messi"
+                                onChange={handleChange}
+                                maxLength={255}
+                                isInvalid={getIn(touched, 'card.name') && getIn(errors, 'card.name')}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {getIn(errors, 'card.name')}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                                    <Form.Group className="form-half-width">
-                                        <Form.Label>Card number</Form.Label>
-                                        <Form.Control
-                                            className="form-control-gray-no-shadow"
-                                            size="xl-18"
-                                            name="cardNumber"
-                                            defaultValue={card.cardNumber || ""}
-                                            placeholder="e.g. 1234 5678 9876 5432"
-                                            onChange={handleChange}
-                                            maxLength={16}
-                                            isInvalid={touched.cardNumber && errors.cardNumber}
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.cardNumber}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                </Form.Group>
+                        <Form.Group className="form-half-width">
+                            <Form.Label>Card number</Form.Label>
+                            <Form.Control
+                                className="form-control-gray-no-shadow"
+                                size="xl-18"
+                                name="card.cardNumber"
+                                defaultValue={card.cardNumber || ""}
+                                placeholder="e.g. 1234 5678 9876 5432"
+                                onChange={handleChange}
+                                maxLength={16}
+                                isInvalid={getIn(touched, 'card.cardNumber') && getIn(errors, 'card.cardNumber')}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {getIn(errors, 'card.cardNumber')}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Form.Group>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }} className="form-half-width">
-                                        <Form.Group className="form-half-width">
-                                            <Form.Label>Expiration Date</Form.Label>
-                                            <Form.Control
-                                                defaultValue={card.expirationYear || "Year"}
-                                                name="expirationYear"
-                                                onChange={(e) => {
-                                                    setCurrentMonth(e.target.value === moment().year().toString() ? moment().month() : 0);
-                                                    handleChange(e);
-                                                }}
-                                                size="xl-18"
-                                                as="select"
-                                                isInvalid={touched.expirationYear && errors.expirationYear}
-                                            >
-                                                <option value="Year" disabled hidden>Year</option>
-                                                {getNextYears(10).map(year => (
-                                                    <option key={year} value={year}>{year}</option>
-                                                ))}
-                                            </Form.Control>
-                                            <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
-                                                {errors.expirationYear}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
+                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }} className="form-half-width">
+                            <Form.Group className="form-half-width">
+                                <Form.Label>Expiration Date</Form.Label>
+                                <Form.Control
+                                    defaultValue={card.expirationYear || "Year"}
+                                    name="card.expirationYear"
+                                    onChange={(e) => {
+                                        setCurrentMonth(e.target.value === moment().year().toString() ? moment().month() : 0);
+                                        handleChange(e);
+                                    }}
+                                    size="xl-18"
+                                    as="select"
+                                    isInvalid={getIn(touched, 'card.expirationYear') && getIn(errors, 'card.expirationYear')}
+                                >
+                                    <option value="Year" disabled hidden>Year</option>
+                                    {getNextYears(10).map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                    {getIn(errors, 'card.expirationYear')}
+                                </Form.Control.Feedback>
+                            </Form.Group>
 
-                                        <Form.Group className="form-half-width">
-                                            <Form.Control
-                                                defaultValue={card.expirationMonth || "Month"}
-                                                name="expirationMonth"
-                                                onChange={handleChange}
-                                                size="xl-18"
-                                                as="select"
-                                                isInvalid={touched.expirationMonth && errors.expirationMonth}
-                                            >
-                                                <option value="Month" disabled hidden>Month</option>
-                                                {[...Array(12 - currentMonth).keys()].map(x => (
-                                                    <option key={x} value={currentMonth + x + 1}>{months(currentMonth + x)}</option>
-                                                ))}
-                                            </Form.Control>
-                                            <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
-                                                {errors.expirationMonth}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Form.Group>
+                            <Form.Group className="form-half-width">
+                                <Form.Control
+                                    defaultValue={card.expirationMonth || "Month"}
+                                    name="card.expirationMonth"
+                                    onChange={handleChange}
+                                    size="xl-18"
+                                    as="select"
+                                    isInvalid={getIn(touched, 'card.expirationMonth') && getIn(errors, 'card.expirationMonth')}
+                                >
+                                    <option value="Month" disabled hidden>Month</option>
+                                    {[...Array(12 - currentMonth).keys()].map(x => (
+                                        <option key={x} value={currentMonth + x + 1}>{months(currentMonth + x)}</option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                    {getIn(errors, 'card.expirationMonth')}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Group>
 
-                                    <Form.Group className="form-half-width">
-                                        <Form.Label>CVC/CW</Form.Label>
-                                        <Form.Control
-                                            className="form-control-gray-no-shadow"
-                                            size="xl-18"
-                                            name="cvc"
-                                            defaultValue={card.cvc || ""}
-                                            placeholder="e.g. 1234"
-                                            onChange={handleChange}
-                                            maxLength={4}
-                                            isInvalid={touched.cvc && errors.cvc}
-                                        />
-                                        <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
-                                            {errors.cvc}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                </Form.Group>
-                            </>
-                        )}
-                </Formik> : payPal ?
+                        <Form.Group className="form-half-width">
+                            <Form.Label>CVC/CW</Form.Label>
+                            <Form.Control
+                                className="form-control-gray-no-shadow"
+                                size="xl-18"
+                                name="card.cvc"
+                                defaultValue={card.cvc || ""}
+                                placeholder="e.g. 1234"
+                                onChange={handleChange}
+                                maxLength={4}
+                                isInvalid={getIn(touched, 'card.cvc') && getIn(errors, 'card.cvc')}
+                            />
+                            <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                {getIn(errors, 'card.cvc')}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Form.Group>
+                </> : payPal ?
                     <div>
-                        PayPal button
+                        <PayPalButton
+                            amount={price}
+                            shippingPreference="NO_SHIPPING"
+                            onSuccess={(_details, data) => {
+                                setFieldValue("payPal.orderId", data.orderID);
+                            }}
+                        />
                     </div>
                     : null}
         </>

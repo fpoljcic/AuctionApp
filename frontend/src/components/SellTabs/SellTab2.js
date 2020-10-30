@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Formik } from 'formik';
 import { Form, InputGroup } from 'react-bootstrap';
 import SubmitButtons from './SubmitButtons';
@@ -10,9 +10,7 @@ import './sellerTabs.css';
 
 const SellTab2 = ({ product, setProduct, setActiveTab }) => {
 
-    const [startDate, setStartDate] = useState(product.startDate || null);
-    const [endDate, setEndDate] = useState(product.endDate || null);
-    const [showErrors, setShowErros] = useState(false);
+    const endDateRef = useRef(null);
 
     const schema = yup.object().shape({
         startPrice: yup.number()
@@ -21,15 +19,20 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
             .min(0.01, "*Start price can't be lower than $0.01")
             .max(999999.99, "*Start price can't be higher than $999999.99"),
         startDate: yup.string()
-            .test("valid-date", "*Start date is required", () => startDate !== null),
+            .nullable()
+            .required("*Start date is required"),
         endDate: yup.string()
-            .test("valid-date", "*End date is required", () => endDate !== null)
+            .nullable()
+            .required("*End date is required")
     });
 
+    const saveValues = (data) => {
+        const newData = { ...product, ...data };
+        setProduct(newData);
+    }
+
     const handleSubmit = (data) => {
-        data.startDate = startDate;
-        data.endDate = endDate;
-        setProduct({ ...product, ...data });
+        saveValues(data);
         setActiveTab(2);
     }
 
@@ -43,8 +46,8 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                     validationSchema={schema}
                     initialValues={{
                         startPrice: product.startPrice || "",
-                        startDate: product.startDate || "",
-                        endDate: product.endDate || ""
+                        startDate: product.startDate || null,
+                        endDate: product.endDate || null
                     }}
                     onSubmit={handleSubmit}
                 >
@@ -53,11 +56,11 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                         handleChange,
                         touched,
                         errors,
+                        setFieldValue,
+                        setFieldTouched,
+                        values
                     }) => (
-                            <Form noValidate onSubmit={(e) => {
-                                setShowErros(true);
-                                handleSubmit(e);
-                            }}>
+                            <Form noValidate onSubmit={handleSubmit}>
                                 <Form.Group style={{ marginBottom: 60 }}>
                                     <Form.Label>Your start price</Form.Label>
                                     <InputGroup>
@@ -89,18 +92,22 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 dateFormat="dd/MM/yyyy"
                                                 name="startDate"
                                                 minDate={new Date()}
-                                                selected={startDate}
+                                                selected={values.startDate}
                                                 onChange={date => {
-                                                    if (date !== null && endDate !== null) {
-                                                        if (!moment(endDate).isAfter(date))
-                                                            setEndDate(moment(date).add(1, 'day').toDate());
+                                                    setFieldValue("startDate", date);
+                                                    if (values.endDate === null) {
+                                                        endDateRef.current.setOpen(true);
+                                                    } else if (date !== null && !moment(values.endDate).isAfter(date)) {
+                                                        setFieldValue("endDate", moment(date).add(1, 'day').toDate());
+                                                        endDateRef.current.setOpen(true);
                                                     }
-                                                    setStartDate(date);
                                                 }}
+                                                disabledKeyboardNavigation
                                                 useWeekdaysShort={true}
+                                                onBlur={() => values.startDate !== null ? setFieldTouched("startDate", true) : null}
                                             />
                                         </div>
-                                        <Form.Control.Feedback className={showErrors && startDate === null ? "d-block" : null} type="invalid">
+                                        <Form.Control.Feedback className={touched.startDate && errors.startDate ? "d-block" : null} type="invalid">
                                             {errors.startDate}
                                         </Form.Control.Feedback>
                                     </Form.Group>
@@ -113,13 +120,16 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 placeholderText="DD/MM/YYYY"
                                                 dateFormat="dd/MM/yyyy"
                                                 name="endDate"
-                                                minDate={startDate !== null ? moment(startDate).add(1, 'day').toDate() : moment().add(1, 'day').toDate()}
-                                                selected={endDate}
-                                                onChange={date => setEndDate(date)}
+                                                minDate={values.startDate !== null ? moment(values.startDate).add(1, 'day').toDate() : moment().add(1, 'day').toDate()}
+                                                selected={values.endDate}
+                                                onChange={date => setFieldValue("endDate", date)}
                                                 useWeekdaysShort={true}
+                                                ref={endDateRef}
+                                                disabledKeyboardNavigation
+                                                onBlur={() => values.endDate !== null ? setFieldTouched("endDate", true) : null}
                                             />
                                         </div>
-                                        <Form.Control.Feedback className={showErrors && endDate === null ? "d-block" : null} type="invalid">
+                                        <Form.Control.Feedback className={touched.startDate && errors.endDate ? "d-block" : null} type="invalid">
                                             {errors.endDate}
                                         </Form.Control.Feedback>
                                     </Form.Group>
@@ -127,7 +137,13 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                 <Form.Text style={{ textAlign: 'left', marginBottom: 80 }} className="form-control-description">
                                     The auction will be automatically closed when the time comes. The highest bid will win the auction.
                                 </Form.Text>
-                                <SubmitButtons onBack={() => setActiveTab(0)} lastTab={false} />
+                                <SubmitButtons
+                                    onBack={() => {
+                                        saveValues(values);
+                                        setActiveTab(0)
+                                    }}
+                                    lastTab={false}
+                                />
                             </Form>
                         )}
                 </Formik>

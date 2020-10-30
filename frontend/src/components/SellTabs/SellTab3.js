@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, getIn } from 'formik';
 import { Form, InputGroup } from 'react-bootstrap';
 import SubmitButtons from './SubmitButtons';
 import { countries, citiesByCountry, callCodeForCountry, codeForCountry } from 'utilities/common';
 import parsePhoneNumberFromString from 'libphonenumber-js';
-import CardForm from 'components/CardForm';
+import CardForm, { cardFormSchema, payPalFormSchema, cardFormInitialValues, payPalInitialValues } from 'components/CardForm';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
-
-var dataValid = false;
 
 const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
 
@@ -17,7 +15,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
     const [callCode, setCallCode] = useState(product.callCode || null);
     const [shipping, setShipping] = useState(product.shipping || false);
     const [featured, setFeatured] = useState(product.featured || false);
-    const [submitCard, setSubmitCard] = useState(null);
+    const [payPal, setPayPal] = useState(product.payPal !== undefined);
 
     useEffect(() => {
         setCallCode(callCodeForCountry(country));
@@ -42,23 +40,32 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
             .test("country-selected", "*Select a country", () => country !== null)
             .test("valid-phone", "*Phone must be valid", (value) => value !== undefined && parsePhoneNumberFromString(value, codeForCountry(country)) !== undefined),
         shipping: yup.bool(),
-        featured: yup.bool()
+        featured: yup.bool(),
+        card: !payPal && (shipping || featured) ? cardFormSchema : null,
+        payPal: payPal ? payPalFormSchema : null
     });
 
-    const handleSubmit = (data) => {
-        dataValid = true;
+    const saveValues = (data) => {
         const newData = { ...product, ...data, callCode: callCode };
+        if (!data.shipping && !data.featured) {
+            delete newData.card;
+            delete newData.payPal;
+        } else {
+            if (data.payPal.orderId !== "")
+                delete newData.card;
+            else
+                delete newData.payPal;
+        }
         setProduct(newData);
-        if (!data.shipping && !data.featured)
-            onDone(newData);
+        return newData;
     }
 
-    const cardSubmit = (data) => {
-        const newData = { ...product, card: { ...data } };
-        setProduct(newData);
-        if (dataValid)
-            onDone(newData);
+    const handleSubmit = (data) => {
+        const newData = saveValues(data);
+        onDone(newData);
     }
+
+    const getPrice = 0 + (shipping ? 10 : 0) + (featured ? 5 : 0);
 
     return (
         <div className="tab-container">
@@ -76,6 +83,8 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                         phone: product.phone || "",
                         shipping: product.shipping || false,
                         featured: product.featured || false,
+                        card: cardFormInitialValues(product.card || {}),
+                        payPal: payPalInitialValues(product.payPal || {})
                     }}
                     onSubmit={handleSubmit}
                 >
@@ -84,12 +93,10 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                         handleChange,
                         touched,
                         errors,
+                        values,
+                        setFieldValue
                     }) => (
-                            <Form noValidate onSubmit={e => {
-                                dataValid = false;
-                                handleSubmit(e);
-                                setSubmitCard(!submitCard);
-                            }}>
+                            <Form noValidate onSubmit={handleSubmit}>
                                 <Form.Group style={{ marginBottom: 40 }}>
                                     <Form.Label>Address</Form.Label>
                                     <Form.Control
@@ -229,11 +236,28 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                     <Form.Group className="sell-form-margin">
                                         <Form.Label style={{ fontSize: 20, letterSpacing: 0.7 }}>Payment information</Form.Label>
                                         <div className="gray-line" />
-                                        <CardForm card={product.card || {}} payPalDisabled={true} submit={submitCard} onSubmit={cardSubmit} />
+                                        <CardForm
+                                            card={product.card || {}}
+                                            payPal={product.payPal || {}}
+                                            payPalDisabled={false}
+                                            cardDisabled={product.payPal !== undefined && product.payPal.orderId !== ""}
+                                            handleChange={handleChange}
+                                            touched={touched}
+                                            errors={errors}
+                                            price={getPrice}
+                                            setPayPal={setPayPal}
+                                            setFieldValue={setFieldValue}
+                                        />
+                                        <Form.Control.Feedback className={payPal && getIn(errors, 'payPal.orderId') ? "d-block" : null} type="invalid">
+                                            {getIn(errors, 'payPal.orderId')}
+                                        </Form.Control.Feedback>
                                     </Form.Group> : null}
 
                                 <SubmitButtons
-                                    onBack={() => setActiveTab(1)}
+                                    onBack={() => {
+                                        saveValues(values);
+                                        setActiveTab(1);
+                                    }}
                                     lastTab={true}
                                 />
                             </Form>

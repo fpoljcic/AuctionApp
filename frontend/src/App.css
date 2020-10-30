@@ -290,14 +290,6 @@ select.form-control {
   background-color: var(--white);
 }
 
-.react-datepicker__day--keyboard-selected {
-  background-color: var(--primary);
-}
-
-.react-datepicker__day--keyboard-selected:hover {
-  background-color: var(--dark-primary);
-}
-
 .react-datepicker__day, .react-datepicker__day-name {
   width: 1.9em;
   line-height: 1.9em;
