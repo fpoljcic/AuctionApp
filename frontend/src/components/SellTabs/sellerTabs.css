@@ -27,6 +27,11 @@
     letter-spacing: 0.56px;
 }
 
-.form-sell-select {
+.form-half-width {
     width: 48%;
+    position: relative;
+}
+
+.sell-form-margin {
+    margin-bottom: 30px;
 }

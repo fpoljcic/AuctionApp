@@ -223,6 +223,28 @@ select.form-control {
   box-shadow: none;
 }
 
+.custom-control-label::before {
+  border-color: var(--light-silver);
+  top: 0.4rem;
+}
+
+.custom-control-label::after {
+  top: 0.4rem;
+}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 0;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.custom-checkbox .custom-control-input:disabled:checked~.custom-control-label::before {
+  background-color: var(--primary-a);
+}
+
 /*--------------DATE PICKER--------------*/
 
 .react-datepicker {

@@ -12,7 +12,6 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
     const history = useHistory();
 
     const [categories, setCategories] = useState(loadedCategories);
-    const [categoryChanged, setCategoryChanged] = useState(false);
     const [subcategories, setSubcategories] = useState(loadedSubcategories);
     const [colors, setColors] = useState(filters.colors);
     const [sizes, setSizes] = useState(filters.sizes);
@@ -36,14 +35,13 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
     const schema = yup.object().shape({
         name: yup.string()
             .required("*Product name is required")
-            .max(60, "*Product name must be less than 60 characters"),
+            .max(60, "*Product name can't be longer than 60 characters"),
         categoryId: yup.string()
             .notOneOf(["Select Category"], "*Category is required"),
         subcategoryId: yup.string()
-            .notOneOf(["Select Subcategory"], "*Subcategory is required")
-            .test("category-changed-test", "*Subcategory is required", () => !categoryChanged),
+            .notOneOf(["Select Subcategory"], "*Subcategory is required"),
         description: yup.string()
-            .max(700, "*Product description must be less than 700 characters"),
+            .max(700, "*Product description can't be longer than 700 characters"),
     });
 
     const handleSubmit = (data) => {
@@ -74,9 +72,10 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                         handleChange,
                         touched,
                         errors,
+                        setFieldValue
                     }) => (
                             <Form noValidate onSubmit={handleSubmit}>
-                                <Form.Group>
+                                <Form.Group className="sell-form-margin">
                                     <Form.Label>What do you sell?</Form.Label>
                                     <Form.Control
                                         className="form-control-gray-no-shadow"
@@ -97,13 +96,13 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                 </Form.Group>
 
                                 <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.categoryId || "Select Category"}
                                             name="categoryId"
                                             onChange={e => {
                                                 selectCategory(e, handleChange);
-                                                setCategoryChanged(true);
+                                                setFieldValue("subcategoryId", "Select Subcategory")
                                             }}
                                             size="xl-18"
                                             as="select"
@@ -119,14 +118,11 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         </Form.Control.Feedback>
                                     </Form.Group>
 
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.subcategoryId || "Select Subcategory"}
                                             name="subcategoryId"
-                                            onChange={e => {
-                                                handleChange(e);
-                                                setCategoryChanged(false);
-                                            }}
+                                            onChange={handleChange}
                                             size="xl-18"
                                             as="select"
                                             isInvalid={touched.subcategoryId && errors.subcategoryId}
@@ -142,7 +138,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                     </Form.Group>
                                 </Form.Group>
 
-                                <Form.Group>
+                                <Form.Group className="sell-form-margin">
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
                                         as="textarea"
@@ -165,7 +161,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                 </Form.Group>
 
                                 <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.color || "Select Color"}
                                             name="color"
@@ -180,7 +176,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         </Form.Control>
                                     </Form.Group>
 
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.size || "Select Size"}
                                             name="size"
@@ -196,7 +192,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                     </Form.Group>
                                 </Form.Group>
 
-                                <SubmitButtons onBack={() => history.push(myAccountSellerUrl)} />
+                                <SubmitButtons onBack={() => history.push(myAccountSellerUrl)} lastTab={false} />
                             </Form>
                         )}
                 </Formik>

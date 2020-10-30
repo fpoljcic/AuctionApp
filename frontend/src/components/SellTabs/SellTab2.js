@@ -12,6 +12,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
 
     const [startDate, setStartDate] = useState(product.startDate || null);
     const [endDate, setEndDate] = useState(product.endDate || null);
+    const [showErrors, setShowErros] = useState(false);
 
     const schema = yup.object().shape({
         startPrice: yup.number()
@@ -53,8 +54,11 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                         touched,
                         errors,
                     }) => (
-                            <Form noValidate onSubmit={handleSubmit}>
-                                <Form.Group style={{ marginBottom: 40 }}>
+                            <Form noValidate onSubmit={(e) => {
+                                setShowErros(true);
+                                handleSubmit(e);
+                            }}>
+                                <Form.Group style={{ marginBottom: 60 }}>
                                     <Form.Label>Your start price</Form.Label>
                                     <InputGroup>
                                         <InputGroup.Prepend>
@@ -69,14 +73,14 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                             maxLength={9}
                                             isInvalid={touched.startPrice && errors.startPrice}
                                         />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.startPrice}
+                                        </Form.Control.Feedback>
                                     </InputGroup>
-                                    <Form.Control.Feedback className="d-block" type="invalid">
-                                        {errors.startPrice}
-                                    </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0 }}>
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Label>Start date</Form.Label>
                                         <div>
                                             <ReactDatePicker
@@ -96,12 +100,12 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 useWeekdaysShort={true}
                                             />
                                         </div>
-                                        <Form.Control.Feedback className="d-block" type="invalid">
+                                        <Form.Control.Feedback className={showErrors && startDate === null ? "d-block" : null} type="invalid">
                                             {errors.startDate}
                                         </Form.Control.Feedback>
                                     </Form.Group>
 
-                                    <Form.Group className="form-sell-select">
+                                    <Form.Group className="form-half-width">
                                         <Form.Label>End date</Form.Label>
                                         <div>
                                             <ReactDatePicker
@@ -115,7 +119,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 useWeekdaysShort={true}
                                             />
                                         </div>
-                                        <Form.Control.Feedback className="d-block" type="invalid">
+                                        <Form.Control.Feedback className={showErrors && endDate === null ? "d-block" : null} type="invalid">
                                             {errors.endDate}
                                         </Form.Control.Feedback>
                                     </Form.Group>
@@ -123,7 +127,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                 <Form.Text style={{ textAlign: 'left', marginBottom: 80 }} className="form-control-description">
                                     The auction will be automatically closed when the time comes. The highest bid will win the auction.
                                 </Form.Text>
-                                <SubmitButtons onBack={() => setActiveTab(0)} />
+                                <SubmitButtons onBack={() => setActiveTab(0)} lastTab={false} />
                             </Form>
                         )}
                 </Formik>

@@ -35,10 +35,11 @@ const Register = () => {
             .required("*Last name is required"),
         email: yup.string()
             .email("*Email must be valid")
-            .max(100, "*Email must be less than 100 characters")
+            .max(100, "*Email can't be longer than 100 characters")
             .required("*Email is required"),
         password: yup.string()
             .min(8, "*Password must have at least 8 characters")
+            .max(255, "*Password can't be longer than 255 characters")
             .required("*Password is required"),
     });
 
@@ -82,6 +83,7 @@ const Register = () => {
                                     size="xl-18"
                                     type="text"
                                     name="firstName"
+                                    maxLength={100}
                                     onChange={handleChange}
                                     isInvalid={touched.firstName && errors.firstName}
                                 />
@@ -97,6 +99,7 @@ const Register = () => {
                                     size="xl-18"
                                     type="text"
                                     name="lastName"
+                                    maxLength={100}
                                     onChange={handleChange}
                                     isInvalid={touched.lastName && errors.lastName}
                                 />
@@ -112,6 +115,7 @@ const Register = () => {
                                     size="xl-18"
                                     type="email"
                                     name="email"
+                                    maxLength={100}
                                     onChange={handleChange}
                                     isInvalid={(touched.email && errors.email) || emailError}
                                 />
@@ -127,6 +131,7 @@ const Register = () => {
                                     size="xl-18"
                                     type="password"
                                     name="password"
+                                    maxLength={255}
                                     onChange={handleChange}
                                     isInvalid={touched.password && errors.password}
                                 />

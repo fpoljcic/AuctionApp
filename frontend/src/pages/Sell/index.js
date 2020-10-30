@@ -27,6 +27,10 @@ const Sell = () => {
         setSubcategories(await getSubcategoriesForCategory(e.target.value));
     }
 
+    const onDone = (product) => {
+        console.log(product);
+    }
+
     const tabs = [
         <SellTab1
             categories={categories}
@@ -38,7 +42,7 @@ const Sell = () => {
             setActiveTab={setActiveTab}
         />,
         <SellTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />,
-        <SellTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} />
+        <SellTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} onDone={onDone} />
     ];
 
     useEffect(() => {

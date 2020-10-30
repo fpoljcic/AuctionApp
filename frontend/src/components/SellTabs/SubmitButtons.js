@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-const SubmitButtons = ({ onBack }) => {
+const SubmitButtons = ({ onBack, lastTab }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
@@ -18,10 +18,14 @@ const SubmitButtons = ({ onBack }) => {
                 style={{ width: 183 }}
                 type="submit"
                 size="xxl"
-                variant="transparent-black-shadow"
+                variant={lastTab ? "fill-purple-shadow" : "transparent-black-shadow"}
             >
-                NEXT
-                <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                {lastTab ? "DONE" :
+                    <>
+                        NEXT
+                        <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                    </>
+                }
             </Button>
         </div>
     );
