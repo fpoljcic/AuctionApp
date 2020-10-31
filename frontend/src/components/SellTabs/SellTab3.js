@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, getIn } from 'formik';
 import { Form, InputGroup } from 'react-bootstrap';
 import SubmitButtons from './SubmitButtons';
 import { countries, citiesByCountry, callCodeForCountry, codeForCountry } from 'utilities/common';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import CardForm, { cardFormSchema, payPalFormSchema, cardFormInitialValues, payPalInitialValues } from 'components/CardForm';
+import { productUrl } from 'utilities/appUrls';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
 
 const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
+    const history = useHistory();
 
     const [country, setCountry] = useState(product.country || null);
     const [callCode, setCallCode] = useState(product.callCode || null);
     const [shipping, setShipping] = useState(product.shipping || false);
     const [featured, setFeatured] = useState(product.featured || false);
     const [payPal, setPayPal] = useState(product.payPal !== undefined);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setCallCode(callCodeForCountry(country));
@@ -60,9 +64,14 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
         return newData;
     }
 
-    const handleSubmit = (data) => {
+    const handleSubmit = async (data) => {
         const newData = saveValues(data);
-        onDone(newData);
+        setLoading(true);
+        const newProduct = await onDone(newData);
+        if (newProduct === null)
+            setLoading(false);
+        else
+            history.push(productUrl(newProduct));
     }
 
     const getPrice = 0 + (shipping ? 10 : 0) + (featured ? 5 : 0);
@@ -259,6 +268,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                         setActiveTab(1);
                                     }}
                                     lastTab={true}
+                                    loading={loading}
                                 />
                             </Form>
                         )}

@@ -210,7 +210,7 @@ public class ProductService {
         return query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & ");
     }
 
-    public void add(ProductRequest productRequest) {
+    public UUID add(ProductRequest productRequest) {
         Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
                 .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
         UUID personId = JwtTokenUtil.getRequestPersonId();
@@ -219,8 +219,6 @@ public class ProductService {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnprocessableException("Wrong person id"));
 
-        if (productRequest.getStartDate().isBefore(LocalDateTime.now()))
-            throw new BadRequestException("Start date can't be before current date");
         if (productRequest.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("End date can't be before current date");
         if (!productRequest.getEndDate().isAfter(productRequest.getStartDate()))
@@ -261,6 +259,7 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
         savePhotos(productRequest.getPhotos(), savedProduct);
+        return savedProduct.getId();
     }
 
     private Card getAndSaveCard(CardRequest cardRequest) {
@@ -300,7 +299,7 @@ public class ProductService {
     }
 
     private void savePhotos(List<String> photoUrls, Product product) {
-        if (photoUrls.isEmpty())
+        if (photoUrls == null || photoUrls.isEmpty())
             return;
         List<Photo> photos = photoUrls.stream().map(url -> new Photo(url, product)).collect(Collectors.toList());
         photos.get(0).setFeatured(true);

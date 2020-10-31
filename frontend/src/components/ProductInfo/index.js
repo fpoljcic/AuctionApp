@@ -45,16 +45,17 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
     }
 
     const getTimeInfo = () => {
-        const productStartDate = moment(product.startDate);
+        const productStartDate = moment.utc(product.startDate);
+        const productEndDate = moment.utc(product.endDate);
         if (moment().isBefore(productStartDate))
             return (
                 <>
-                    Time start: {productStartDate.format("D MMMM YYYY [at] HH:mm")}
+                    Time start: {productStartDate.local().format("D MMMM YYYY [at] HH:mm")}
                     <br />
-                    Time end: {moment(product.endDate).format("D MMMM YYYY [at] HH:mm")}
+                    Time end: {productEndDate.local().format("D MMMM YYYY [at] HH:mm")}
                 </>
             );
-        const timeLeft = !active ? 0 : moment.duration(moment(product.endDate).diff(moment())).format("D [days] h [hours] m [minutes]");
+        const timeLeft = !active ? 0 : moment.duration(productEndDate.diff(moment())).format("D [days] h [hours] m [minutes]");
         return (
             <>
                 Time left: {timeLeft}

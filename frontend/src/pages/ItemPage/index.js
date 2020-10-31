@@ -35,7 +35,7 @@ const ItemPage = ({ match }) => {
             const productId = match.params.id;
             try {
                 const data = await getProduct(productId, personId);
-                setActive(moment().isBetween(moment(data.startDate), moment(data.endDate), null, "[)"));
+                setActive(moment().isBetween(moment.utc(data.startDate), moment.utc(data.endDate), null, "[)"));
                 setOwnProduct(data.personId === personId);
                 setProduct(data);
                 if (personId === null) {

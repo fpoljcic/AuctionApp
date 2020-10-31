@@ -4,7 +4,7 @@ import { Step, Stepper } from 'react-form-stepper';
 import { myAccountSellerSellUrl, myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
 import { getCategories } from 'api/category';
 import { getSubcategoriesForCategory } from 'api/subcategory';
-import { getProductFilters } from 'api/product';
+import { addProduct, getProductFilters } from 'api/product';
 import SellTab1 from 'components/SellTabs/SellTab1';
 import SellTab2 from 'components/SellTabs/SellTab2';
 import SellTab3 from 'components/SellTabs/SellTab3';
@@ -27,8 +27,19 @@ const Sell = () => {
         setSubcategories(await getSubcategoriesForCategory(e.target.value));
     }
 
-    const onDone = (product) => {
-        console.log(product);
+    const onDone = async (product) => {
+        product.phone = product.callCode + product.phone;
+        delete product.callCode;
+        try {
+            const id = await addProduct(product);
+            const categoryName = categories.filter(category => category.id === product.categoryId)[0].name;
+            const subcategoryName = subcategories.filter(subcategory => subcategory.id === product.subcategoryId)[0].name;
+            return {
+                id, categoryName, subcategoryName
+            };
+        } catch (e) {
+            return null;
+        }
     }
 
     const tabs = [

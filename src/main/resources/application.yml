@@ -9,6 +9,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        jdbc:
+          time_zone: UTC
     hibernate:
       ddl-auto: ${SCHEMA_DB}
     show-sql: true

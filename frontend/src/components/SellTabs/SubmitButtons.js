@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-const SubmitButtons = ({ onBack, lastTab }) => {
+const SubmitButtons = ({ onBack, lastTab, loading }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
@@ -19,6 +19,7 @@ const SubmitButtons = ({ onBack, lastTab }) => {
                 type="submit"
                 size="xxl"
                 variant={lastTab ? "fill-purple-shadow" : "transparent-black-shadow"}
+                disabled={loading}
             >
                 {lastTab ? "DONE" :
                     <>

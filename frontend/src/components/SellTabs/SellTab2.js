@@ -36,6 +36,14 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
         setActiveTab(2);
     }
 
+    const getTimeInfo = (startDate, endDate) => {
+        if (startDate === null || endDate === null)
+            return "/";
+        const productStartDate = moment(startDate);
+        const productEndDate = moment(endDate);
+        return moment.duration(productEndDate.diff(productStartDate)).format("D [days] h [hours] m [minutes]", { trim: "all" });
+    }
+
     return (
         <div className="tab-container">
             <div className="tab-title">
@@ -94,11 +102,15 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 minDate={new Date()}
                                                 selected={values.startDate}
                                                 onChange={date => {
-                                                    setFieldValue("startDate", date);
+                                                    if (date === null) {
+                                                        setFieldValue("startDate", date);
+                                                        return;
+                                                    }
+                                                    setFieldValue("startDate", moment(date).isBefore(moment()) ? moment().toDate() : moment(date).startOf('day').toDate());
                                                     if (values.endDate === null) {
                                                         endDateRef.current.setOpen(true);
-                                                    } else if (date !== null && !moment(values.endDate).isAfter(date)) {
-                                                        setFieldValue("endDate", moment(date).add(1, 'day').toDate());
+                                                    } else if (!moment(values.endDate).isAfter(date)) {
+                                                        setFieldValue("endDate", moment(date).endOf('day').toDate());
                                                         endDateRef.current.setOpen(true);
                                                     }
                                                 }}
@@ -120,9 +132,9 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 placeholderText="DD/MM/YYYY"
                                                 dateFormat="dd/MM/yyyy"
                                                 name="endDate"
-                                                minDate={values.startDate !== null ? moment(values.startDate).add(1, 'day').toDate() : moment().add(1, 'day').toDate()}
+                                                minDate={values.startDate !== null ? moment(values.startDate).toDate() : moment().toDate()}
                                                 selected={values.endDate}
-                                                onChange={date => setFieldValue("endDate", date)}
+                                                onChange={date => setFieldValue("endDate", moment(date).endOf('day').toDate())}
                                                 useWeekdaysShort={true}
                                                 ref={endDateRef}
                                                 disabledKeyboardNavigation
@@ -135,6 +147,8 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                     </Form.Group>
                                 </Form.Group>
                                 <Form.Text style={{ textAlign: 'left', marginBottom: 80 }} className="form-control-description">
+                                    Active time: {getTimeInfo(values.startDate, values.endDate)}
+                                    <br />
                                     The auction will be automatically closed when the time comes. The highest bid will win the auction.
                                 </Form.Text>
                                 <SubmitButtons

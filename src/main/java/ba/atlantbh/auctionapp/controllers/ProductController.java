@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -94,8 +95,8 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody @Valid ProductRequest productRequest) {
-        productService.add(productRequest);
-        return ResponseEntity.ok("Product added");
+    public ResponseEntity<UUID> add(@RequestBody @Valid ProductRequest productRequest) {
+        UUID productId = productService.add(productRequest);
+        return ResponseEntity.ok(productId);
     }
 }

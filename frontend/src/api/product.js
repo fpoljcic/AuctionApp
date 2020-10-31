@@ -42,3 +42,7 @@ export const filterCountProducts = async (query, category, subcategory, minPrice
 export const getProductFilters = async () => {
     return (await axios.get(hostUrl + '/products/filters')).data;
 };
+
+export const addProduct = async (product) => {
+    return (await axios.post(hostUrl + '/products/add', { ...product }, defaultHeader())).data;
+};
