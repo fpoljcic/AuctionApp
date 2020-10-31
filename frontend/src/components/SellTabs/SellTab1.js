@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { myAccountSellerUrl } from 'utilities/appUrls';
 import SubmitButtons from './SubmitButtons';
+import Dropzone from "components/Dropzone";
+import { uploadImage } from 'api/image';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
@@ -15,6 +17,10 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
     const [subcategories, setSubcategories] = useState(loadedSubcategories);
     const [colors, setColors] = useState(filters.colors);
     const [sizes, setSizes] = useState(filters.sizes);
+    const [photos, setPhotos] = useState(product.photos || []);
+    const [uploading, setUploading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const maxPhotos = 10;
 
     const [nameLength, setNameLength] = useState(0);
     const [descriptionLength, setDescriptionLength] = useState(0);
@@ -44,10 +50,36 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
             .max(700, "*Product description can't be longer than 700 characters"),
     });
 
-    const handleSubmit = (data) => {
-        setProduct({ ...product, ...data });
+    const handleSubmit = async (data) => {
+        setLoading(true);
+        const newPhotos = await Promise.all(photos.map(async (photo, index) => {
+            if (photo.url !== undefined)
+                return photo;
+            setUploading(true);
+            photo.url = await uploadImage(photo.file);
+            return photo;
+        }));
+        setPhotos(newPhotos);
+        setLoading(false);
+        setProduct({ ...product, ...data, photos: newPhotos });
         setActiveTab(1);
     }
+
+    const onDrop = useCallback(acceptedFiles => {
+        if (photos.length + acceptedFiles.length > maxPhotos)
+            return;
+        acceptedFiles.map(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                setPhotos(prevState => [
+                    ...prevState,
+                    { src: e.target.result, file }
+                ]);
+            };
+            reader.readAsDataURL(file);
+            return file;
+        });
+    }, [photos.length]);
 
     return (
         <div className="tab-container">
@@ -192,7 +224,24 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                     </Form.Group>
                                 </Form.Group>
 
-                                <SubmitButtons onBack={() => history.push(myAccountSellerUrl)} lastTab={false} />
+                                <Dropzone onDrop={onDrop} accept={"image/*"} images={photos} setImages={setPhotos} />
+                                <Form.Text style={{ marginBottom: 40 }} className="form-control-description">
+                                    {maxPhotos - photos.length !== 0 ?
+                                        <>
+                                            You can add {maxPhotos - photos.length} photos more
+                                        </>
+                                        :
+                                        <>
+                                            You can't add anymore photos
+                                        </>
+                                    }
+                                </Form.Text>
+
+                                <SubmitButtons
+                                    onBack={() => history.push(myAccountSellerUrl)}
+                                    loading={loading}
+                                    uploading={uploading}
+                                />
                             </Form>
                         )}
                 </Formik>
