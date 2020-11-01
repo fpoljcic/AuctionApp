@@ -51,7 +51,7 @@ const Login = () => {
             .required("*Email is required"),
         password: yup.string()
             .required("*Password is required")
-            .max(255, "*Password can't be longer than 100 characters"),
+            .max(255, "*Password can't be longer than 255 characters"),
         remember: yup.bool()
     });
 

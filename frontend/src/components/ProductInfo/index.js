@@ -142,7 +142,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                             <RiHeartFill style={{ fontSize: 22, marginLeft: 5, color: 'var(--lighter-silver)' }} />
                         )}
                 </Button>
-                <div className="font-18" style={{ marginTop: 15 }}>
+                <div className="font-18" style={{ marginTop: 15, maxWidth: '100%', wordWrap: 'break-word' }}>
                     Details
                     <div className="gray-line" />
                     <div className="font-15">

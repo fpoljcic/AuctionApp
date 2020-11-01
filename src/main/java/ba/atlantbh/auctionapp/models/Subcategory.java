@@ -20,6 +20,7 @@ public class Subcategory {
     private UUID id;
 
     @NotBlank
+    @Column(nullable = false)
     private String name;
 
     private String photoUrl;

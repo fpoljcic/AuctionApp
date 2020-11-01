@@ -9,6 +9,8 @@
     object-fit: contain;
     cursor: pointer;
     height: auto;
+    max-height: 500px;
+    min-height: 300px;
 }
 
 .product-image-small {

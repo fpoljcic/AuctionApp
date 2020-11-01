@@ -23,10 +23,10 @@ public class Category {
     private UUID id;
 
     @NotBlank
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    public Category(String name) {
+    public Category(@NotBlank String name) {
         this.name = name;
     }
 }

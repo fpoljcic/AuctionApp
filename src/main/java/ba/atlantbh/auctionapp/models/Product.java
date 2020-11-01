@@ -31,9 +31,11 @@ public class Product {
 
     @NotBlank
     @Column(nullable = false)
+    @javax.validation.constraints.Size(max = 60)
     private String name;
 
     @Column(columnDefinition = "TEXT")
+    @javax.validation.constraints.Size(max = 700)
     private String description;
 
     @Min(value = 0)
@@ -56,6 +58,7 @@ public class Product {
 
     @NotBlank
     @Column(nullable = false)
+    @javax.validation.constraints.Size(max = 32)
     private String zip;
 
     @NotBlank
@@ -64,6 +67,7 @@ public class Product {
 
     @NotBlank
     @Column(nullable = false)
+    @javax.validation.constraints.Size(max = 32)
     private String phone;
 
     @Column(nullable = false)

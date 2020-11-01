@@ -24,12 +24,22 @@
     height: 14.4vw;
 }
 
+.word-wrap-xxl {
+    max-width: 18.2vw;
+    word-wrap: break-word;
+}
+
+.word-wrap-xl, .word-wrap-lg {
+    max-width: 14.4vw;
+    word-wrap: break-word;
+}
+
 .featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {
     scale: 1.02;
     transition: all 0.1s;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .featured-item-container {
         position: relative;
         width: 100%;
@@ -43,5 +53,9 @@
         position: absolute;
         width: 100%;
         height: 82%
+    }
+    .word-wrap-xxl, .word-wrap-xl, .word-wrap-lg {
+        max-width: 100%;
+        word-wrap: break-word;
     }
 }

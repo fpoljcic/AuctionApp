@@ -28,7 +28,8 @@ public class Card {
 
     @NotBlank
     @Column(nullable = false)
-    @Size(max = 16)
+    @Size(max = 19)
+    @Size(min = 13)
     private String cardNumber;
 
     @Column(nullable = false)
@@ -50,7 +51,7 @@ public class Card {
     @JoinColumn(name = "person_id")
     private Person person;
 
-    public Card(@NotBlank String name, @NotBlank @Size(max = 16) String cardNumber, @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(12) Integer expirationMonth, @Min(100) @Max(9999) Short cvc) {
+    public Card(@NotBlank String name, @NotBlank @Size(max = 19) @Size(min = 13) String cardNumber, @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(12) Integer expirationMonth, @Min(100) @Max(9999) Short cvc) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.expirationYear = expirationYear;

@@ -22,6 +22,7 @@ public class Photo {
     private UUID id;
 
     @NotBlank
+    @Column(nullable = false)
     private String url;
 
     @Column(nullable = false)
