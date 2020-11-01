@@ -1,5 +1,8 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
+import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.enums.Color;
 import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
@@ -9,6 +12,8 @@ import ba.atlantbh.auctionapp.requests.SearchCountRequest;
 import ba.atlantbh.auctionapp.requests.SearchRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,17 +45,28 @@ public class ProductController {
     }
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
     public ResponseEntity<ProductResponse> getProduct(@RequestParam String productId,
                                                       @RequestParam(defaultValue = "") String userId) {
         return ResponseEntity.ok(productService.getProduct(productId, userId));
     }
 
     @GetMapping("/related")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
     public ResponseEntity<List<SimpleProductProj>> getRelatedProducts(@RequestParam String id) {
         return ResponseEntity.ok(productService.getRelatedProducts(id));
     }
 
     @GetMapping("/search")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
     public ResponseEntity<ProductPageResponse> search(@Valid SearchRequest searchRequest) {
         return ResponseEntity.ok(productService.search(
                 searchRequest.getQuery(),
@@ -66,6 +82,9 @@ public class ProductController {
     }
 
     @GetMapping("/search/count")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
     public ResponseEntity<List<CategoryCountReponse>> searchCount(@Valid SearchCountRequest searchCountRequest) {
         return ResponseEntity.ok(productService.searchCount(
                 searchCountRequest.getQuery(),
@@ -77,6 +96,9 @@ public class ProductController {
     }
 
     @GetMapping("/filter/count")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
     public ResponseEntity<FilterCountResponse> filterCount(@Valid FilterCountRequest filterCountRequest) {
         return ResponseEntity.ok(productService.filterCount(
                 filterCountRequest.getQuery(),
@@ -95,6 +117,11 @@ public class ProductController {
     }
 
     @PostMapping("/add")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
     public ResponseEntity<UUID> add(@RequestBody @Valid ProductRequest productRequest) {
         UUID productId = productService.add(productRequest);
         return ResponseEntity.ok(productId);

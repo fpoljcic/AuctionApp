@@ -28,11 +28,14 @@ public class BidService {
     private final ProductRepository productRepository;
 
     public List<SimpleBidProj> getBidsForProduct(String id) {
+        if (!productRepository.existsById(UUID.fromString(id)))
+            throw new UnprocessableException("Wrong product id");
         return bidRepository.getBidsForProduct(id);
     }
 
     public void add(BidRequest bidRequest) {
-        Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new UnprocessableException("Wrong product id"));
+        Product product = productRepository.findById(bidRequest.getProductId())
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (product.getStartPrice().compareTo(bidRequest.getPrice()) > 0)
             throw new BadRequestException("Price can't be lower than the product start price");
         if (product.getStartDate().isAfter(LocalDateTime.now()))

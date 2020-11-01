@@ -1,7 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
+import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.models.Wishlist;
@@ -22,9 +22,9 @@ public class WishlistService {
 
     public void add(WishlistRequest wishlistRequest) {
         Person person = personRepository.findById(wishlistRequest.getPersonId())
-                .orElseThrow(() -> new NotFoundException("Wrong person id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (wishlistRepository.existsByPersonAndProduct(person, product))
             throw new BadRequestException("You already wishlisted this product");
         wishlistRepository.save(new Wishlist(person, product));
@@ -32,9 +32,9 @@ public class WishlistService {
 
     public void remove(WishlistRequest wishlistRequest) {
         Person person = personRepository.findById(wishlistRequest.getPersonId())
-                .orElseThrow(() -> new NotFoundException("Wrong person id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         Wishlist wishlist = wishlistRepository.findByPersonAndProduct(person, product)
                 .orElseThrow(() -> new BadRequestException("You didn't wishlist this product"));
         wishlistRepository.delete(wishlist);

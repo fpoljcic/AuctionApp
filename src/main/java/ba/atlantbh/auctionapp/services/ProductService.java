@@ -1,7 +1,6 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.*;
 import ba.atlantbh.auctionapp.models.enums.Color;
@@ -53,14 +52,14 @@ public class ProductService {
 
     public ProductResponse getProduct(String productId, String userId) {
         FullProductProj product = productRepository.getProduct(productId, userId)
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         List<SimplePhotoProj> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
         return new ProductResponse(product, productPhotos);
     }
 
     public List<SimpleProductProj> getRelatedProducts(String id) {
         Product product = productRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
                 product.getSubcategory().getCategory().getId().toString());
     }
