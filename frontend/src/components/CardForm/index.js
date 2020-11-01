@@ -12,15 +12,17 @@ export const cardFormSchema = yup.object().shape({
         .max(255, "*Name can't be longer than 255 characters"),
     cardNumber: yup.string()
         .required("*Card number is required")
-        .max(16, "*Card number can't be longer than 16 characters"),
+        .min(13, "*Card number must have at least 13 characters")
+        .max(19, "*Card number can't be longer than 19 characters"),
     expirationYear: yup.number()
         .required("*Expiration year is required"),
     expirationMonth: yup.number()
         .required("*Expiration month is required"),
-    cvc: yup.string()
+    cvc: yup.number()
+        .typeError("*CVC must be a number")
         .required("*CVC is required")
-        .min(3, "*CVC must have at least 3 characters")
-        .max(4, "*CVC can't be longer than 4 characters")
+        .min(100, "*CVC must have at least 3 characters")
+        .max(9999, "*CVC can't be longer than 4 characters")
 });
 
 export const payPalFormSchema = yup.object().shape({
@@ -127,7 +129,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 defaultValue={card.cardNumber || ""}
                                 placeholder="e.g. 1234 5678 9876 5432"
                                 onChange={handleChange}
-                                maxLength={16}
+                                maxLength={19}
                                 isInvalid={getIn(touched, 'card.cardNumber') && getIn(errors, 'card.cardNumber')}
                             />
                             <Form.Control.Feedback type="invalid">

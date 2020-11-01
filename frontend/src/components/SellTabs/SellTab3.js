@@ -25,6 +25,15 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
         setCallCode(callCodeForCountry(country));
     }, [country])
 
+    const checkPhoneNumber = (phone) => {
+        if (phone === undefined)
+            return false;
+        const parsedPhoneNumber = parsePhoneNumberFromString(phone, codeForCountry(country));
+        if (parsedPhoneNumber === undefined)
+            return false;
+        return parsedPhoneNumber.isValid();
+    }
+
     const schema = yup.object().shape({
         street: yup.string()
             .required("*Address is required")
@@ -40,9 +49,9 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
             .max(32, "*Zip can't be longer than 32 characters"),
         phone: yup.string()
             .required("*Phone is required")
-            .max(100, "*Phone can't be longer than 100 characters")
+            .max(32, "*Phone can't be longer than 32 characters")
             .test("country-selected", "*Select a country", () => country !== null)
-            .test("valid-phone", "*Phone must be valid", (value) => value !== undefined && parsePhoneNumberFromString(value, codeForCountry(country)) !== undefined),
+            .test("valid-phone", "*Phone must be valid", checkPhoneNumber),
         shipping: yup.bool(),
         featured: yup.bool(),
         card: !payPal && (shipping || featured) ? cardFormSchema : null,
@@ -71,7 +80,10 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
         if (newProduct === null)
             setLoading(false);
         else
-            history.push(productUrl(newProduct));
+            history.push({
+                pathname: productUrl(newProduct),
+                state: { newProduct: true }
+            })
     }
 
     const getPrice = 0 + (shipping ? 10 : 0) + (featured ? 5 : 0);
@@ -196,7 +208,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                             defaultValue={product.phone || ""}
                                             placeholder="e.g. 62123456"
                                             onChange={handleChange}
-                                            maxLength={100}
+                                            maxLength={32}
                                             isInvalid={touched.phone && errors.phone}
                                         />
                                         <Form.Control.Feedback type="invalid">

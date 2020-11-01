@@ -223,6 +223,17 @@ select.form-control {
   box-shadow: none;
 }
 
+.select-clear {
+  position: absolute;
+  right: 38px;
+  font-size: 30px;
+  top: 12px;
+  color: var(--light-gray);
+  cursor: pointer;
+  padding-right: 6px;
+  border-right: 1px solid var(--light-silver);
+}
+
 .custom-control-label::before {
   border-color: var(--light-silver);
   top: 0.4rem;

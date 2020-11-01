@@ -15,7 +15,7 @@ import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({ match }) => {
+const ItemPage = ({ match, location }) => {
     const personId = getUserId();
     const { setBreadcrumb } = useBreadcrumbContext();
     const { showMessage } = useAlertContext();
@@ -46,6 +46,8 @@ const ItemPage = ({ match }) => {
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
                 setWished(data.wished);
                 setBids(bids);
+                if (location.state !== undefined && location.state.newProduct)
+                    showMessage("success", "You have successfully added a new product!");
             } catch (e) { }
         }
 

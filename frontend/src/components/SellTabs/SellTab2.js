@@ -134,7 +134,13 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                                 name="endDate"
                                                 minDate={values.startDate !== null ? moment(values.startDate).toDate() : moment().toDate()}
                                                 selected={values.endDate}
-                                                onChange={date => setFieldValue("endDate", moment(date).endOf('day').toDate())}
+                                                onChange={date => {
+                                                    if (date === null) {
+                                                        setFieldValue("endDate", date);
+                                                        return;
+                                                    }
+                                                    setFieldValue("endDate", moment(date).endOf('day').toDate());
+                                                }}
                                                 useWeekdaysShort={true}
                                                 ref={endDateRef}
                                                 disabledKeyboardNavigation

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Form } from 'react-bootstrap';
+import { MdClear } from 'react-icons/md';
 import { myAccountSellerUrl } from 'utilities/appUrls';
 import SubmitButtons from './SubmitButtons';
 import Dropzone from "components/Dropzone";
@@ -16,7 +17,9 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
     const [categories, setCategories] = useState(loadedCategories);
     const [subcategories, setSubcategories] = useState(loadedSubcategories);
     const [colors, setColors] = useState(filters.colors);
+    const [color, setColor] = useState(product.color || "Select Color");
     const [sizes, setSizes] = useState(filters.sizes);
+    const [size, setSize] = useState(product.size || "Select Size");
     const [photos, setPhotos] = useState(product.photos || []);
     const [uploading, setUploading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -195,9 +198,12 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                 <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Form.Group className="form-half-width">
                                         <Form.Control
-                                            defaultValue={product.color || "Select Color"}
                                             name="color"
-                                            onChange={handleChange}
+                                            onChange={e => {
+                                                handleChange(e);
+                                                setColor(e.target.value);
+                                            }}
+                                            value={color}
                                             size="xl-18"
                                             as="select"
                                         >
@@ -206,13 +212,23 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                                 <option key={color} value={color}>{color}</option>
                                             ))}
                                         </Form.Control>
+                                        <MdClear
+                                            onClick={() => {
+                                                setFieldValue("color", null);
+                                                setColor("Select Color");
+                                            }}
+                                            className="select-clear"
+                                        />
                                     </Form.Group>
 
                                     <Form.Group className="form-half-width">
                                         <Form.Control
-                                            defaultValue={product.size || "Select Size"}
                                             name="size"
-                                            onChange={handleChange}
+                                            onChange={e => {
+                                                handleChange(e);
+                                                setSize(e.target.value);
+                                            }}
+                                            value={size}
                                             size="xl-18"
                                             as="select"
                                         >
@@ -221,6 +237,13 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                                 <option key={size} value={size}>{size.replace("_", " ")}</option>
                                             ))}
                                         </Form.Control>
+                                        <MdClear
+                                            onClick={() => {
+                                                setFieldValue("size", null);
+                                                setSize("Select Size");
+                                            }}
+                                            className="select-clear"
+                                        />
                                     </Form.Group>
                                 </Form.Group>
 

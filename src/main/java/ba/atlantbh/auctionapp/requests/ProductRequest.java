@@ -55,7 +55,7 @@ public class ProductRequest {
     private String zip;
 
     @NotBlank(message = "Phone can't be blank")
-    @javax.validation.constraints.Size(max = 100, message = "Phone can't be longer than 255 characters")
+    @javax.validation.constraints.Size(max = 32, message = "Phone can't be longer than 32 characters")
     private String phone;
 
     private Boolean shipping = false;

@@ -14,7 +14,8 @@ public class CardRequest {
     private String name;
 
     @NotBlank(message = "Card number can't be blank")
-    @Size(max = 16, message = "Card number can't be longer than 16 characters")
+    @Size(min = 13, message = "Card number must have at least 13 characters")
+    @Size(max = 19, message = "Card number can't be longer than 19 characters")
     private String cardNumber;
 
     @NotNull(message = "Expiration year is required")
@@ -28,7 +29,7 @@ public class CardRequest {
     private Integer expirationMonth;
 
     @NotNull(message = "Cvc is required")
-    @Min(value = 100, message = "Cvc can't be less than 3 characters")
+    @Min(value = 100, message = "Cvc can't must have at least 3 characters")
     @Max(value = 9999, message = "Cvc can't be more than 4 characters")
     private Short cvc;
 }
