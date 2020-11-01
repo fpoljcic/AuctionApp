@@ -98,11 +98,11 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                     <Form.Text style={{ textAlign: 'left', paddingLeft: '1.5rem' }} className="form-control-description">
                         We accept the following credit cards.
                         <div style={{ marginTop: 5 }}>
-                            <Image style={{ width: 250 }} src="/images/cards.png" />
+                            <Image style={{ width: 'max(210px, 14vw)' }} src="/images/cards.png" />
                         </div>
                     </Form.Text>
 
-                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
+                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginTop: 30 }}>
                         <Form.Group className="form-half-width">
                             <Form.Label>Name on card</Form.Label>
                             <Form.Control
@@ -138,10 +138,10 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                         </Form.Group>
                     </Form.Group>
 
-                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }} className="form-half-width">
+                    <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'end' }} className="form-half-width">
                             <Form.Group className="form-half-width">
-                                <Form.Label>Expiration Date</Form.Label>
+                                <Form.Label style={{ whiteSpace: 'nowrap' }}>Expiration Date</Form.Label>
                                 <Form.Control
                                     defaultValue={card.expirationYear || "Year"}
                                     name="card.expirationYear"

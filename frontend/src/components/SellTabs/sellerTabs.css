@@ -1,7 +1,7 @@
 .tab-container {
     border: 1px solid var(--light-silver);
     margin: 0 auto;
-    width: 40vw;
+    width: 50vw;
     min-width: 320px;
 }
 
@@ -14,6 +14,7 @@
     font-size: 20px;
     letter-spacing: 0.7px;
     height: 60px;
+    padding: 10px;
 }
 
 .tab-content {
@@ -34,4 +35,25 @@
 
 .sell-form-margin {
     margin-bottom: 30px;
+}
+
+.sell-submit-button {
+    width: 183px;
+}
+
+.inline-feedback-error {
+    position: absolute;
+}
+
+@media (max-width: 991px) {
+    .form-half-width {
+        width: 100%;
+        position: relative;
+    }
+    .sell-submit-button {
+        width: 48%;
+    }
+    .inline-feedback-error {
+        position: static;
+    }
 }

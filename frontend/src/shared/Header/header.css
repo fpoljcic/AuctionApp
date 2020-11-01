@@ -87,4 +87,7 @@
     .bottom-header-search {
         width: 90%;
     }
+    .account-list {
+        display: none;
+    }
 }

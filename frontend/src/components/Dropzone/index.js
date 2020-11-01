@@ -44,7 +44,7 @@ const Dropzone = ({ onDrop, accept, images, setImages }) => {
                 <DndProvider backend={backendForDND}>
                     <ImageGrid images={images} moveImage={moveImage} />
                 </DndProvider>
-                <div style={{ margin: 'auto 0' }}>
+                <div style={{ margin: 'auto 10px' }}>
                     {isDragActive ? (
                         "Release to drop the image here"
                     ) : (

@@ -23,7 +23,7 @@ const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
-                style={{ width: 183 }}
+                className="sell-submit-button"
                 size="xxl"
                 variant="transparent-black-shadow-disabled"
                 onClick={onBack}
@@ -33,7 +33,7 @@ const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
                 BACK
             </Button>
             <Button
-                style={{ width: 183 }}
+                className="sell-submit-button"
                 type="submit"
                 size="xxl"
                 variant={lastTab ? "fill-purple-shadow" : "transparent-black-shadow"}

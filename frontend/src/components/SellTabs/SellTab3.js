@@ -135,7 +135,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                                     <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.country || "Select Country"}

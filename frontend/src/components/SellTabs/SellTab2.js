@@ -90,7 +90,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                     </InputGroup>
                                 </Form.Group>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0 }}>
+                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: 0 }}>
                                     <Form.Group className="form-half-width">
                                         <Form.Label>Start date</Form.Label>
                                         <div>

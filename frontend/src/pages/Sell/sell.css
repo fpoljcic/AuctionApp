@@ -21,6 +21,12 @@
 }
 
 .sell-stepper {
-    width: 700px;
+    width: 45vw;
     margin: 0 auto;
+}
+
+@media (max-width: 575px) {
+    .sell-stepper {
+        width: 100%;
+    }
 }

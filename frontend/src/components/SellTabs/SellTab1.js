@@ -124,13 +124,13 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         maxLength={60}
                                         isInvalid={touched.name && errors.name}
                                     />
-                                    <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                    <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                         {errors.name}
                                     </Form.Control.Feedback>
                                     <Form.Text className="form-control-description">2-5 words ({60 - nameLength} characters)</Form.Text>
                                 </Form.Group>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                                     <Form.Group className="form-half-width">
                                         <Form.Control
                                             defaultValue={product.categoryId || "Select Category"}
@@ -189,13 +189,13 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         maxLength={700}
                                         rows={5}
                                     />
-                                    <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                    <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                         {errors.description}
                                     </Form.Control.Feedback>
                                     <Form.Text className="form-control-description">100 words ({700 - descriptionLength} characters)</Form.Text>
                                 </Form.Group>
 
-                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                                     <Form.Group className="form-half-width">
                                         <Form.Control
                                             name="color"
