@@ -102,7 +102,13 @@ const Header = () => {
                     <GrFormSearch className="bottom-header-search-icon" onClick={handleSearch} />
                 </div>
                 <Nav style={{ position: 'relative' }}>
-                    <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={homeUrl}>HOME</NavLink>
+                    <NavLink
+                        isActive={(match, location) => (match.isExact || location.pathname === loginUrl || location.pathname === registerUrl)}
+                        className="black-nav-link nav-link"
+                        activeClassName="black-active-nav-link"
+                        to={homeUrl}>
+                        HOME
+                    </NavLink>
                     <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={shopUrl}>SHOP</NavLink>
                     <NavLink
                         style={{ paddingRight: 0, paddingTop: 28, paddingBottom: 28 }}
