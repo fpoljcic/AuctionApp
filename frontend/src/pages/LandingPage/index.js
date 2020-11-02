@@ -44,7 +44,16 @@ const LandingPage = () => {
         <ListGroup variant="categories">
           <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
-            <ListGroup.Item key={category.name} action onClick={() => history.push(categoryUrl(category))}>{category.name}</ListGroup.Item>
+            <ListGroup.Item
+              key={category.name}
+              action
+              onClick={() => history.push({
+                pathname: categoryUrl(category),
+                state: { fromLandingPage: true }
+              })}
+            >
+              {category.name}
+            </ListGroup.Item>
           ))}
           <ListGroup.Item action onClick={() => history.push(allCategoryUrl)}>All Categories</ListGroup.Item>
         </ListGroup>
@@ -85,7 +94,7 @@ const LandingPage = () => {
         <div className="gray-line" />
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
-            <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} />
+            <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} fromLandingPage={true} />
           ))}
         </div>
       </div>
