@@ -201,7 +201,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                         </Form.Group>
                     </Form.Group>
                 </> : payPal ?
-                    <div>
+                    <div style={{ textAlign: 'center' }}>
                         <PayPalButton
                             amount={price}
                             shippingPreference="NO_SHIPPING"
