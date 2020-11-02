@@ -39,7 +39,7 @@ const Shop = () => {
 
     useEffect(() => {
         setLoading(true);
-        const fromLandingPage = history.location.state !== undefined && history.location.state.fromLandingPage;
+        const fromLandingPage = history.location.state != null && history.location.state.fromLandingPage;
         if (fromLandingPage)
             scrollToTop();
         formBreadcrumb(fromLandingPage);
