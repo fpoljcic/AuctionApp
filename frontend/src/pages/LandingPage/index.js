@@ -65,7 +65,7 @@ const LandingPage = () => {
               </div>
 
               <Button
-                style={{ width: 192 }}
+                style={{ width: 192, marginTop: 10 }}
                 size="xxl"
                 variant="transparent-black-shadow"
                 onClick={() => history.push(productUrl(featuredProducts[0]))}

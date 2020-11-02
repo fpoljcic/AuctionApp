@@ -105,6 +105,7 @@ h3 {
   color: var(--text-primary);
   background-color: transparent;
   box-shadow: 3px 3px 0 0 var(--primary-a);
+  margin-top: 10px;
 }
 
 .btn-transparent-black-shadow-disabled {

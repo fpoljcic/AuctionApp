@@ -16,7 +16,7 @@ const ImageCard = ({ data, size, url }) => {
                 src={imagePath}
                 onClick={() => history.push(url)}
             />
-            <h3 className={"word-wrap-" + size}>
+            <h3 onClick={() => history.push(url)} className={"word-wrap-" + size}>
                 {data.name}
             </h3>
             Start from ${data.startPrice}

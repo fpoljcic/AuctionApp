@@ -25,11 +25,13 @@
 }
 
 .word-wrap-xxl {
+    cursor: pointer;
     max-width: 18.2vw;
     word-wrap: break-word;
 }
 
 .word-wrap-xl, .word-wrap-lg {
+    cursor: pointer;
     max-width: 14.4vw;
     word-wrap: break-word;
 }

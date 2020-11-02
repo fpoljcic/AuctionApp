@@ -106,7 +106,8 @@ const Header = () => {
                         isActive={(match, location) => (match.isExact || location.pathname === loginUrl || location.pathname === registerUrl)}
                         className="black-nav-link nav-link"
                         activeClassName="black-active-nav-link"
-                        to={homeUrl}>
+                        to={homeUrl}
+                    >
                         HOME
                     </NavLink>
                     <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={shopUrl}>SHOP</NavLink>
