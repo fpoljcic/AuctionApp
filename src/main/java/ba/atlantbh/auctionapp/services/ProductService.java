@@ -1,6 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.*;
 import ba.atlantbh.auctionapp.models.enums.Color;
@@ -213,10 +214,8 @@ public class ProductService {
         Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
                 .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
         UUID personId = JwtTokenUtil.getRequestPersonId();
-        if (personId == null)
-            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
 
         if (productRequest.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("End date can't be before current date");
@@ -268,6 +267,8 @@ public class ProductService {
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
+            if (!cardRequest.getCardNumber().matches("^(\\d*)$"))
+                throw new BadRequestException("Card number can only contain digits");
             card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),

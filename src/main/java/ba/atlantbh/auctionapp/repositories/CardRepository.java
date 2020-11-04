@@ -11,4 +11,5 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
                                                                                     Integer expirationYear,
                                                                                     Integer expirationMonth,
                                                                                     Short cvc);
+    Optional<Card> findByPersonId(UUID personId);
 }

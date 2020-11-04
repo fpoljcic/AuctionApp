@@ -6,6 +6,7 @@ import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.requests.LoginRequest;
 import ba.atlantbh.auctionapp.requests.RegisterRequest;
+import ba.atlantbh.auctionapp.requests.UpdateProfileRequest;
 import ba.atlantbh.auctionapp.responses.LoginResponse;
 import ba.atlantbh.auctionapp.responses.RegisterResponse;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -14,10 +15,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -48,5 +46,14 @@ public class PersonController {
     public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         Person person = personService.register(registerRequest);
         return ResponseEntity.ok(new RegisterResponse(person, jwtTokenUtil.generateToken(person)));
+    }
+
+    @PutMapping("/update")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
+    public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
+        return ResponseEntity.ok(personService.update(updateProfileRequest));
     }
 }

@@ -1,6 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.Bid;
 import ba.atlantbh.auctionapp.models.Person;
@@ -43,10 +44,8 @@ public class BidService {
         if (product.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("Auction ended for this product");
         UUID personId = JwtTokenUtil.getRequestPersonId();
-        if (personId == null)
-            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         if (product.getPerson().getId() == person.getId())
             throw new BadRequestException("You can't bid on your own product");
         BigDecimal maxBid = bidRepository.getMaxBidFromPersonForProduct(person.getId().toString(), product.getId().toString());
