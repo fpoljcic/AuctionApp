@@ -1,0 +1,22 @@
+.dropzone {
+    min-height: 320px;
+    background-color: var(--almost-white);
+    border: 2px dashed var(--light-silver);
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.dropzone-active {
+    border: 2px solid var(--primary);
+}
+
+.dropzone-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+}

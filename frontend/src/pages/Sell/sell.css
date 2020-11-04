@@ -1,0 +1,32 @@
+.white-circle {
+    position: relative;
+    height: 22px;
+    width: 22px;
+    background-color: var(--white);
+    border-radius: 50%;
+}
+
+.purple-circle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+}
+
+.RFS-StepperContainer>.RFS-StepContainer>.RFS-ConnectorContainer {
+    margin-left: -6px;
+    margin-right: -6px;
+}
+
+.sell-stepper {
+    width: 45vw;
+    margin: 0 auto;
+}
+
+@media (max-width: 575px) {
+    .sell-stepper {
+        width: 100%;
+    }
+}

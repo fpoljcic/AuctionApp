@@ -26,6 +26,8 @@ h1 {
   line-height: 52px;
   margin-bottom: 0;
   font-weight: normal;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 h2 {
@@ -42,6 +44,8 @@ h3 {
   font-weight: bold;
   margin-bottom: 0;
   line-height: unset;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 /*--------------BUTTON--------------*/
@@ -58,12 +62,18 @@ h3 {
   flex-wrap: wrap;
 }
 
+.btn.focus, .btn:focus {
+  box-shadow: 0 0 9px 0 var(--black-a-3);
+}
+
 .btn:hover {
   color: currentColor;
 }
 
 .btn-lg {
   height: 46px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
 }
 
 .btn-xl {
@@ -101,10 +111,32 @@ h3 {
   box-shadow: 3px 3px 0 0 var(--primary-a);
 }
 
+.btn-transparent-black-shadow-disabled {
+  color: var(--text-primary);
+  background-color: transparent;
+  border: 3px solid var(--lighter-silver);
+  box-shadow: 3px 3px 0 0 var(--black-a-2);
+}
+
 .btn-fill-purple {
   color: var(--white);
   background: var(--primary);
+}
+
+.btn-fill-purple-shadow {
+  color: var(--white);
+  background: var(--primary);
   box-shadow: 3px 3px 0 0 var(--primary-a);
+}
+
+.btn-fill-purple:hover, .btn-fill-purple-shadow:hover {
+  color: var(--white);
+}
+
+.btn-fill-gray {
+  color: var(--text-primary);
+  background: var(--white-smoke);
+  border: none;
 }
 
 .btn-fill-white {
@@ -131,6 +163,11 @@ h3 {
   color: var(--text-secondary);
 }
 
+.form-control:focus {
+  border: 1px solid var(--light-silver);
+  box-shadow: 0 0 9px 0 var(--black-a-3);
+}
+
 .form-control-lg {
   height: 46px;
   font-size: 16px;
@@ -154,6 +191,12 @@ h3 {
   border: 1px solid var(--light-silver);
 }
 
+.form-control-gray-no-shadow {
+  background: var(--almost-white);
+  border: 1px solid var(--light-silver);
+  box-shadow: none;
+}
+
 .form-group, .custom-control {
   text-align: left;
 }
@@ -172,15 +215,149 @@ h3 {
   justify-content: space-between;
 }
 
+.input-group-text {
+  border-radius: 0;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  padding-left: 1em;
+  padding-right: 1em;
+  color: var(--text-primary);
+  background-color: var(--white-smoke);
+}
+
 select.form-control {
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 512 512' style='font-size: 24px;' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z'></path></svg>");
   background-repeat: no-repeat;
   background-position-x: 98%;
-  background-position-y: 0.5em;
+  background-position-y: 50%;
   border: 3px solid var(--lighter-silver);
   box-shadow: none;
+}
+
+.select-clear {
+  position: absolute;
+  right: 38px;
+  font-size: 30px;
+  top: 12px;
+  color: var(--light-gray);
+  cursor: pointer;
+  padding-right: 6px;
+  border-right: 1px solid var(--light-silver);
+}
+
+.custom-control-label::before {
+  border-color: var(--light-silver);
+  top: 0.4rem;
+}
+
+.custom-control-label::after {
+  top: 0.4rem;
+}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 0;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.custom-checkbox .custom-control-input:disabled:checked~.custom-control-label::before {
+  background-color: var(--primary-a);
+}
+
+.custom-control-input:focus~.custom-control-label::before {
+  box-shadow: 0 0 9px 0 var(--black-a-3);
+}
+
+.custom-control-input:not(:disabled):active~.custom-control-label::before {
+  color: var(--white);
+  background-color: var(--primary-a);
+  border-color: var(--primary-a);
+}
+
+.custom-control-input:focus:not(:checked)~.custom-control-label::before {
+  border-color: var(--primary-a);
+}
+
+/*--------------DATE PICKER--------------*/
+
+.react-datepicker {
+  font-size: 1em;
+  border-radius: 0;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container>input {
+  background-image: url("data:image/svg+xml;ut8,<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 1024 1024' style='font-size: 24px;' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z'></path></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 96%;
+  background-position-y: 50%;
+}
+
+.react-datepicker__header {
+  padding-top: 0.8em;
+  background-color: var(--almost-white);
+  border-bottom: none;
+}
+
+.react-datepicker__current-month {
+  border-bottom: 1px solid var(--lighter-silver);
+  padding-bottom: 6px;
+}
+
+.react-datepicker__navigation {
+  top: 1em;
+  line-height: 1.7em;
+  border: 0.45em solid transparent;
+}
+
+.react-datepicker__month {
+  font-size: 1em;
+  margin: 0 1em 0.4em 1em;
+}
+
+.react-datepicker__day-names {
+  margin-top: 0.4em;
+  background-color: var(--white);
+}
+
+.react-datepicker__day, .react-datepicker__day-name {
+  width: 1.9em;
+  line-height: 1.9em;
+  margin: 0.366em;
+}
+
+.react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+  background-color: var(--primary);
+}
+
+.react-datepicker__day--selected:hover, .react-datepicker__day--in-selecting-range:hover, .react-datepicker__day--in-range:hover {
+  background-color: var(--dark-primary);
+}
+
+.react-datepicker__navigation--previous {
+  border-right-color: var(--primary);
+  left: 1em;
+}
+
+.react-datepicker__navigation--next {
+  border-left-color: var(--primary);
+  right: 1em;
+}
+
+.react-datepicker__navigation--previous:hover {
+  border-right-color: var(--dark-primary);
+}
+
+.react-datepicker__navigation--next:hover {
+  border-left-color: var(--dark-primary);
 }
 
 /*--------------NAV LINKS--------------*/

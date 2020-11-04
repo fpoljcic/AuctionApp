@@ -20,7 +20,7 @@ const BidTable = ({ bids }) => {
                             <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
                             {bid.firstName + ' ' + bid.lastName}
                         </td>
-                        <td>{moment(bid.date).format("D MMMM YYYY")}</td>
+                        <td>{moment.utc(bid.date).local().format("D MMMM YYYY")}</td>
                         <td style={i === 0 ? { color: 'var(--strong-green)', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
                     </tr>
                 ))}

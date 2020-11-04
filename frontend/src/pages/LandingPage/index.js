@@ -12,7 +12,7 @@ import { useBreadcrumbContext } from 'AppContext';
 import './landingPage.css';
 
 const LandingPage = () => {
-  const { removeBreadcrumb } = useBreadcrumbContext(); 
+  const { removeBreadcrumb } = useBreadcrumbContext();
   const history = useHistory();
 
   const [categories, setCategories] = useState([]);
@@ -44,7 +44,16 @@ const LandingPage = () => {
         <ListGroup variant="categories">
           <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
           {categories.map(category => (
-            <ListGroup.Item key={category.name} action onClick={() => history.push(categoryUrl(category))}>{category.name}</ListGroup.Item>
+            <ListGroup.Item
+              key={category.name}
+              action
+              onClick={() => history.push({
+                pathname: categoryUrl(category),
+                state: { fromLandingPage: true }
+              })}
+            >
+              {category.name}
+            </ListGroup.Item>
           ))}
           <ListGroup.Item action onClick={() => history.push(allCategoryUrl)}>All Categories</ListGroup.Item>
         </ListGroup>
@@ -65,13 +74,13 @@ const LandingPage = () => {
               </div>
 
               <Button
-                style={{ width: 192 }}
+                style={{ width: 192, marginTop: 10 }}
                 size="xxl"
                 variant="transparent-black-shadow"
                 onClick={() => history.push(productUrl(featuredProducts[0]))}
               >
                 BID NOW
-                <IoIosArrowForward style={{ fontSize: 24 }} />
+                <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
               </Button>
             </div>
             <Image className="featured-product-image" src={featuredProducts[0].url !== null ? featuredProducts[0].url : "/images/placeholder-image-gray.png"} />
@@ -85,7 +94,7 @@ const LandingPage = () => {
         <div className="gray-line" />
         <div className="featured-items-container">
           {randomSubcategories.map(subcategory => (
-            <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} />
+            <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} fromLandingPage={true} />
           ))}
         </div>
       </div>

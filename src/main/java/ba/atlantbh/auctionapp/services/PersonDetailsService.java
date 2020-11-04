@@ -1,6 +1,6 @@
 package ba.atlantbh.auctionapp.services;
 
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.security.PersonDetails;
@@ -16,7 +16,7 @@ public class PersonDetailsService implements UserDetailsService {
 
     @Override
     public PersonDetails loadUserByUsername(String email) {
-        Person person = personRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        Person person = personRepository.findByEmail(email).orElseThrow(UnauthorizedException::new);
         return new PersonDetails(person);
     }
 }

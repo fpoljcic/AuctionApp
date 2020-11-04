@@ -24,6 +24,7 @@ const ProductPhotos = ({ photos }) => {
                 width="100%"
                 height="438px"
                 src={imagePath}
+                style={photos[activePhoto] === undefined ? { objectFit: 'cover' } : null}
                 className="product-image-big"
             />
             <AiOutlineFullscreen

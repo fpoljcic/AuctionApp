@@ -1,6 +1,6 @@
 package ba.atlantbh.auctionapp.security;
 
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.services.PersonDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -56,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             PersonDetails personDetails;
             try {
                 personDetails = personDetailsService.loadUserByUsername(email);
-            } catch (NotFoundException ignore) {
+            } catch (UnauthorizedException ignore) {
                 // Wrong email address in signature
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT signature");
                 return;

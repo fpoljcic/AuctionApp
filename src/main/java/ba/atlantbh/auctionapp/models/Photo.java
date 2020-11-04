@@ -22,6 +22,7 @@ public class Photo {
     private UUID id;
 
     @NotBlank
+    @Column(nullable = false)
     private String url;
 
     @Column(nullable = false)
@@ -31,7 +32,8 @@ public class Photo {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Photo(@NotBlank String url) {
+    public Photo(@NotBlank String url, Product product) {
         this.url = url;
+        this.product = product;
     }
 }

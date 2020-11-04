@@ -6,7 +6,7 @@ import { FaThList } from "react-icons/fa";
 import { filterCountProducts, searchProducts } from 'api/product';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { removeSpaces } from 'utilities/appUrls';
-import { capitalizeFirstLetter } from 'utilities/common';
+import { capitalizeFirstLetter, scrollToTop } from 'utilities/common';
 import CategoriesFilter from 'components/CategoriesFilter';
 import PriceFilter from 'components/PriceFilter';
 import ColorFilter from 'components/ColorFilter';
@@ -39,7 +39,10 @@ const Shop = () => {
 
     useEffect(() => {
         setLoading(true);
-        formBreadcrumb();
+        const fromLandingPage = history.location.state != null && history.location.state.fromLandingPage;
+        if (fromLandingPage)
+            scrollToTop();
+        formBreadcrumb(fromLandingPage);
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
 
@@ -54,7 +57,7 @@ const Shop = () => {
         return capitalizeFirstLetter(name);
     }
 
-    const formBreadcrumb = () => {
+    const formBreadcrumb = (fromLandingPage) => {
         const urlElements = history.location.pathname.split("/").slice(1);
         if (urlElements.length === 1) {
             setBreadcrumb("SHOP", []);
@@ -66,7 +69,10 @@ const Shop = () => {
                 }
             }));
         }
-        refreshData(urlElements);
+        if (fromLandingPage)
+            setTimeout(() => refreshData(urlElements), 100);
+        else
+            refreshData(urlElements);
     }
 
     const refreshData = async (urlElements) => {

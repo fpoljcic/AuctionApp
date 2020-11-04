@@ -1,12 +1,15 @@
 package ba.atlantbh.auctionapp.services;
 
-import ba.atlantbh.auctionapp.exceptions.NotFoundException;
-import ba.atlantbh.auctionapp.models.Product;
+import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
+import ba.atlantbh.auctionapp.models.*;
 import ba.atlantbh.auctionapp.models.enums.Color;
 import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.*;
-import ba.atlantbh.auctionapp.repositories.PhotoRepository;
-import ba.atlantbh.auctionapp.repositories.ProductRepository;
+import ba.atlantbh.auctionapp.repositories.*;
+import ba.atlantbh.auctionapp.requests.CardRequest;
+import ba.atlantbh.auctionapp.requests.PayPalRequest;
+import ba.atlantbh.auctionapp.requests.ProductRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlascopco.hunspell.Hunspell;
@@ -19,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -27,6 +32,10 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final PhotoRepository photoRepository;
+    private final SubcategoryRepository subcategoryRepository;
+    private final PersonRepository personRepository;
+    private final CardRepository cardRepository;
+    private final PayPalRepository payPalRepository;
     private final Hunspell speller;
 
     public List<SimpleProductProj> getFeaturedRandomProducts() {
@@ -43,14 +52,14 @@ public class ProductService {
 
     public ProductResponse getProduct(String productId, String userId) {
         FullProductProj product = productRepository.getProduct(productId, userId)
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         List<SimplePhotoProj> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
         return new ProductResponse(product, productPhotos);
     }
 
     public List<SimpleProductProj> getRelatedProducts(String id) {
         Product product = productRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
                 product.getSubcategory().getCategory().getId().toString());
     }
@@ -198,5 +207,101 @@ public class ProductService {
 
     private String formTsQuery(String query) {
         return query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & ");
+    }
+
+    public UUID add(ProductRequest productRequest) {
+        Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
+                .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        if (personId == null)
+            throw new UnprocessableException("Invalid JWT signature");
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+
+        if (productRequest.getEndDate().isBefore(LocalDateTime.now()))
+            throw new BadRequestException("End date can't be before current date");
+        if (!productRequest.getEndDate().isAfter(productRequest.getStartDate()))
+            throw new BadRequestException("End date must be after start date");
+
+        CardRequest cardRequest = productRequest.getCard();
+        PayPalRequest payPalRequest = productRequest.getPayPal();
+        if (productRequest.getFeatured() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Featured products must have payment details");
+        if (productRequest.getShipping() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Products with shipping must have payment details");
+        if (cardRequest != null && payPalRequest != null)
+            throw new BadRequestException("Conflicting payment details");
+
+        Card card = getAndSaveCard(cardRequest);
+        PayPal payPal = getAndSavePayPal(payPalRequest);
+
+        Product product = new Product(
+                productRequest.getName(),
+                productRequest.getStartPrice(),
+                productRequest.getStartDate(),
+                productRequest.getEndDate(),
+                productRequest.getStreet(),
+                productRequest.getCity(),
+                productRequest.getZip(),
+                productRequest.getCountry(),
+                productRequest.getPhone(),
+                person,
+                subcategory
+        );
+        product.setDescription(productRequest.getDescription());
+        product.setColor(productRequest.getColor());
+        product.setSize(productRequest.getSize());
+        product.setFeatured(productRequest.getFeatured());
+        product.setShipping(productRequest.getShipping());
+        product.setCard(card);
+        product.setPayPal(payPal);
+
+        Product savedProduct = productRepository.save(product);
+        savePhotos(productRequest.getPhotos(), savedProduct);
+        return savedProduct.getId();
+    }
+
+    private Card getAndSaveCard(CardRequest cardRequest) {
+        Card card = null;
+        if (cardRequest != null) {
+            if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
+                    cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
+                            cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
+                throw new BadRequestException("Entered card has expired");
+            card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
+                    cardRequest.getName(),
+                    cardRequest.getCardNumber(),
+                    cardRequest.getExpirationYear(),
+                    cardRequest.getExpirationMonth(),
+                    cardRequest.getCvc()
+            ).orElseGet(() -> {
+                Card newCard = new Card(
+                        cardRequest.getName(),
+                        cardRequest.getCardNumber(),
+                        cardRequest.getExpirationYear(),
+                        cardRequest.getExpirationMonth(),
+                        cardRequest.getCvc()
+                );
+                cardRepository.save(newCard);
+                return newCard;
+            });
+        }
+        return card;
+    }
+
+    private PayPal getAndSavePayPal(PayPalRequest payPalRequest) {
+        PayPal payPal = null;
+        if (payPalRequest != null) {
+            payPal = payPalRepository.save(new PayPal(payPalRequest.getOrderId()));
+        }
+        return payPal;
+    }
+
+    private void savePhotos(List<String> photoUrls, Product product) {
+        if (photoUrls == null || photoUrls.isEmpty())
+            return;
+        List<Photo> photos = photoUrls.stream().map(url -> new Photo(url, product)).collect(Collectors.toList());
+        photos.get(0).setFeatured(true);
+        photoRepository.saveAll(photos);
     }
 }

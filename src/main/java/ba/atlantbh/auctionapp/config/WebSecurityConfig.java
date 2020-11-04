@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] protectedRoutes = {
             "/bids/add",
             "/wishlist/add",
-            "/wishlist/remove"
+            "/wishlist/remove",
+            "/products/add"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -75,7 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "https://auction-app.netlify.app",
-                "https://auction-app-test.netlify.app"
+                "https://auction-app-test.netlify.app",
+                "https://auction-app-master.netlify.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));

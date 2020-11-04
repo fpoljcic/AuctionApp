@@ -11,6 +11,18 @@
     width: 50%;
 }
 
+.product-info-container>div {
+    margin: 20px 0;
+}
+
+.product-info-container>div:first-child {
+    margin-top: 0;
+}
+
+.product-info-container>div:last-child {
+    margin-bottom: 0;
+}
+
 @media (max-width: 767px) {
     .product-container>div:first-child {
         width: 100%;

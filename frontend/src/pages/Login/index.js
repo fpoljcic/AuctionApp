@@ -47,10 +47,11 @@ const Login = () => {
     const schema = yup.object().shape({
         email: yup.string()
             .email("*Email must be valid")
-            .max(100, "*Email must be less than 100 characters")
+            .max(100, "*Email can't be longer than 100 characters")
             .required("*Email is required"),
         password: yup.string()
-            .required("*Password is required"),
+            .required("*Password is required")
+            .max(255, "*Password can't be longer than 255 characters"),
         remember: yup.bool()
     });
 
@@ -78,6 +79,7 @@ const Login = () => {
                                     size="xl-18"
                                     type="email"
                                     name="email"
+                                    maxLength={100}
                                     defaultValue={rememberInfo.email || ""}
                                     onChange={handleChange}
                                     isInvalid={(touched.email && errors.email) || loginError}
@@ -94,6 +96,7 @@ const Login = () => {
                                     size="xl-18"
                                     type="password"
                                     name="password"
+                                    maxLength={255}
                                     defaultValue={rememberInfo.password || ""}
                                     onChange={handleChange}
                                     isInvalid={(touched.password && errors.password) || loginError}
@@ -113,7 +116,7 @@ const Login = () => {
                                 onChange={handleChange}
                             />
 
-                            <Button disabled={loading} block variant="fill-purple" size="xxl" type="submit">
+                            <Button disabled={loading} block variant="fill-purple-shadow" size="xxl" type="submit">
                                 LOGIN
                             </Button>
 

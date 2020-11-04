@@ -3,6 +3,11 @@ export const homeUrl = "/";
 export const loginUrl = "/login";
 export const registerUrl = "/register";
 export const myAccountUrl = "/my_account";
+export const myAccountSellerUrl = "/my_account/seller";
+export const myAccountSellerSellUrl = "/my_account/seller/sell";
+export const myAccountBidsUrl = "/my_account/bids";
+export const myAccountWishlistUrl = "/my_account/wishlist";
+export const myAccountSettingsUrl = "/my_account/settings";
 export const forgotPasswordUrl = "/forgot_password";
 
 export const allCategoryUrl = "/all";

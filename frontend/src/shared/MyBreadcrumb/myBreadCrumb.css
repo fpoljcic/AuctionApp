@@ -3,7 +3,7 @@
     padding-left: 11.1%;
     padding-right: 11.1%;
     text-align: right;
-    justify-content: end;
+    justify-content: flex-end;
     height: 60px;
     align-items: center;
     border-radius: 0;
