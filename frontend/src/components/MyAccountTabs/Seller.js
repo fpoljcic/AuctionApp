@@ -3,9 +3,9 @@ import { Button } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { useHistory } from 'react-router-dom';
+import { myAccountSellerSellUrl } from 'utilities/appUrls';
 
 import './myAccountTabs.css';
-import { myAccountSellerSellUrl } from 'utilities/appUrls';
 
 const Seller = () => {
     const history = useHistory();

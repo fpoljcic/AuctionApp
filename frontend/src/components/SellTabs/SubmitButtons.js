@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
@@ -9,7 +9,12 @@ const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
             case lastTab:
                 return "DONE";
             case uploading:
-                return "UPLOADING...";
+                return (
+                    <>
+                        UPLOADING
+                        <Spinner className="text-spinner" animation="border" />
+                    </>
+                )
             default:
                 return (
                     <>

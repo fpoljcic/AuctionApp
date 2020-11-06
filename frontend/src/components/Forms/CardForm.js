@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getIn } from 'formik';
 import { Form, Image } from 'react-bootstrap';
 import moment, { months } from 'moment';
-import { getNextYears } from 'utilities/common';
+import { getNextYears } from 'utilities/date';
 import { PayPalButton } from 'react-paypal-button-v2';
 import * as yup from 'yup';
 
@@ -13,7 +13,8 @@ export const cardFormSchema = yup.object().shape({
     cardNumber: yup.string()
         .required("*Card number is required")
         .min(13, "*Card number must have at least 13 characters")
-        .max(19, "*Card number can't be longer than 19 characters"),
+        .max(19, "*Card number can't be longer than 19 characters")
+        .test("digits-only", "Card number can only contain digits", value => /^\d*$/.test(value)),
     expirationYear: yup.number()
         .required("*Expiration year is required"),
     expirationMonth: yup.number()
@@ -158,7 +159,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                         <option key={year} value={year}>{year}</option>
                                     ))}
                                 </Form.Control>
-                                <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationYear')}
                                 </Form.Control.Feedback>
                             </Form.Group>
@@ -177,7 +178,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                         <option key={x} value={currentMonth + x + 1}>{months(currentMonth + x)}</option>
                                     ))}
                                 </Form.Control>
-                                <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                                <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationMonth')}
                                 </Form.Control.Feedback>
                             </Form.Group>
@@ -195,7 +196,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 maxLength={4}
                                 isInvalid={getIn(touched, 'card.cvc') && getIn(errors, 'card.cvc')}
                             />
-                            <Form.Control.Feedback style={{ position: 'absolute' }} type="invalid">
+                            <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                 {getIn(errors, 'card.cvc')}
                             </Form.Control.Feedback>
                         </Form.Group>

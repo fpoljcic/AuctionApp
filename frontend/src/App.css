@@ -76,6 +76,12 @@ h3 {
   letter-spacing: 0.56px;
 }
 
+.btn-lg-2 {
+  height: 49px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
+}
+
 .btn-xl {
   height: 54px;
 }
@@ -160,7 +166,7 @@ h3 {
   border: 1px solid var(--light-silver);
   box-shadow: 3px 3px 0 0 var(--black-a);
   border-radius: 0;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .form-control:focus {
@@ -172,6 +178,12 @@ h3 {
   height: 46px;
   font-size: 16px;
   letter-spacing: 0.56px;
+}
+
+.form-control-lg-18 {
+  height: 46px;
+  font-size: 18px;
+  letter-spacing: 0.63px;
 }
 
 .form-control-xl-16 {
@@ -504,4 +516,20 @@ a:hover {
 
 img {
   object-fit: cover;
+}
+
+.verify-phone {
+  background-color: var(--white);
+  font-size: 16px;
+  letter-spacing: 0.56px;
+  width: 220px;
+  justify-content: center;
+}
+
+.text-spinner {
+  width: 1rem;
+  height: 1rem;
+  font-size: 10px;
+  margin-left: 8px;
+  margin-top: 2px;
 }
