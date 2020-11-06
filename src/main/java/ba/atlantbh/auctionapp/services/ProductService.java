@@ -102,9 +102,10 @@ public class ProductService {
 
         UUID id = JwtTokenUtil.getRequestPersonId();
 
+        String tsQuery = formTsQuery(query);
         Slice<SimpleProductProj> searchResult = productRepository.search(
                 query,
-                formTsQuery(query),
+                tsQuery,
                 category,
                 subcategory,
                 id == null ? "" : id.toString(),
@@ -114,7 +115,13 @@ public class ProductService {
                 size == null ? "" : size.toString(),
                 pageRequest
         );
-        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), getSuggestion(query));
+
+        String suggestion = getSuggestion(query);
+        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(query, tsQuery)) {
+            suggestion = query;
+        }
+
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), suggestion);
     }
 
     public List<CategoryCountReponse> searchCount(String query, Integer minPrice, Integer maxPrice, Color color, Size size) {

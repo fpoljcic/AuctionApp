@@ -12,6 +12,10 @@ const SizeFilter = ({ size, filterCount, handleClick }) => {
     const [activeSize, setActiveSize] = useState(size);
 
     useEffect(() => {
+        setActiveSize(size);
+    }, [size])
+
+    useEffect(() => {
         if (filterCount.sizes === undefined)
             return;
         setsizes(filterCount.sizes);

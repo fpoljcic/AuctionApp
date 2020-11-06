@@ -12,6 +12,10 @@ const ColorFilter = ({ color, filterCount, handleClick }) => {
     const [activeColor, setActiveColor] = useState(color);
 
     useEffect(() => {
+        setActiveColor(color);
+    }, [color])
+
+    useEffect(() => {
         if (filterCount.colors === undefined)
             return;
         setColors(filterCount.colors);

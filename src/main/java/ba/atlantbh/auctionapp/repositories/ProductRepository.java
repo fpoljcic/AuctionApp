@@ -80,6 +80,13 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                                     @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice,
                                     String color, String size, Pageable pageable);
 
+    @Query(value = "SELECT EXISTS(SELECT 1 " +
+            "FROM product pr WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND start_date <= now() AND end_date > now())",
+            nativeQuery = true)
+    Boolean searchExists(String query, String tsquery);
+
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
             "FROM product pr INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
