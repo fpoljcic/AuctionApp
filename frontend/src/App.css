@@ -386,6 +386,14 @@ a:hover {
   color: var(--white);
 }
 
+.silver-nav-link {
+  color: var(--light-silver);
+}
+
+.silver-nav-link:hover {
+  color: var(--white);
+}
+
 .white-nav-link:hover {
   color: var(--light-silver);
 }

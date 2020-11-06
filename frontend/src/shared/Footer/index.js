@@ -15,13 +15,13 @@ const Footer = () => {
         <div className="footer-content-title">
           AUCTION
         </div>
-        <Link className="white-nav-link" to={aboutUrl}>
+        <Link className="silver-nav-link" to={aboutUrl}>
           About Us
         </Link>
-        <Link className="white-nav-link" to={termsUrl}>
+        <Link className="silver-nav-link" to={termsUrl}>
           Terms and Conditions
         </Link>
-        <Link className="white-nav-link" to={privacyUrl}>
+        <Link className="silver-nav-link" to={privacyUrl}>
           Privacy and Policy
         </Link>
       </div>
@@ -30,8 +30,8 @@ const Footer = () => {
         <div className="footer-content-title">
           GET IN TOUCH
         </div>
-        Call Us at +387 62-345-678
-        <a className="white-nav-link" target="_blank" rel="noopener noreferrer" href="mailto:support@auction.com">support@auction.com</a>
+        <a className="silver-nav-link" href="tel:+387 62-345-678">Call Us at +387 62-345-678</a>
+        <a className="silver-nav-link" target="_blank" rel="noopener noreferrer" href="mailto:support@auction.com">support@auction.com</a>
         <div className="socials-container">
           <a className="social-link" rel="noopener noreferrer" href="https://www.facebook.com/AtlantBH" target="_blank">
             <SiFacebook />
