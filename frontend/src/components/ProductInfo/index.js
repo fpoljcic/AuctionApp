@@ -97,6 +97,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                         size="xl-18"
                         type="text"
                         onChange={e => setBidPrice(e.target.value)}
+                        onKeyUp={e => e.key === 'Enter' ? handleBid() : null}
                     />
                     <div className="place-bid-label">
                         Enter ${minPrice} or more
