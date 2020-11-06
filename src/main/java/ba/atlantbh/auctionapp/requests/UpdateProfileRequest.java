@@ -36,6 +36,8 @@ public class UpdateProfileRequest {
     @Size(max = 32, message = "Phone can't be longer than 32 characters")
     private String phone;
 
+    private Boolean verified = false;
+
     private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
 
     @Valid

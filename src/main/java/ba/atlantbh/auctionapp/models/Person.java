@@ -56,6 +56,7 @@ public class Person {
     private LocalDateTime dateOfBirth;
     @Size(max = 32)
     private String phone;
+    private Boolean verified = false;
 
     private String street;
     private String city;
