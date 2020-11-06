@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { getIn } from 'formik';
 import { Form, Image } from 'react-bootstrap';
-import moment, { months } from 'moment';
-import { getNextYears } from 'utilities/date';
+import { getCurrentMonth, getCurrentYear, getNextYears, getMonth } from 'utilities/date';
 import { PayPalButton } from 'react-paypal-button-v2';
 import * as yup from 'yup';
 
@@ -147,7 +146,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     defaultValue={card.expirationYear || "Year"}
                                     name="card.expirationYear"
                                     onChange={(e) => {
-                                        setCurrentMonth(e.target.value === moment().year().toString() ? moment().month() : 0);
+                                        setCurrentMonth(parseInt(e.target.value) === getCurrentYear() ? getCurrentMonth() : 0);
                                         handleChange(e);
                                     }}
                                     size="xl-18"
@@ -175,7 +174,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 >
                                     <option value="Month" disabled hidden>Month</option>
                                     {[...Array(12 - currentMonth).keys()].map(x => (
-                                        <option key={x} value={currentMonth + x + 1}>{months(currentMonth + x)}</option>
+                                        <option key={x} value={currentMonth + x + 1}>{getMonth(currentMonth + x)}</option>
                                     ))}
                                 </Form.Control>
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">

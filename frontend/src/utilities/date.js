@@ -1,5 +1,12 @@
 import moment, { months } from "moment";
 
+export const longDateTimeFormat = "D MMMM YYYY [at] HH:mm";
+export const longDateFormat = "D MMMM YYYY";
+
+export const getMonth = (n) => {
+    return months(n);
+}
+
 export const getMonths = () => {
     return months();
 }
@@ -26,4 +33,20 @@ export const getDaysInMonth = (month, year) => {
     if (month == null || year == null)
         return 0;
     return moment(year + "-" + month, "YYYY-MM").daysInMonth();
+}
+
+export const getLongDate = (date) => {
+    return moment.utc(date).local().format(longDateFormat);
+}
+
+export const getCurrentYear = () => {
+    return moment().year();
+}
+
+export const getCurrentMonth = () => {
+    return moment().month();
+}
+
+export const getDurationBetweenDates = (date1, date2, trim) => {
+    return moment.duration(date2.diff(date1)).format("D [days] h [hours] m [minutes]", { trim: "all" });
 }

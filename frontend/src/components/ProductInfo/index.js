@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { RiHeartFill } from "react-icons/ri";
 import { IoIosArrowForward } from "react-icons/io";
+import { getDurationBetweenDates, longDateTimeFormat } from 'utilities/date';
 import moment from 'moment';
 
 import './productInfo.css';
@@ -50,12 +51,12 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
         if (moment().isBefore(productStartDate))
             return (
                 <>
-                    Time start: {productStartDate.local().format("D MMMM YYYY [at] HH:mm")}
+                    Time start: {productStartDate.local().format(longDateTimeFormat)}
                     <br />
-                    Time end: {productEndDate.local().format("D MMMM YYYY [at] HH:mm")}
+                    Time end: {productEndDate.local().format(longDateTimeFormat)}
                 </>
             );
-        const timeLeft = !active ? 0 : moment.duration(productEndDate.diff(moment())).format("D [days] h [hours] m [minutes]");
+        const timeLeft = !active ? 0 : getDurationBetweenDates(moment(), productEndDate);
         return (
             <>
                 Time left: {timeLeft}
