@@ -124,7 +124,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     ${bids[0] === undefined ? 0 : bids[0].price}
                 </span>
                 <br />
-                No bids: {bids.length}
+                No. bids: {bids.length}
                 <br />
                 {getTimeInfo()}
             </div>
