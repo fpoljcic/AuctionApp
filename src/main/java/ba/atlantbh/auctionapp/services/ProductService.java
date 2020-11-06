@@ -100,7 +100,12 @@ public class ProductService {
                 break;
         }
 
-        UUID id = JwtTokenUtil.getRequestPersonId();
+        UUID id = null;
+        try {
+            id = JwtTokenUtil.getRequestPersonId();
+        } catch (UnauthorizedException ignore) {
+
+        }
 
         String tsQuery = formTsQuery(query);
         Slice<SimpleProductProj> searchResult = productRepository.search(
@@ -214,7 +219,10 @@ public class ProductService {
     }
 
     private String formTsQuery(String query) {
-        return query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & ");
+        return query.replaceAll("[\\p{P}\\p{S}]", "")
+                .replaceAll("\\s+", " ")
+                .trim()
+                .replace(" ", " & ");
     }
 
     public UUID add(ProductRequest productRequest) {
