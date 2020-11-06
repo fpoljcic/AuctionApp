@@ -28,9 +28,9 @@ const ImageCardOverlay = ({ children, data, url }) => {
         }
         try {
             if (wished)
-                await removeWishlistProduct(personId, data.id);
+                await removeWishlistProduct(data.id);
             else
-                await wishlistProduct(personId, data.id);
+                await wishlistProduct(data.id);
             setWished(!wished);
         } catch (e) { }
         setLoadingWish(false);

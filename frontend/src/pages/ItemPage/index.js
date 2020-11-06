@@ -89,11 +89,11 @@ const ItemPage = ({ match, location }) => {
         }
         try {
             if (wished) {
-                await removeWishlistProduct(personId, product.id);
+                await removeWishlistProduct(product.id);
                 showMessage("success", "You have removed the product from your wishlist.");
             }
             else {
-                await wishlistProduct(personId, product.id);
+                await wishlistProduct(product.id);
                 showMessage("success", "You have added the product to your wishlist.");
             }
             setWished(!wished);

@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getIn } from 'formik';
 import { Form, Image } from 'react-bootstrap';
 import { getCurrentMonth, getCurrentYear, getNextYears, getMonth } from 'utilities/date';
 import { PayPalButton } from 'react-paypal-button-v2';
 import * as yup from 'yup';
 
-export const cardFormSchema = yup.object().shape({
-    name: yup.string()
-        .required("*Name is required")
-        .max(255, "*Name can't be longer than 255 characters"),
-    cardNumber: yup.string()
-        .required("*Card number is required")
-        .min(13, "*Card number must have at least 13 characters")
-        .max(19, "*Card number can't be longer than 19 characters")
-        .test("digits-only", "Card number can only contain digits", value => /^\d*$/.test(value)),
-    expirationYear: yup.number()
-        .required("*Expiration year is required"),
-    expirationMonth: yup.number()
-        .required("*Expiration month is required"),
-    cvc: yup.number()
-        .typeError("*CVC must be a number")
-        .required("*CVC is required")
-        .min(100, "*CVC must have at least 3 characters")
-        .max(9999, "*CVC can't be longer than 4 characters")
-});
+export const cardFormSchema = (initialCardNumber) => {
+    return yup.object().shape({
+        name: yup.string()
+            .required("*Name is required")
+            .max(255, "*Name can't be longer than 255 characters"),
+        cardNumber: yup.string()
+            .required("*Card number is required")
+            .min(13, "*Card number must have at least 13 characters")
+            .max(19, "*Card number can't be longer than 19 characters")
+            .test("digits-only", "Card number can only contain digits", value => value === initialCardNumber || /^\d*$/.test(value)),
+        expirationYear: yup.number()
+            .required("*Expiration year is required"),
+        expirationMonth: yup.number()
+            .required("*Expiration month is required"),
+        cvc: yup.number()
+            .typeError("*CVC must be a number")
+            .required("*CVC is required")
+            .min(100, "*CVC must have at least 3 characters")
+            .max(9999, "*CVC can't be longer than 4 characters")
+    });
+};
 
 export const payPalFormSchema = yup.object().shape({
     orderId: yup.string()
@@ -49,8 +51,23 @@ export const payPalInitialValues = (paypal) => {
 const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handleChange, touched, errors, price, setPayPal: setPayPalType, setFieldValue }) => {
 
     const [currentMonth, setCurrentMonth] = useState(0);
-    const [payPal, setPayPal] = useState(Object.keys(payPalObj).length !== 0 || false);
+    const [payPal, setPayPal] = useState(payPalObj !== undefined ? (Object.keys(payPalObj).length !== 0 || false) : false);
     const [creditCard, setCreditCard] = useState(payPalDisabled || Object.keys(card).length !== 0);
+    const [expirationYear, setExpirationYear] = useState(card.expirationYear || "Year");
+    const [expirationMonth, setExpirationMonth] = useState(card.expirationMonth || "Month");
+
+    useEffect(() => {
+        if (Object.keys(card).length === 0)
+            return;
+        setFieldValue("card.name", card.name);
+        setFieldValue("card.cardNumber", card.cardNumber);
+        setFieldValue("card.expirationYear", card.expirationYear);
+        setFieldValue("card.expirationMonth", card.expirationMonth);
+        setFieldValue("card.cvc", card.cvc);
+
+        setExpirationYear(card.expirationYear);
+        setExpirationMonth(card.expirationMonth);
+    }, [card, setFieldValue])
 
     return (
         <>
@@ -143,11 +160,12 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                             <Form.Group className="form-half-width">
                                 <Form.Label style={{ whiteSpace: 'nowrap' }}>Expiration Date</Form.Label>
                                 <Form.Control
-                                    defaultValue={card.expirationYear || "Year"}
+                                    value={expirationYear}
                                     name="card.expirationYear"
-                                    onChange={(e) => {
+                                    onChange={e => {
                                         setCurrentMonth(parseInt(e.target.value) === getCurrentYear() ? getCurrentMonth() : 0);
                                         handleChange(e);
+                                        setExpirationYear(e.target.value);
                                     }}
                                     size="xl-18"
                                     as="select"
@@ -165,9 +183,12 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
 
                             <Form.Group className="form-half-width">
                                 <Form.Control
-                                    defaultValue={card.expirationMonth || "Month"}
+                                    value={expirationMonth}
                                     name="card.expirationMonth"
-                                    onChange={handleChange}
+                                    onChange={e => {
+                                        handleChange(e);
+                                        setExpirationMonth(e.target.value);
+                                    }}
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationMonth') && getIn(errors, 'card.expirationMonth')}

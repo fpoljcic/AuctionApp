@@ -18,7 +18,7 @@ export const getNextYears = (n) => {
 
 export const getPastYears = (n) => {
     const year = moment().year();
-    return [...Array(n).keys()].map(x => year - x);
+    return [...Array(n).keys()].map(x => year - x - 1);
 }
 
 export const getDaysArrayInMonth = (month, year) => {

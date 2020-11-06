@@ -2,6 +2,7 @@ package ba.atlantbh.auctionapp.controllers;
 
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.responses.CardResponse;
+import ba.atlantbh.auctionapp.responses.EmptyResponse;
 import ba.atlantbh.auctionapp.services.CardService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,7 +23,11 @@ public class CardController {
     @ApiResponses(value = {
             @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
     })
-    public ResponseEntity<CardResponse> getCard() {
-        return ResponseEntity.ok(cardService.getCard());
+    public ResponseEntity<Object> getCard() {
+        CardResponse card = cardService.getCard();
+        if (card.getName() == null)
+            return ResponseEntity.ok(new EmptyResponse());
+        else
+            return ResponseEntity.ok(card);
     }
 }

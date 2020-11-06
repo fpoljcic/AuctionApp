@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import RequiredForm, { requiredFormInitialValues, requiredFormSchema } from 'components/Forms/RequiredForm';
 import { getUser } from 'utilities/localStorage';
 import { Button, Form, Image } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { toBase64 } from 'utilities/common';
+import { getCard } from 'api/card';
+import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
 import * as yup from 'yup';
 
 import './myAccountTabs.css';
@@ -17,9 +19,18 @@ const Profile = () => {
     const [imageSrc, setImageSrc] = useState(user.photo);
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [card, setCard] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setCard(await getCard());
+        }
+        fetchData();
+    }, [])
 
     const schema = yup.object().shape({
-        ...requiredFormSchema
+        ...requiredFormSchema,
+        card: cardFormSchema(card.cardNumber)
     });
 
     const handleSubmit = async (data) => {
@@ -41,7 +52,8 @@ const Profile = () => {
         <Formik
             validationSchema={schema}
             initialValues={{
-                ...requiredFormInitialValues(user)
+                ...requiredFormInitialValues(user),
+                card: cardFormInitialValues(card),
             }}
             onSubmit={handleSubmit}
         >
@@ -54,7 +66,7 @@ const Profile = () => {
                 setFieldValue
             }) => (
                     <Form noValidate onSubmit={handleSubmit}>
-                        <div style={{ width: '100%' }} className="tab-container">
+                        <div style={{ width: '100%', marginBottom: 40 }} className="tab-container">
                             <div style={{ justifyContent: 'flex-start' }} className="profile-tab-title">
                                 REQUIRED
                             </div>
@@ -85,8 +97,29 @@ const Profile = () => {
                                 </div>
                             </div>
                         </div>
+
+                        <div style={{ width: '100%', marginBottom: 40 }} className="tab-container">
+                            <div style={{ justifyContent: 'flex-start' }} className="profile-tab-title">
+                                CARD INFORMATION
+                            </div>
+                            <div className="profile-tab-content">
+                                <div className="profile-tab-picture" />
+
+                                <div className="profile-tab-form">
+                                    <CardForm
+                                        card={card}
+                                        payPalDisabled={true}
+                                        handleChange={handleChange}
+                                        touched={touched}
+                                        errors={errors}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <Button
-                            style={{ width: 243, marginTop: 40, marginLeft: 'calc(100% - 243px)' }}
+                            style={{ width: 243, marginLeft: 'calc(100% - 243px)' }}
                             size="xxl"
                             variant="transparent-black-shadow"
                             type="submit"
