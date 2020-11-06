@@ -8,7 +8,7 @@ INSERT INTO public.category (id, name) VALUES ('5763c435-6979-4f93-8762-d64d6590
 INSERT INTO public.category (id, name) VALUES ('cfbffcc5-65ca-4f07-8d6d-08a9df900d60', 'Accessories');
 INSERT INTO public.category (id, name) VALUES ('c124c8d2-3113-4bf2-8bde-5b014b19d741', 'Jewelry');
 INSERT INTO public.category (id, name) VALUES ('9e8678a6-e274-462a-9b7a-b93370721644', 'Shoes');
-INSERT INTO public.category (id, name) VALUES ('54697ae9-9804-4b29-9a6a-46b38ca1aabb', 'Sportware');
+INSERT INTO public.category (id, name) VALUES ('54697ae9-9804-4b29-9a6a-46b38ca1aabb', 'Sportswear');
 INSERT INTO public.category (id, name) VALUES ('efd8592b-fb09-4009-89f9-24e5b43028c7', 'Home');
 INSERT INTO public.category (id, name) VALUES ('90044706-12c4-4168-987e-6cd9e44b63bc', 'Electronics');
 INSERT INTO public.category (id, name) VALUES ('7e233590-92db-45c1-95a2-e5e9610536fb', 'Mobile');
