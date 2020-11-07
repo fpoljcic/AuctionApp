@@ -3,25 +3,26 @@ import { getIn } from 'formik';
 import { Form, Image } from 'react-bootstrap';
 import { getCurrentMonth, getCurrentYear, getNextYears, getMonth } from 'utilities/date';
 import { PayPalButton } from 'react-paypal-button-v2';
+import { MdClear } from 'react-icons/md';
 import * as yup from 'yup';
 
-export const cardFormSchema = (initialCardNumber) => {
+export const cardFormSchema = (notRequired, initialCardNumber) => {
     return yup.object().shape({
         name: yup.string()
-            .required("*Name is required")
+            .test("custom-required", "*Name is required", value => notRequired || value)
             .max(255, "*Name can't be longer than 255 characters"),
         cardNumber: yup.string()
-            .required("*Card number is required")
+            .test("custom-required", "*Card number is required", value => notRequired || value)
             .min(13, "*Card number must have at least 13 characters")
             .max(19, "*Card number can't be longer than 19 characters")
-            .test("digits-only", "Card number can only contain digits", value => value === initialCardNumber || /^\d*$/.test(value)),
+            .test("digits-only", "Card number can only contain digits", value => notRequired || value === initialCardNumber || /^\d*$/.test(value)),
         expirationYear: yup.number()
-            .required("*Expiration year is required"),
+            .test("custom-required", "*Expiration year is required", value => notRequired || value),
         expirationMonth: yup.number()
-            .required("*Expiration month is required"),
+            .test("custom-required", "*Expiration month is required", value => notRequired || value),
         cvc: yup.number()
             .typeError("*CVC must be a number")
-            .required("*CVC is required")
+            .test("custom-required", "*CVC is required", value => notRequired || value)
             .min(100, "*CVC must have at least 3 characters")
             .max(9999, "*CVC can't be longer than 4 characters")
     });
@@ -129,6 +130,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 defaultValue={card.name || ""}
                                 placeholder="e.g. Lionel Messi"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.name", "") : null}
                                 maxLength={255}
                                 isInvalid={getIn(touched, 'card.name') && getIn(errors, 'card.name')}
                             />
@@ -146,6 +148,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 defaultValue={card.cardNumber || ""}
                                 placeholder="e.g. 1234 5678 9876 5432"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.cardNumber", "") : null}
                                 maxLength={19}
                                 isInvalid={getIn(touched, 'card.cardNumber') && getIn(errors, 'card.cardNumber')}
                             />
@@ -156,9 +159,9 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                     </Form.Group>
 
                     <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-                        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'end' }} className="form-half-width">
+                        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'flex-end' }} className="form-half-width">
+                            <Form.Label style={{ width: '100%' }}>Expiration Date</Form.Label>
                             <Form.Group className="form-half-width">
-                                <Form.Label style={{ whiteSpace: 'nowrap' }}>Expiration Date</Form.Label>
                                 <Form.Control
                                     value={expirationYear}
                                     name="card.expirationYear"
@@ -176,6 +179,13 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                         <option key={year} value={year}>{year}</option>
                                     ))}
                                 </Form.Control>
+                                <MdClear
+                                    onClick={() => {
+                                        setFieldValue("card.expirationYear", "");
+                                        setExpirationYear("Year");
+                                    }}
+                                    className="select-clear"
+                                />
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationYear')}
                                 </Form.Control.Feedback>
@@ -198,6 +208,13 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                         <option key={x} value={currentMonth + x + 1}>{getMonth(currentMonth + x)}</option>
                                     ))}
                                 </Form.Control>
+                                <MdClear
+                                    onClick={() => {
+                                        setFieldValue("card.expirationMonth", "");
+                                        setExpirationMonth("Month");
+                                    }}
+                                    className="select-clear"
+                                />
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationMonth')}
                                 </Form.Control.Feedback>
@@ -213,6 +230,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 defaultValue={card.cvc || ""}
                                 placeholder="e.g. 1234"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.cvc", "") : null}
                                 maxLength={4}
                                 isInvalid={getIn(touched, 'card.cvc') && getIn(errors, 'card.cvc')}
                             />

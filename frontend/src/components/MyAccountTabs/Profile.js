@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import RequiredForm, { requiredFormInitialValues, requiredFormSchema } from 'components/Forms/RequiredForm';
+import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
+import OptionalForm, { optionalFormInitialValues, optionalFormSchema } from 'components/Forms/OptionalForm';
 import { getUser } from 'utilities/localStorage';
 import { Button, Form, Image } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { toBase64 } from 'utilities/common';
 import { getCard } from 'api/card';
-import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
 import * as yup from 'yup';
 
 import './myAccountTabs.css';
@@ -20,6 +21,7 @@ const Profile = () => {
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [card, setCard] = useState({});
+    const [cardEmpty, setCardEmpty] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,7 +32,12 @@ const Profile = () => {
 
     const schema = yup.object().shape({
         ...requiredFormSchema,
-        card: cardFormSchema(card.cardNumber)
+        card: cardFormSchema(cardEmpty, card.cardNumber)
+            .test("card-empty", "", card => {
+                setCardEmpty(Object.keys(card).every(prop => card[prop] === undefined));
+                return true;
+            }),
+        ...optionalFormSchema
     });
 
     const handleSubmit = async (data) => {
@@ -54,6 +61,7 @@ const Profile = () => {
             initialValues={{
                 ...requiredFormInitialValues(user),
                 card: cardFormInitialValues(card),
+                ...optionalFormInitialValues(user)
             }}
             onSubmit={handleSubmit}
         >
@@ -112,6 +120,25 @@ const Profile = () => {
                                         handleChange={handleChange}
                                         touched={touched}
                                         errors={errors}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ width: '100%', marginBottom: 40 }} className="tab-container">
+                            <div style={{ justifyContent: 'flex-start' }} className="profile-tab-title">
+                                OPTIONAL
+                            </div>
+                            <div className="profile-tab-content">
+                                <div className="profile-tab-picture" />
+
+                                <div className="profile-tab-form">
+                                    <OptionalForm
+                                        handleChange={handleChange}
+                                        touched={touched}
+                                        errors={errors}
+                                        values={values}
                                         setFieldValue={setFieldValue}
                                     />
                                 </div>

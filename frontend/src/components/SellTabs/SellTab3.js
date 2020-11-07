@@ -45,7 +45,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
             .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
         shipping: yup.bool(),
         featured: yup.bool(),
-        card: !payPal && (shipping || featured) ? cardFormSchema(null) : null,
+        card: !payPal && (shipping || featured) ? cardFormSchema(false, null) : null,
         payPal: payPal ? payPalFormSchema : null
     });
 
