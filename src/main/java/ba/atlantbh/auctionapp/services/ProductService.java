@@ -222,7 +222,7 @@ public class ProductService {
         return query.replaceAll("[\\p{P}\\p{S}]", "")
                 .replaceAll("\\s+", " ")
                 .trim()
-                .replace(" ", " & ");
+                .replace(" ", " | ");
     }
 
     public UUID add(ProductRequest productRequest) {

@@ -93,7 +93,7 @@ const Shop = () => {
                 newFilter.minPrice, newFilter.maxPrice, newFilter.color, newFilter.size));
             setProducts(data.products);
             setLastPage(data.lastPage);
-            if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
+            if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query.trim() !== data.didYouMean) {
                 showMessage("warning", (
                     <>
                         Did you mean?

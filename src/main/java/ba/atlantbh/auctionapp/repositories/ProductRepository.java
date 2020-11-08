@@ -66,7 +66,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
@@ -82,7 +82,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT EXISTS(SELECT 1 " +
             "FROM product pr WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND start_date <= now() AND end_date > now())",
             nativeQuery = true)
     Boolean searchExists(String query, String tsquery);
@@ -91,7 +91,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "FROM product pr INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
             "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
             "AND (case when :color = '' then true else pr.color = :color end) " +
@@ -107,7 +107,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
@@ -123,7 +123,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
@@ -142,7 +142,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
             "AND (case when :color = '' then true else pr.color = :color end) " +
