@@ -42,7 +42,7 @@ const Dropzone = ({ onDrop, accept, images, setImages }) => {
             <input className="dropzone-input" {...getInputProps()} />
             <div className="dropzone-content">
                 <DndProvider backend={backendForDND}>
-                    <ImageGrid images={images} moveImage={moveImage} />
+                    <ImageGrid images={images} setImages={setImages} moveImage={moveImage} />
                 </DndProvider>
                 <div style={{ margin: 'auto 10px' }}>
                     {isDragActive ? (

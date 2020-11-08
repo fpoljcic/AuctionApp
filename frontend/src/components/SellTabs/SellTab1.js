@@ -7,6 +7,7 @@ import { myAccountSellerUrl } from 'utilities/appUrls';
 import SubmitButtons from './SubmitButtons';
 import Dropzone from "components/Dropzone";
 import { uploadImage } from 'api/image';
+import { v4 as uuid } from 'uuid';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
@@ -80,7 +81,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
             reader.onload = function (e) {
                 setPhotos(prevState => [
                     ...prevState,
-                    { src: e.target.result, file }
+                    { src: e.target.result, file, id: uuid() }
                 ]);
             };
             reader.readAsDataURL(file);

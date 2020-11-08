@@ -24,9 +24,11 @@
   --strong-green: #6CC047;
   --pale-purple: #C4BFD6;
   --white: #FFF;
+  --red: #FF0000;
   --black-a: rgba(0, 0, 0, 0.11);
   --black-a-2: rgba(0, 0, 0, 0.05);
   --black-a-3: rgba(0, 0, 0, 0.08);
+  --black-a-4: rgba(0, 0, 0, 0.75);
   --nero: #252525;
 }
 
@@ -56,9 +58,11 @@
   --strong-green: #6CC047;
   --pale-purple: #C4BFD6;
   --white: #FFF;
+  --red: #FF0000;
   --black-a: rgba(0, 0, 0, 0.11);
   --black-a-2: rgba(0, 0, 0, 0.05);
   --black-a-3: rgba(0, 0, 0, 0.08);
+  --black-a-4: rgba(0, 0, 0, 0.75);
   --nero: #0e0e0e;
 }
 
