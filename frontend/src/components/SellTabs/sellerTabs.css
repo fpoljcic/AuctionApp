@@ -34,6 +34,7 @@
 }
 
 .sell-form-margin {
+    position: relative;
     margin-bottom: 30px;
 }
 
