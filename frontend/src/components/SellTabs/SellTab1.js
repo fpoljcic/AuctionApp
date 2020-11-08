@@ -68,7 +68,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
             setLoading(false);
             setProduct({ ...product, ...data, photos: newPhotos });
             setActiveTab(1);
-        } catch (e) { 
+        } catch (e) {
             setLoading(false);
         }
     }
@@ -193,6 +193,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         isInvalid={touched.description && errors.description}
                                         maxLength={700}
                                         rows={5}
+                                        style={{ maxHeight: 700 }}
                                     />
                                     <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                         {errors.description}
