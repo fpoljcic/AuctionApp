@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from 'api/auth';
 import { setSession } from 'utilities/localStorage';
-import { loginUrl, myAccountUrl } from 'utilities/appUrls';
+import { loginUrl, myAccountUrl, privacyUrl, termsUrl } from 'utilities/appUrls';
 import { useAlertContext, useBreadcrumbContext, useUserContext } from 'AppContext';
 import * as yup from 'yup';
 
@@ -41,6 +41,8 @@ const Register = () => {
             .min(8, "*Password must have at least 8 characters")
             .max(255, "*Password can't be longer than 255 characters")
             .required("*Password is required"),
+        agreement: yup.bool()
+            .oneOf([true], "*Plese accept our terms")
     });
 
     const handleSubmit = async (user) => {
@@ -66,7 +68,7 @@ const Register = () => {
             </div>
             <Formik
                 validationSchema={schema}
-                initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
+                initialValues={{ firstName: "", lastName: "", email: "", password: "", agreement: false }}
                 onSubmit={handleSubmit}
             >
                 {({
@@ -137,6 +139,35 @@ const Register = () => {
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.password}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Check
+                                    custom
+                                    type="checkbox"
+                                    id="custom-agreement-checkbox"
+                                    label={
+                                        <>
+                                            By clicking register you agree to our
+                                            {' '}
+                                            <Link rel="noopener noreferrer" target="_blank" style={{ display: 'inline', padding: 0 }} className="purple-nav-link nav-link" to={privacyUrl}>
+                                                Privacy Policy
+                                            </Link>
+                                            {' '}
+                                            and
+                                            {' '}
+                                            <Link rel="noopener noreferrer" target="_blank" style={{ display: 'inline', padding: 0 }} className="purple-nav-link nav-link" to={termsUrl}>
+                                                Terms and Conditions
+                                            </Link>
+                                            .
+                                        </>
+                                    }
+                                    name="agreement"
+                                    onChange={handleChange}
+                                />
+                                <Form.Control.Feedback style={{ textAlign: 'left' }} className={touched.agreement && errors.agreement ? "d-block" : null} type="invalid">
+                                    {errors.agreement}
                                 </Form.Control.Feedback>
                             </Form.Group>
 
