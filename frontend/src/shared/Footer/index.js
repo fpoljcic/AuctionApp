@@ -22,7 +22,7 @@ const Footer = () => {
           Terms and Conditions
         </Link>
         <Link className="silver-nav-link" to={privacyUrl}>
-          Privacy and Policy
+          Privacy Policy
         </Link>
       </div>
 
