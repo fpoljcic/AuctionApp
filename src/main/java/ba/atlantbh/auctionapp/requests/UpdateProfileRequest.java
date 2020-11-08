@@ -38,12 +38,12 @@ public class UpdateProfileRequest {
 
     private Boolean verified = false;
 
-    private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
+    private String photo;
 
     @Valid
     private CardRequest card;
 
-    @Size(max = 255, message = "Address can't be longer than 255 characters")
+    @Size(max = 255, message = "Street can't be longer than 255 characters")
     private String street;
 
     @Size(max = 255, message = "Country can't be longer than 255 characters")

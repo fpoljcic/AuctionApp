@@ -7,6 +7,7 @@ import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.repositories.CardRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
+import ba.atlantbh.auctionapp.requests.CardRequest;
 import ba.atlantbh.auctionapp.requests.LoginRequest;
 import ba.atlantbh.auctionapp.requests.RegisterRequest;
 import ba.atlantbh.auctionapp.requests.UpdateProfileRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -58,17 +60,46 @@ public class PersonService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        if (updateProfileRequest.getCard() != null) {
+        if (!person.getEmail().equals(updateProfileRequest.getEmail())
+                && personRepository.existsByEmail(updateProfileRequest.getEmail()))
+            throw new ConflictException("Email already in use");
+        updateCard(updateProfileRequest.getCard(), person);
+        updateMapper.updatePerson(updateProfileRequest, person);
+        setBlankPropsToNull(person);
+        Person savedPerson = personRepository.save(person);
+        savedPerson.setPassword(null);
+        return savedPerson;
+    }
+
+    private void updateCard(CardRequest updatedCard, Person person) {
+        if (updatedCard != null) {
             Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
             String maskedCardNumber = card.getMaskedCardNumber();
-            if (maskedCardNumber != null && maskedCardNumber.equals(updateProfileRequest.getCard().getCardNumber()))
-                updateProfileRequest.getCard().setCardNumber(card.getCardNumber());
-            else if (!updateProfileRequest.getCard().getCardNumber().matches("^(\\d*)$"))
+            if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
+                updatedCard.setCardNumber(card.getCardNumber());
+            else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
                 throw new BadRequestException("Card number can only contain digits");
-            updateMapper.updateCard(updateProfileRequest.getCard(), card);
+            updateMapper.updateCard(updatedCard, card);
             cardRepository.save(card);
+        } else {
+            List<Card> cards = cardRepository.findAllByPersonId(person.getId());
+            for (Card card : cards) {
+                card.setPerson(null);
+                cardRepository.save(card);
+            }
         }
-        updateMapper.updatePerson(updateProfileRequest, person);
-        return personRepository.save(person);
+    }
+
+    private void setBlankPropsToNull(Person person) {
+        if (person.getStreet().equals(""))
+            person.setStreet(null);
+        if (person.getCountry().equals(""))
+            person.setCountry(null);
+        if (person.getCity().equals(""))
+            person.setCity(null);
+        if (person.getState().equals(""))
+            person.setState(null);
+        if (person.getZip().equals(""))
+            person.setZip(null);
     }
 }

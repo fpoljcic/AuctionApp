@@ -3,16 +3,21 @@ import { Formik } from 'formik';
 import RequiredForm, { requiredFormInitialValues, requiredFormSchema } from 'components/Forms/RequiredForm';
 import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
 import OptionalForm, { optionalFormInitialValues, optionalFormSchema } from 'components/Forms/OptionalForm';
-import { getUser } from 'utilities/localStorage';
-import { Button, Form, Image } from 'react-bootstrap';
+import { getUser, setUser } from 'utilities/localStorage';
+import { Button, Form, Image, Spinner } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { toBase64 } from 'utilities/common';
+import { getDate } from 'utilities/date';
 import { getCard } from 'api/card';
+import { uploadImage } from 'api/image';
+import { updateUser } from 'api/auth';
+import { useAlertContext } from 'AppContext';
 import * as yup from 'yup';
 
 import './myAccountTabs.css';
 
 const Profile = () => {
+    const { showMessage } = useAlertContext();
 
     const user = getUser();
     const inputFile = useRef(null);
@@ -20,12 +25,15 @@ const Profile = () => {
     const [imageSrc, setImageSrc] = useState(user.photo);
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [card, setCard] = useState({});
     const [cardEmpty, setCardEmpty] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
-            setCard(await getCard());
+            try {
+                setCard(await getCard());
+            } catch (e) { }
         }
         fetchData();
     }, [])
@@ -40,8 +48,27 @@ const Profile = () => {
         ...optionalFormSchema
     });
 
+    const deleteProperties = (userData) => {
+        delete userData.day;
+        delete userData.month;
+        delete userData.year;
+        if (cardEmpty)
+            delete userData.card;
+    }
+
     const handleSubmit = async (data) => {
-        console.log(data)
+        setUploading(true);
+        const userData = { ...data };
+        userData.dateOfBirth = getDate(data.day, data.month, data.year);
+        deleteProperties(userData);
+        try {
+            if (imageFile !== null)
+                userData.photo = await uploadImage(imageFile);
+            const newUser = await updateUser(userData);
+            setUser(newUser);
+            showMessage("success", "You have successfully updated your profile info!");
+        } catch (e) { }
+        setUploading(false);
     }
 
     const uploadFile = async (e) => {
@@ -88,7 +115,7 @@ const Profile = () => {
                                         onClick={() => inputFile.current.click()}
                                         disabled={loading}
                                     >
-                                        CHANGE PHOTO
+                                        {loading ? "LOADING" : "CHANGE PHOTO"}
                                     </Button>
                                     <input onChange={uploadFile} accept="image/*" type="file" ref={inputFile} style={{ display: 'none' }} />
                                 </div>
@@ -150,9 +177,19 @@ const Profile = () => {
                             size="xxl"
                             variant="transparent-black-shadow"
                             type="submit"
+                            disabled={uploading}
                         >
-                            SAVE INFO
-                            <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                            {uploading ? (
+                                <>
+                                    SAVING
+                                    <Spinner className="text-spinner" animation="border" />
+                                </>
+                            ) : (
+                                    <>
+                                        SAVE INFO
+                                        <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                                    </>
+                                )}
                         </Button>
                     </Form>
                 )

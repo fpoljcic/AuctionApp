@@ -55,17 +55,21 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
 
     const handleSubmit = async (data) => {
         setLoading(true);
-        const newPhotos = await Promise.all(photos.map(async (photo, index) => {
-            if (photo.url !== undefined)
+        try {
+            const newPhotos = await Promise.all(photos.map(async (photo) => {
+                if (photo.url !== undefined)
+                    return photo;
+                setUploading(true);
+                photo.url = await uploadImage(photo.file);
                 return photo;
-            setUploading(true);
-            photo.url = await uploadImage(photo.file);
-            return photo;
-        }));
-        setPhotos(newPhotos);
-        setLoading(false);
-        setProduct({ ...product, ...data, photos: newPhotos });
-        setActiveTab(1);
+            }));
+            setPhotos(newPhotos);
+            setLoading(false);
+            setProduct({ ...product, ...data, photos: newPhotos });
+            setActiveTab(1);
+        } catch (e) { 
+            setLoading(false);
+        }
     }
 
     const onDrop = useCallback(acceptedFiles => {

@@ -74,8 +74,13 @@ const RequiredForm = ({ initialPhoneNumber, handleChange, touched, errors, value
         setLoading(true);
         let country = countryCode;
         if (country === null) {
-            country = (await getGeoInfo()).country_code;
-            setCountryCode(country);
+            try {
+                country = (await getGeoInfo()).country_code;
+                setCountryCode(country);
+            } catch (e) {
+                setLoading(false);
+                return;
+            }
         }
         const isValid = validPhoneNumber(phone, country, true);
         setVerified(isValid);

@@ -47,6 +47,10 @@ export const getCurrentMonth = () => {
     return moment().month();
 }
 
-export const getDurationBetweenDates = (date1, date2, trim) => {
+export const getDurationBetweenDates = (date1, date2) => {
     return moment.duration(date2.diff(date1)).format("D [days] h [hours] m [minutes]", { trim: "all" });
+}
+
+export const getDate = (day, month, year) => {
+    return moment().set({ "date": day, "month": month, "year": year }).toDate();
 }

@@ -52,6 +52,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+            @ApiResponse(code = 409, message = "Conflict", response = ConflictException.class),
     })
     public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
         return ResponseEntity.ok(personService.update(updateProfileRequest));
