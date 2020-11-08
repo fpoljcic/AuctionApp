@@ -44,11 +44,11 @@ export const validToken = () => {
     return Date.now() < exp * 1000;
 }
 
-export const scrollToTop = () => {
+export const scrollToTop = (smooth) => {
     window.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'smooth'
+        behavior: smooth ? 'smooth' : 'auto'
     });
 }
 

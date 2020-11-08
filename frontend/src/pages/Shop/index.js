@@ -41,7 +41,7 @@ const Shop = () => {
         setLoading(true);
         const fromLandingPage = history.location.state != null && history.location.state.fromLandingPage;
         if (fromLandingPage)
-            scrollToTop();
+            scrollToTop(true);
         formBreadcrumb(fromLandingPage);
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])

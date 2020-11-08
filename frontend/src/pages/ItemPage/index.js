@@ -30,7 +30,7 @@ const ItemPage = ({ match, location }) => {
 
     useEffect(() => {
         formBreadcrumb();
-        scrollToTop();
+        scrollToTop(true);
         const fetchData = async () => {
             const productId = match.params.id;
             try {

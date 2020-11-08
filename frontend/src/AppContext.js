@@ -35,7 +35,7 @@ export const AppProvider = ({ children }) => {
     axios.interceptors.response.use((response) => response, handleError);
 
     const showMessage = (variant, message) => {
-        scrollToTop();
+        scrollToTop(true);
         setVariant(variant);
         setMessage(message);
         setAlertVisible(true);
