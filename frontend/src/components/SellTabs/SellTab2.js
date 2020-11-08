@@ -45,6 +45,13 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
         return getDurationBetweenDates(productStartDate, productEndDate);
     }
 
+    const handlStartPrice = (e, handleChange) => {
+        if (isNaN(e.target.value))
+            handleChange(e);
+        e.target.value = e.target.value.replace(/(\.\d{2})\d+/, '$1');
+        handleChange(e);
+    }
+
     return (
         <div className="tab-container">
             <div className="tab-title">
@@ -81,7 +88,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                             size="xl-18"
                                             name="startPrice"
                                             defaultValue={product.startPrice || ""}
-                                            onChange={handleChange}
+                                            onChange={e => handlStartPrice(e, handleChange)}
                                             maxLength={9}
                                             isInvalid={touched.startPrice && errors.startPrice}
                                         />

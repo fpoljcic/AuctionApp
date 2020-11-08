@@ -77,6 +77,12 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
         setLoadingWish(false);
     }
 
+    const handleBidPrice = (price) => {
+        if (isNaN(price))
+            setBidPrice(price);
+        setBidPrice(price.replace(/(\.\d{2})\d+/, '$1'));
+    }
+
     return (
         <div className="product-info-container">
             <div>
@@ -96,7 +102,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                         className="form-control-gray place-bid-form"
                         size="xl-18"
                         type="text"
-                        onChange={e => setBidPrice(e.target.value)}
+                        onChange={e => handleBidPrice(e.target.value)}
                         onKeyUp={e => e.key === 'Enter' ? handleBid() : null}
                     />
                     <div className="place-bid-label">
