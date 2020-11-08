@@ -30,7 +30,7 @@ export const cardFormSchema = (notRequired, initialCardNumber) => {
 
 export const payPalFormSchema = yup.object().shape({
     orderId: yup.string()
-        .required("*Finnish the payment checkout with PayPal")
+        .required("*Finish the payment checkout with PayPal")
 });
 
 export const cardFormInitialValues = (card) => {
@@ -76,7 +76,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                 custom
                 type="checkbox"
                 id="custom-paypal-checkbox"
-                label="Pay Pal"
+                label="PayPal"
                 name="payPal"
                 checked={payPal}
                 onChange={e => {
