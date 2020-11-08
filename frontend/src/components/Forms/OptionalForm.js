@@ -65,6 +65,7 @@ const OptionalForm = ({ handleChange, touched, errors, values, setFieldValue }) 
                         size="lg-18"
                         as="select"
                         isInvalid={touched.country && errors.country}
+                        style={{ paddingRight: 66 }}
                     >
                         <option value="Select Country" disabled hidden>Select Country</option>
                         {countries.map(country => (
@@ -94,6 +95,7 @@ const OptionalForm = ({ handleChange, touched, errors, values, setFieldValue }) 
                         size="lg-18"
                         as="select"
                         isInvalid={touched.city && errors.city}
+                        style={{ paddingRight: 66 }}
                     >
                         <option value="Select City" hidden>Select City</option>
                         {citiesByCountry(country).map(city => (

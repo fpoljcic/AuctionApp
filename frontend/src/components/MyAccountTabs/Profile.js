@@ -107,11 +107,11 @@ const Profile = () => {
                             </div>
                             <div className="profile-tab-content">
                                 <div className="profile-tab-picture">
-                                    <Image src={imageSrc} width="100%" style={{ maxHeight: '20vw' }} />
+                                    <Image src={imageSrc} className="profile-img" />
                                     <Button
                                         size="lg-2"
                                         variant="transparent-black-shadow-disabled"
-                                        style={{ width: '100%', marginTop: 10 }}
+                                        style={{ width: '100%', marginTop: 10, marginBottom: 10 }}
                                         onClick={() => inputFile.current.click()}
                                         disabled={loading}
                                     >

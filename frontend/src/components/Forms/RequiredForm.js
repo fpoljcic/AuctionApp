@@ -6,6 +6,8 @@ import { BirthDateForm } from './BirthDateForm';
 import { getGeoInfo } from 'api/geo';
 import { validPhoneNumber } from 'utilities/common';
 
+import './forms.css';
+
 export const requiredFormSchema = {
     firstName: yup.string()
         .min(2, "*First name must have at least 2 characters")
@@ -133,7 +135,7 @@ const RequiredForm = ({ initialPhoneNumber, handleChange, touched, errors, value
                 </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group style={{ width: '50%' }}>
+            <Form.Group className="gender-select">
                 <Form.Label>I am</Form.Label>
                 <Form.Control
                     defaultValue={values.gender || "Gender"}

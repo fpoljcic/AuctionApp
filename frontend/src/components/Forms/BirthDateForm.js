@@ -2,10 +2,12 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import { getDaysArrayInMonth, getDaysInMonth, getMonths, getPastYears } from 'utilities/date';
 
+import './forms.css';
+
 export const BirthDateForm = ({ handleChange, touched, values, errors, setFieldValue }) => (
     <Form.Group>
         <Form.Label>Date of Birth</Form.Label>
-        <div style={{ display: 'flex', width: '70%' }}>
+        <div className="dob-container">
             <Form.Control
                 defaultValue={values.month || -1}
                 name="month"
@@ -17,7 +19,7 @@ export const BirthDateForm = ({ handleChange, touched, values, errors, setFieldV
                 size="lg-18"
                 as="select"
                 isInvalid={touched.month && errors.month}
-                style={{ width: '40%', marginRight: 20 }}
+                className="dob-month"
             >
                 <option value={-1} disabled hidden>Month</option>
                 {getMonths().map((month, i) => (
@@ -32,7 +34,7 @@ export const BirthDateForm = ({ handleChange, touched, values, errors, setFieldV
                 size="lg-18"
                 as="select"
                 isInvalid={touched.day && errors.day}
-                style={{ width: '20%', marginRight: 20 }}
+                className="dob-day"
             >
                 <option value={-1} disabled hidden>Day</option>
                 {getDaysArrayInMonth(parseInt(values.month) + 1, values.year).map(day => (
@@ -51,7 +53,7 @@ export const BirthDateForm = ({ handleChange, touched, values, errors, setFieldV
                 size="lg-18"
                 as="select"
                 isInvalid={touched.year && errors.year}
-                style={{ width: '40%' }}
+                className="dob-year"
             >
                 <option value={-1} disabled hidden>Year</option>
                 {getPastYears(100).map(year => (
@@ -59,18 +61,18 @@ export const BirthDateForm = ({ handleChange, touched, values, errors, setFieldV
                 ))}
             </Form.Control>
         </div>
-        <div style={{ display: 'flex', width: '70%' }}>
-            <div style={{ width: '40%', marginRight: 20 }}>
+        <div className="dob-container">
+            <div className="dob-month">
                 <Form.Control.Feedback className={touched.month && errors.month ? "d-block" : null} type="invalid">
                     {errors.month}
                 </Form.Control.Feedback>
             </div>
-            <div style={{ width: '20%', marginRight: 20 }}>
+            <div className="dob-day">
                 <Form.Control.Feedback className={touched.day && errors.day ? "d-block" : null} type="invalid">
                     {errors.day}
                 </Form.Control.Feedback>
             </div>
-            <div style={{ width: '40%' }}>
+            <div className="dob-year">
                 <Form.Control.Feedback className={touched.year && errors.year ? "d-block" : null} type="invalid">
                     {errors.year}
                 </Form.Control.Feedback>

@@ -210,6 +210,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={color}
                                             size="xl-18"
                                             as="select"
+                                            style={{ paddingRight: 66 }}
                                         >
                                             <option value="Select Color" disabled hidden>Select Color</option>
                                             {colors.map(color => (
@@ -235,6 +236,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={size}
                                             size="xl-18"
                                             as="select"
+                                            style={{ paddingRight: 66 }}
                                         >
                                             <option value="Select Size" disabled hidden>Select Size</option>
                                             {sizes.map(size => (

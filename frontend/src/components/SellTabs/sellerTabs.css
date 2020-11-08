@@ -45,7 +45,7 @@
     position: absolute;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1199px) {
     .form-half-width {
         width: 100%;
         position: relative;

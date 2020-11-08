@@ -173,6 +173,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationYear') && getIn(errors, 'card.expirationYear')}
+                                    style={{ paddingRight: 66 }}
                                 >
                                     <option value="Year" disabled hidden>Year</option>
                                     {getNextYears(10).map(year => (
@@ -202,6 +203,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationMonth') && getIn(errors, 'card.expirationMonth')}
+                                    style={{ paddingRight: 66 }}
                                 >
                                     <option value="Month" disabled hidden>Month</option>
                                     {[...Array(12 - currentMonth).keys()].map(x => (

@@ -62,7 +62,10 @@ const Header = () => {
                         (
                             <>
                                 <Image style={{ marginRight: '0.5rem' }} roundedCircle className="avatar-image-tiny" src={user.photo} />
-                                {user.firstName + ' ' + user.lastName + ' |'}
+                                <div className="top-header-username">
+                                    {user.firstName + ' ' + user.lastName}
+                                </div>
+                                |
                                 <Link style={{ paddingRight: 0, paddingLeft: 5 }} className="white-nav-link nav-link" onClick={handleLogout} to={homeUrl}>
                                     Log out
                                 </Link>

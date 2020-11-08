@@ -6,6 +6,7 @@ import SubmitButtons from './SubmitButtons';
 import { countries, citiesByCountry, callCodeForCountry, validPhoneNumber } from 'utilities/common';
 import CardForm, { cardFormSchema, payPalFormSchema, cardFormInitialValues, payPalInitialValues } from 'components/Forms/CardForm';
 import { productUrl } from 'utilities/appUrls';
+import { getCard } from 'api/card';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
@@ -19,10 +20,25 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
     const [featured, setFeatured] = useState(product.featured || false);
     const [payPal, setPayPal] = useState(product.payPal !== undefined);
     const [loading, setLoading] = useState(false);
+    const [initialCardNumber, setInitialCardNumber] = useState(null);
 
     useEffect(() => {
         setCallCode(callCodeForCountry(country));
     }, [country])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const card = await getCard();
+                if (Object.keys(card).length !== 0) {
+                    setProduct({ ...product, card });
+                    setInitialCardNumber(card.cardNumber);
+                }
+            } catch (e) { }
+        }
+        fetchData();
+        // eslint-disable-next-line
+    }, [])
 
     const schema = yup.object().shape({
         street: yup.string()
@@ -45,7 +61,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
             .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
         shipping: yup.bool(),
         featured: yup.bool(),
-        card: !payPal && (shipping || featured) ? cardFormSchema(false, null) : null,
+        card: !payPal && (shipping || featured) ? cardFormSchema(false, initialCardNumber) : null,
         payPal: payPal ? payPalFormSchema : null
     });
 

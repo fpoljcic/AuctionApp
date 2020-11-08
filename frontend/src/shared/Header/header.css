@@ -12,6 +12,13 @@
     padding-left: 11.1%;
 }
 
+.top-header-username {
+    max-width: 40vw;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
 .bottom-header-container {
     display: flex;
     justify-content: space-between;
@@ -75,6 +82,9 @@
 }
 
 @media (max-width: 575px) {
+    .top-header-username {
+        max-width: 20vw;
+    }
     .top-header-nav-links .nav-link {
         padding: 0.25rem 0.5rem;
     }

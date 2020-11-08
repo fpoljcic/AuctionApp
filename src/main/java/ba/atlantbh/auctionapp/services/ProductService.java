@@ -246,7 +246,7 @@ public class ProductService {
         if (cardRequest != null && payPalRequest != null)
             throw new BadRequestException("Conflicting payment details");
 
-        Card card = getAndSaveCard(cardRequest);
+        Card card = getAndSaveCard(cardRequest, person.getId());
         PayPal payPal = getAndSavePayPal(payPalRequest);
 
         Product product = new Product(
@@ -275,15 +275,25 @@ public class ProductService {
         return savedProduct.getId();
     }
 
-    private Card getAndSaveCard(CardRequest cardRequest) {
+    private Card getAndSaveCard(CardRequest cardRequest, UUID personId) {
         Card card = null;
         if (cardRequest != null) {
             if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
-            if (!cardRequest.getCardNumber().matches("^(\\d*)$"))
-                throw new BadRequestException("Card number can only contain digits");
+            if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
+                List<Card> cards = cardRepository.findAllByPersonId(personId);
+                if (cards.isEmpty() || !cards.get(0).getMaskedCardNumber().equals(cardRequest.getCardNumber()))
+                    throw new BadRequestException("Card number can only contain digits");
+                Card existingCard = cards.get(0);
+                if (!existingCard.getName().equals(cardRequest.getName()) ||
+                        !existingCard.getExpirationYear().equals(cardRequest.getExpirationYear()) ||
+                        !existingCard.getExpirationMonth().equals(cardRequest.getExpirationMonth()) ||
+                        !existingCard.getCvc().equals(cardRequest.getCvc()))
+                    throw new BadRequestException("Wrong card info");
+                return existingCard;
+            }
             card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),
