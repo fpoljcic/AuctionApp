@@ -1,3 +1,7 @@
+:root {
+  --arrow: #573BAC;
+}
+
 .purple-theme {
   --primary-background: #FFF;
   --secondary-background: #FAFAFA;
