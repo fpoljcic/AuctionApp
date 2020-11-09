@@ -1,34 +1,48 @@
 package ba.atlantbh.auctionapp.services;
 
+import ba.atlantbh.auctionapp.exceptions.BadGatewayException;
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
 import ba.atlantbh.auctionapp.exceptions.ConflictException;
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
+import ba.atlantbh.auctionapp.models.Token;
 import ba.atlantbh.auctionapp.repositories.CardRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
-import ba.atlantbh.auctionapp.requests.CardRequest;
-import ba.atlantbh.auctionapp.requests.LoginRequest;
-import ba.atlantbh.auctionapp.requests.RegisterRequest;
-import ba.atlantbh.auctionapp.requests.UpdateProfileRequest;
+import ba.atlantbh.auctionapp.repositories.TokenRepository;
+import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import ba.atlantbh.auctionapp.utilities.UpdateMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-@AllArgsConstructor
+import static ba.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsString;
+
+@RequiredArgsConstructor
 @Service
 public class PersonService {
 
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
+    private final TokenRepository tokenRepository;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final UpdateMapper updateMapper;
+
+    private String hostUrl;
+
+    @Value("${app.hostUrl}")
+    public void setHostUrl(String hostUrl) {
+        this.hostUrl = hostUrl;
+    }
 
     public Person register(RegisterRequest registerRequest) {
         if (personRepository.existsByEmail(registerRequest.getEmail()))
@@ -102,4 +116,29 @@ public class PersonService {
         if (person.getZip().equals(""))
             person.setZip(null);
     }
+
+    public String forgotPassword(ForgotPassRequest forgotPassRequest) {
+        String message = "We sent you an email with a confirmation link. " +
+                "It will be active in the next 24 hours.";
+        Optional<Person> personOptional = personRepository.findByEmail(forgotPassRequest.getEmail());
+        if (personOptional.isEmpty())
+            return message;
+        Person person = personOptional.get();
+        UUID uuid = UUID.randomUUID();
+        String body = formEmailBody(hostUrl, uuid);
+        try {
+            emailService.sendMail(person.getEmail(), "Forgot password", body);
+        } catch (MessagingException e) {
+            throw new BadGatewayException("We have issues sending you an email");
+        }
+        Token token = new Token(uuid, person);
+        tokenRepository.save(token);
+        return message;
+    }
+
+    private String formEmailBody(String hostUrl, UUID uuid) {
+        String body = getResourceFileAsString("static/mail.html");
+        return body.replace("hostUrl", hostUrl + "/reset_password?token=" + uuid);
+    }
+
 }
