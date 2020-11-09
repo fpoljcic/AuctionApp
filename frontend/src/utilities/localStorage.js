@@ -9,6 +9,11 @@ export const setSession = (user, token) => {
     localStorage.setItem(userItem, JSON.stringify(user));
 }
 
+// set user to local storage
+export const setUser = (user) => {
+    localStorage.setItem(userItem, JSON.stringify(user));
+};
+
 // remove token and user from local storage
 export const removeSession = () => {
     localStorage.removeItem(tokenItem);

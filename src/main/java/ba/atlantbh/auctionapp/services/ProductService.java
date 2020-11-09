@@ -1,6 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.*;
 import ba.atlantbh.auctionapp.models.enums.Color;
@@ -99,11 +100,17 @@ public class ProductService {
                 break;
         }
 
-        UUID id = JwtTokenUtil.getRequestPersonId();
+        UUID id = null;
+        try {
+            id = JwtTokenUtil.getRequestPersonId();
+        } catch (UnauthorizedException ignore) {
 
+        }
+
+        String tsQuery = formTsQuery(query);
         Slice<SimpleProductProj> searchResult = productRepository.search(
                 query,
-                formTsQuery(query),
+                tsQuery,
                 category,
                 subcategory,
                 id == null ? "" : id.toString(),
@@ -113,7 +120,13 @@ public class ProductService {
                 size == null ? "" : size.toString(),
                 pageRequest
         );
-        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), getSuggestion(query));
+
+        String suggestion = getSuggestion(query);
+        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(query, tsQuery)) {
+            suggestion = query;
+        }
+
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), suggestion);
     }
 
     public List<CategoryCountReponse> searchCount(String query, Integer minPrice, Integer maxPrice, Color color, Size size) {
@@ -206,17 +219,18 @@ public class ProductService {
     }
 
     private String formTsQuery(String query) {
-        return query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & ");
+        return query.replaceAll("[\\p{P}\\p{S}]", "")
+                .replaceAll("\\s+", " ")
+                .trim()
+                .replace(" ", " | ");
     }
 
     public UUID add(ProductRequest productRequest) {
         Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
                 .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
         UUID personId = JwtTokenUtil.getRequestPersonId();
-        if (personId == null)
-            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
 
         if (productRequest.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("End date can't be before current date");
@@ -232,7 +246,7 @@ public class ProductService {
         if (cardRequest != null && payPalRequest != null)
             throw new BadRequestException("Conflicting payment details");
 
-        Card card = getAndSaveCard(cardRequest);
+        Card card = getAndSaveCard(cardRequest, person.getId());
         PayPal payPal = getAndSavePayPal(payPalRequest);
 
         Product product = new Product(
@@ -261,13 +275,25 @@ public class ProductService {
         return savedProduct.getId();
     }
 
-    private Card getAndSaveCard(CardRequest cardRequest) {
+    private Card getAndSaveCard(CardRequest cardRequest, UUID personId) {
         Card card = null;
         if (cardRequest != null) {
             if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
+            if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
+                List<Card> cards = cardRepository.findAllByPersonId(personId);
+                if (cards.isEmpty() || !cards.get(0).getMaskedCardNumber().equals(cardRequest.getCardNumber()))
+                    throw new BadRequestException("Card number can only contain digits");
+                Card existingCard = cards.get(0);
+                if (!existingCard.getName().equals(cardRequest.getName()) ||
+                        !existingCard.getExpirationYear().equals(cardRequest.getExpirationYear()) ||
+                        !existingCard.getExpirationMonth().equals(cardRequest.getExpirationMonth()) ||
+                        !existingCard.getCvc().equals(cardRequest.getCvc()))
+                    throw new BadRequestException("Wrong card info");
+                return existingCard;
+            }
             card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),

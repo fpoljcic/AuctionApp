@@ -13,9 +13,9 @@ export const forgotPasswordUrl = "/forgot_password";
 export const allCategoryUrl = "/all";
 
 export const shopUrl = "/shop";
-export const aboutUrl = "/shop/about";
-export const termsUrl = "/shop/terms";
-export const privacyUrl = "/shop/privacy";
+export const aboutUrl = "/about";
+export const termsUrl = "/terms";
+export const privacyUrl = "/privacy";
 
 
 export const productUrl = (product) => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { RiHeartFill } from "react-icons/ri";
 import { IoIosArrowForward } from "react-icons/io";
+import { getDurationBetweenDates, longDateTimeFormat } from 'utilities/date';
 import moment from 'moment';
 
 import './productInfo.css';
@@ -50,12 +51,12 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
         if (moment().isBefore(productStartDate))
             return (
                 <>
-                    Time start: {productStartDate.local().format("D MMMM YYYY [at] HH:mm")}
+                    Time start: {productStartDate.local().format(longDateTimeFormat)}
                     <br />
-                    Time end: {productEndDate.local().format("D MMMM YYYY [at] HH:mm")}
+                    Time end: {productEndDate.local().format(longDateTimeFormat)}
                 </>
             );
-        const timeLeft = !active ? 0 : moment.duration(productEndDate.diff(moment())).format("D [days] h [hours] m [minutes]");
+        const timeLeft = !active ? 0 : getDurationBetweenDates(moment(), productEndDate);
         return (
             <>
                 Time left: {timeLeft}
@@ -74,6 +75,12 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
         setLoadingWish(true);
         await wishlist();
         setLoadingWish(false);
+    }
+
+    const handleBidPrice = (price) => {
+        if (isNaN(price))
+            setBidPrice(price);
+        setBidPrice(price.replace(/(\.\d{2})\d+/, '$1'));
     }
 
     return (
@@ -95,7 +102,8 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                         className="form-control-gray place-bid-form"
                         size="xl-18"
                         type="text"
-                        onChange={e => setBidPrice(e.target.value)}
+                        onChange={e => handleBidPrice(e.target.value)}
+                        onKeyUp={e => e.key === 'Enter' ? handleBid() : null}
                     />
                     <div className="place-bid-label">
                         Enter ${minPrice} or more
@@ -123,7 +131,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     ${bids[0] === undefined ? 0 : bids[0].price}
                 </span>
                 <br />
-                No bids: {bids.length}
+                No. bids: {bids.length}
                 <br />
                 {getTimeInfo()}
             </div>

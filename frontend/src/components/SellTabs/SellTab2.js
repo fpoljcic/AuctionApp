@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import { Form, InputGroup } from 'react-bootstrap';
 import SubmitButtons from './SubmitButtons';
 import ReactDatePicker from 'react-datepicker';
+import { getDurationBetweenDates } from 'utilities/date';
 import moment from 'moment';
 import * as yup from 'yup';
 
@@ -41,7 +42,14 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
             return "/";
         const productStartDate = moment(startDate);
         const productEndDate = moment(endDate);
-        return moment.duration(productEndDate.diff(productStartDate)).format("D [days] h [hours] m [minutes]", { trim: "all" });
+        return getDurationBetweenDates(productStartDate, productEndDate);
+    }
+
+    const handlStartPrice = (e, handleChange) => {
+        if (isNaN(e.target.value))
+            handleChange(e);
+        e.target.value = e.target.value.replace(/(\.\d{2})\d+/, '$1');
+        handleChange(e);
     }
 
     return (
@@ -80,7 +88,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                             size="xl-18"
                                             name="startPrice"
                                             defaultValue={product.startPrice || ""}
-                                            onChange={handleChange}
+                                            onChange={e => handlStartPrice(e, handleChange)}
                                             maxLength={9}
                                             isInvalid={touched.startPrice && errors.startPrice}
                                         />

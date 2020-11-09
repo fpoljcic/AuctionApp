@@ -8,14 +8,18 @@ import { addProduct, getProductFilters } from 'api/product';
 import SellTab1 from 'components/SellTabs/SellTab1';
 import SellTab2 from 'components/SellTabs/SellTab2';
 import SellTab3 from 'components/SellTabs/SellTab3';
+import { getUser } from 'utilities/localStorage';
 
 import './sell.css';
+import { scrollToTop } from 'utilities/common';
 
 const Sell = () => {
     const { setBreadcrumb } = useBreadcrumbContext();
 
+    const user = getUser();
+
     const [activeTab, setActiveTab] = useState(0);
-    const [product, setProduct] = useState({});
+    const [product, setProduct] = useState({ street: user.street, country: user.country, city: user.city, zip: user.zip, phone: user.phone });
 
     const [categories, setCategories] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
@@ -74,6 +78,10 @@ const Sell = () => {
         fetchData();
         // eslint-disable-next-line 
     }, [])
+
+    useEffect(() => {
+        scrollToTop(false);
+    }, [activeTab])
 
     const renderStep = (active) => (
         <Step>

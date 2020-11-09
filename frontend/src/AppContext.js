@@ -21,14 +21,21 @@ export const AppProvider = ({ children }) => {
     const [message, setMessage] = useState(null);
 
     const handleError = (error) => {
-        showMessage("warning", error.response !== undefined ? error.response.data.message : error.message);
+        let errorMessage = error.message;
+        if (error.response !== undefined) {
+            if (error.response.data.message !== undefined)
+                errorMessage = error.response.data.message;
+            else
+                errorMessage = error.response.data.error.message;
+        }
+        showMessage("warning", errorMessage);
         return Promise.reject(error);
     }
 
     axios.interceptors.response.use((response) => response, handleError);
 
     const showMessage = (variant, message) => {
-        scrollToTop();
+        scrollToTop(true);
         setVariant(variant);
         setMessage(message);
         setAlertVisible(true);

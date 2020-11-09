@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Card {
     @Id
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -57,5 +58,15 @@ public class Card {
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.cvc = cvc;
+    }
+
+    public Card(Person person) {
+        this.person = person;
+    }
+
+    public String getMaskedCardNumber() {
+        if (cardNumber == null)
+            return null;
+        return String.join("", Collections.nCopies(cardNumber.length() - 4, "*")) + cardNumber.substring(cardNumber.length() - 4);
     }
 }

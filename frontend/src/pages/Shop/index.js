@@ -41,7 +41,7 @@ const Shop = () => {
         setLoading(true);
         const fromLandingPage = history.location.state != null && history.location.state.fromLandingPage;
         if (fromLandingPage)
-            scrollToTop();
+            scrollToTop(true);
         formBreadcrumb(fromLandingPage);
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
@@ -93,7 +93,7 @@ const Shop = () => {
                 newFilter.minPrice, newFilter.maxPrice, newFilter.color, newFilter.size));
             setProducts(data.products);
             setLastPage(data.lastPage);
-            if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
+            if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query.trim() !== data.didYouMean) {
                 showMessage("warning", (
                     <>
                         Did you mean?

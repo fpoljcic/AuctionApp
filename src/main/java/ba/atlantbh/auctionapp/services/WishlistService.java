@@ -1,6 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.models.Product;
@@ -9,8 +10,11 @@ import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.repositories.WishlistRepository;
 import ba.atlantbh.auctionapp.requests.WishlistRequest;
+import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -21,8 +25,9 @@ public class WishlistService {
     private final ProductRepository productRepository;
 
     public void add(WishlistRequest wishlistRequest) {
-        Person person = personRepository.findById(wishlistRequest.getPersonId())
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (wishlistRepository.existsByPersonAndProduct(person, product))
@@ -31,8 +36,9 @@ public class WishlistService {
     }
 
     public void remove(WishlistRequest wishlistRequest) {
-        Person person = personRepository.findById(wishlistRequest.getPersonId())
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         Product product = productRepository.findById(wishlistRequest.getProductId())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         Wishlist wishlist = wishlistRepository.findByPersonAndProduct(person, product)

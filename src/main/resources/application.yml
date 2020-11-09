@@ -13,7 +13,6 @@ spring:
           time_zone: UTC
     hibernate:
       ddl-auto: ${SCHEMA_DB}
-    show-sql: true
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationInMs: ${JWT_EXPIRATION}

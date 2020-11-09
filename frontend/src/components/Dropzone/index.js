@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ImageGrid from "components/ImageGrid";
 import { DndProvider } from "react-dnd";
@@ -23,9 +23,13 @@ const getClassName = (className, isActive) => {
 };
 
 const Dropzone = ({ onDrop, accept, images, setImages }) => {
+
+    const [disabled, setDisabled] = useState(false);
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept
+        accept,
+        disabled
     });
 
     const moveImage = (dragIndex, hoverIndex) => {
@@ -37,12 +41,16 @@ const Dropzone = ({ onDrop, accept, images, setImages }) => {
         );
     };
 
+    useEffect(() => {
+        setDisabled(images.length === 10);
+    }, [images])
+
     return (
         <div className={getClassName("dropzone", isDragActive)} {...getRootProps()}>
             <input className="dropzone-input" {...getInputProps()} />
             <div className="dropzone-content">
                 <DndProvider backend={backendForDND}>
-                    <ImageGrid images={images} moveImage={moveImage} />
+                    <ImageGrid images={images} setImages={setImages} moveImage={moveImage} />
                 </DndProvider>
                 <div style={{ margin: 'auto 10px' }}>
                     {isDragActive ? (

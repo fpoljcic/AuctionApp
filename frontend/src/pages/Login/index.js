@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from 'utilities/localStorage';
 import { SiFacebook, SiGmail } from 'react-icons/si';
 import { loginUser } from 'api/auth';
-import { forgotPasswordUrl } from 'utilities/appUrls';
+import { forgotPasswordUrl, registerUrl } from 'utilities/appUrls';
 import { useBreadcrumbContext, useUserContext } from 'AppContext';
 import * as yup from 'yup';
 
@@ -132,6 +132,9 @@ const Login = () => {
                             </Form.Row>
 
                             <Form.Text className="font-18">
+                                <Link className="purple-nav-link nav-link" to={registerUrl}>
+                                    Don't have an account? Register here.
+                                </Link>
                                 <Link className="purple-nav-link nav-link" to={forgotPasswordUrl}>
                                     Forgot password?
                                 </Link>

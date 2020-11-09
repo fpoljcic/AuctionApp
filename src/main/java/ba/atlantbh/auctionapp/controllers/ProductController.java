@@ -69,7 +69,7 @@ public class ProductController {
     })
     public ResponseEntity<ProductPageResponse> search(@Valid SearchRequest searchRequest) {
         return ResponseEntity.ok(productService.search(
-                searchRequest.getQuery(),
+                searchRequest.getQuery().trim(),
                 searchRequest.getCategory(),
                 searchRequest.getSubcategory(),
                 searchRequest.getPage(),
@@ -87,7 +87,7 @@ public class ProductController {
     })
     public ResponseEntity<List<CategoryCountReponse>> searchCount(@Valid SearchCountRequest searchCountRequest) {
         return ResponseEntity.ok(productService.searchCount(
-                searchCountRequest.getQuery(),
+                searchCountRequest.getQuery().trim(),
                 searchCountRequest.getMinPrice(),
                 searchCountRequest.getMaxPrice(),
                 searchCountRequest.getColor(),
@@ -101,7 +101,7 @@ public class ProductController {
     })
     public ResponseEntity<FilterCountResponse> filterCount(@Valid FilterCountRequest filterCountRequest) {
         return ResponseEntity.ok(productService.filterCount(
-                filterCountRequest.getQuery(),
+                filterCountRequest.getQuery().trim(),
                 filterCountRequest.getCategory(),
                 filterCountRequest.getSubcategory(),
                 filterCountRequest.getMinPrice(),

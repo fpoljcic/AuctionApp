@@ -7,6 +7,7 @@ import { myAccountSellerUrl } from 'utilities/appUrls';
 import SubmitButtons from './SubmitButtons';
 import Dropzone from "components/Dropzone";
 import { uploadImage } from 'api/image';
+import { v4 as uuid } from 'uuid';
 import * as yup from 'yup';
 
 import './sellerTabs.css';
@@ -55,17 +56,21 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
 
     const handleSubmit = async (data) => {
         setLoading(true);
-        const newPhotos = await Promise.all(photos.map(async (photo, index) => {
-            if (photo.url !== undefined)
+        try {
+            const newPhotos = await Promise.all(photos.map(async (photo) => {
+                if (photo.url !== undefined)
+                    return photo;
+                setUploading(true);
+                photo.url = await uploadImage(photo.file);
                 return photo;
-            setUploading(true);
-            photo.url = await uploadImage(photo.file);
-            return photo;
-        }));
-        setPhotos(newPhotos);
-        setLoading(false);
-        setProduct({ ...product, ...data, photos: newPhotos });
-        setActiveTab(1);
+            }));
+            setPhotos(newPhotos);
+            setLoading(false);
+            setProduct({ ...product, ...data, photos: newPhotos });
+            setActiveTab(1);
+        } catch (e) {
+            setLoading(false);
+        }
     }
 
     const onDrop = useCallback(acceptedFiles => {
@@ -76,7 +81,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
             reader.onload = function (e) {
                 setPhotos(prevState => [
                     ...prevState,
-                    { src: e.target.result, file }
+                    { src: e.target.result, file, id: uuid() }
                 ]);
             };
             reader.readAsDataURL(file);
@@ -188,6 +193,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         isInvalid={touched.description && errors.description}
                                         maxLength={700}
                                         rows={5}
+                                        style={{ maxHeight: 700 }}
                                     />
                                     <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                         {errors.description}
@@ -206,6 +212,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={color}
                                             size="xl-18"
                                             as="select"
+                                            style={{ paddingRight: 66 }}
                                         >
                                             <option value="Select Color" disabled hidden>Select Color</option>
                                             {colors.map(color => (
@@ -231,6 +238,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={size}
                                             size="xl-18"
                                             as="select"
+                                            style={{ paddingRight: 66 }}
                                         >
                                             <option value="Select Size" disabled hidden>Select Size</option>
                                             {sizes.map(size => (

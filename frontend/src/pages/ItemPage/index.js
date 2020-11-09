@@ -30,7 +30,7 @@ const ItemPage = ({ match, location }) => {
 
     useEffect(() => {
         formBreadcrumb();
-        scrollToTop();
+        scrollToTop(true);
         const fetchData = async () => {
             const productId = match.params.id;
             try {
@@ -43,7 +43,8 @@ const ItemPage = ({ match, location }) => {
                 }
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.price : 0), 0);
-                setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
+                const minPrice = highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01;
+                setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
                 setWished(data.wished);
                 setBids(bids);
                 if (location.state !== undefined && location.state.newProduct)
@@ -73,7 +74,8 @@ const ItemPage = ({ match, location }) => {
         try {
             await bidForProduct(parseFloat(price), product.id);
             const newBids = await getBidsForProduct(product.id);
-            setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.price : 0), 0) + 0.01);
+            const minPrice = Math.max(...newBids.map(bid => bid.personId === personId ? bid.price : 0), 0) + 0.01;
+            setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
             if (personId === newBids[0].personId)
                 showMessage("success", "Congratulations! You are the highest bider!");
             else
@@ -89,11 +91,11 @@ const ItemPage = ({ match, location }) => {
         }
         try {
             if (wished) {
-                await removeWishlistProduct(personId, product.id);
+                await removeWishlistProduct(product.id);
                 showMessage("success", "You have removed the product from your wishlist.");
             }
             else {
-                await wishlistProduct(personId, product.id);
+                await wishlistProduct(product.id);
                 showMessage("success", "You have added the product to your wishlist.");
             }
             setWished(!wished);

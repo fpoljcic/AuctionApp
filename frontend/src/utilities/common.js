@@ -1,8 +1,8 @@
-import moment from "moment";
 import { decode } from "jsonwebtoken";
 import { getToken } from "utilities/localStorage";
 import countriesJSON from "assets/json/countries.min.json";
 import countryCodesJSON from "assets/json/country-codes.min.json";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const countries = Object.keys(countriesJSON);
 
@@ -27,10 +27,14 @@ export const codeForCountry = (country) => {
     return result.length === 1 ? result[0].country_code : "";
 }
 
-export const getNextYears = (n) => {
-    const year = moment().year();
-    return [...Array(n).keys()].map(x => year + x);
-} 
+export const validPhoneNumber = (phone, country, isCountryCode) => {
+    if (phone === undefined)
+        return false;
+    const parsedPhoneNumber = parsePhoneNumberFromString(phone, isCountryCode ? country : codeForCountry(country));
+    if (parsedPhoneNumber === undefined)
+        return false;
+    return parsedPhoneNumber.isValid();
+}
 
 export const validToken = () => {
     const token = getToken();
@@ -40,14 +44,23 @@ export const validToken = () => {
     return Date.now() < exp * 1000;
 }
 
-export const scrollToTop = () => {
+export const scrollToTop = (smooth) => {
     window.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'smooth'
+        behavior: smooth ? 'smooth' : 'auto'
     });
 }
 
 export const capitalizeFirstLetter = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+export const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+export const isTouchDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));

@@ -5,6 +5,7 @@ import ba.atlantbh.auctionapp.models.enums.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -61,7 +62,9 @@ public class ProductRequest {
     private Boolean shipping = false;
     private Boolean featured = false;
 
+    @Valid
     private CardRequest card;
 
+    @Valid
     private PayPalRequest payPal;
 }

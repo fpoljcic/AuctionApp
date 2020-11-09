@@ -37,7 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/bids/add",
             "/wishlist/add",
             "/wishlist/remove",
-            "/products/add"
+            "/products/add",
+            "/auth/update",
+            "/cards/person"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

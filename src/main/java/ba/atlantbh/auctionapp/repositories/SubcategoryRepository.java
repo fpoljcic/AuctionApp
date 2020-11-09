@@ -15,6 +15,7 @@ public interface SubcategoryRepository extends JpaRepository<Subcategory, UUID> 
     @Query(value = "SELECT sc.id, sc.name, c.name categoryName, sc.photo_url url, min(start_price) startPrice " +
                    "FROM subcategory sc INNER JOIN category c on c.id = sc.category_id " +
                    "INNER JOIN product p on sc.id = p.subcategory_id " +
+                   "WHERE p.start_date <= now() AND p.end_date > now() " +
                    "GROUP BY (sc.id, sc.name, c.name, sc.photo_url) ORDER BY RANDOM() LIMIT 4", nativeQuery = true)
     List<SubcategoryProj> getRandomSubcategories();
 

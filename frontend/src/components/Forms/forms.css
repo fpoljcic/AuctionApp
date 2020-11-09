@@ -1,0 +1,38 @@
+.dob-container {
+    display: flex;
+    width: 70%;
+}
+
+.dob-month {
+    width: 40%;
+    margin-right: 20px;
+}
+
+.dob-day {
+    width: 20%;
+    margin-right: 20px;
+}
+
+.dob-year {
+    width: 40%;
+}
+
+.gender-select {
+    width: 50%;
+}
+
+@media (max-width: 575px) {
+    .dob-container {
+        flex-wrap: wrap;
+    }
+    .dob-container, .dob-month, .dob-day, .dob-year {
+        width: 100%;
+    }
+    .dob-month, .dob-day {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .gender-select {
+        width: 100%;
+    }
+}
