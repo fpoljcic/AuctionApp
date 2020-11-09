@@ -28,6 +28,9 @@ public class Token {
     @Column(nullable = false)
     private UUID token;
 
+    @Column(nullable = false)
+    private Boolean used = false;
+
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
