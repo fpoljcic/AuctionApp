@@ -115,18 +115,19 @@ public class PersonService {
     }
 
     public String forgotPassword(ForgotPassRequest forgotPassRequest) {
-        String message = "We sent you an email with a confirmation link. " +
-                "It will be active in the next 24 hours.";
+        String message = "We sent you an email with a link to reset your password. " +
+                "The link will expire after 24 hours.";
         Optional<Person> personOptional = personRepository.findByEmail(forgotPassRequest.getEmail());
         if (personOptional.isEmpty())
             return message;
         Person person = personOptional.get();
         if (tokenRepository.existsByPerson(person.getId().toString()))
-            return "We have already sent you an email in the last 24 hours. Check your inbox.";
+            return "We have already sent you an email with a link to reset your password " +
+                    "in the last 24 hours. Please check your inbox.";
         UUID uuid = UUID.randomUUID();
         String body = formEmailBody(hostUrl, uuid);
         try {
-            emailService.sendMail(person.getEmail(), "Forgot password", body);
+            emailService.sendMail(person.getEmail(), "Password reset", body);
         } catch (MessagingException e) {
             throw new BadGatewayException("We have issues sending you an email");
         }

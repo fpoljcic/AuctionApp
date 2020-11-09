@@ -12,3 +12,11 @@ export const loginUser = async (user) => {
 export const updateUser = async (user) => {
     return (await axios.put(hostUrl + '/auth/update', user, defaultHeader())).data;
 };
+
+export const forgotPassword = async (email) => {
+    return (await axios.post(hostUrl + '/auth/forgot_password', { email })).data;
+};
+
+export const resetPassword = async (token, password) => {
+    return (await axios.post(hostUrl + '/auth/reset_password', { token, password })).data;
+};

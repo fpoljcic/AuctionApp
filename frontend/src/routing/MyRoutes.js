@@ -9,6 +9,8 @@ import Shop from 'pages/Shop';
 import ItemPage from 'pages/ItemPage';
 import Login from 'pages/Login';
 import Register from 'pages/Register';
+import ForgotPassword from 'pages/ForgotPassword';
+import ResetPassword from 'pages/ResetPassword';
 import Sell from 'pages/Sell';
 import MyAccount from 'pages/MyAccount';
 import PageNotFound from 'pages/PageNotFound';
@@ -22,6 +24,8 @@ const MyRoutes = () => {
             <Route path="/shop*" component={Shop} />
             <GuestRoute path="/login" component={Login} />
             <GuestRoute path="/register" component={Register} />
+            <GuestRoute path="/forgot_password" component={ForgotPassword} />
+            <GuestRoute path="/reset_password" component={ResetPassword} />
             <PrivateRoute path="/my_account/seller/sell" component={Sell} />
             <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />

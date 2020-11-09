@@ -6,7 +6,7 @@ import { setSession, setRememberInfo, getRememberInfo, removeRememberInfo } from
 import { SiFacebook, SiGmail } from 'react-icons/si';
 import { loginUser } from 'api/auth';
 import { forgotPasswordUrl, registerUrl } from 'utilities/appUrls';
-import { useBreadcrumbContext, useUserContext } from 'AppContext';
+import { useAlertContext, useBreadcrumbContext, useUserContext } from 'AppContext';
 import * as yup from 'yup';
 
 import './login.css';
@@ -14,6 +14,7 @@ import './login.css';
 const Login = () => {
     const { setBreadcrumb } = useBreadcrumbContext();
     const { setLoggedIn } = useUserContext();
+    const { showMessage } = useAlertContext();
     const history = useHistory();
 
     const rememberInfo = getRememberInfo();
@@ -23,6 +24,9 @@ const Login = () => {
 
     useEffect(() => {
         setBreadcrumb("LOGIN", []);
+        const message = history.location.state != null && history.location.state.message;
+        if (message)
+            showMessage("success", message);
         // eslint-disable-next-line
     }, [])
 

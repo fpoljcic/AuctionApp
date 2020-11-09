@@ -5,7 +5,7 @@ import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, ListGroup, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { removeSession, getUser } from 'utilities/localStorage';
-import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl } from 'utilities/appUrls';
+import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl, forgotPasswordUrl, resetPasswordUrl } from 'utilities/appUrls';
 import { useUserContext } from 'AppContext';
 import * as qs from 'query-string';
 
@@ -106,7 +106,8 @@ const Header = () => {
                 </div>
                 <Nav style={{ position: 'relative' }}>
                     <NavLink
-                        isActive={(match, location) => (match.isExact || location.pathname === loginUrl || location.pathname === registerUrl)}
+                        isActive={(match, location) => (match.isExact || location.pathname === loginUrl || location.pathname === registerUrl ||
+                            location.pathname === forgotPasswordUrl || location.pathname === resetPasswordUrl)}
                         className="black-nav-link nav-link"
                         activeClassName="black-active-nav-link"
                         to={homeUrl}
