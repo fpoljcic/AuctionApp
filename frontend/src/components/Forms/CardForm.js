@@ -173,20 +173,21 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationYear') && getIn(errors, 'card.expirationYear')}
-                                    style={{ paddingRight: 66 }}
+                                    style={expirationYear !== "Year" ? { paddingRight: 66 } : null}
                                 >
                                     <option value="Year" disabled hidden>Year</option>
                                     {getNextYears(10).map(year => (
                                         <option key={year} value={year}>{year}</option>
                                     ))}
                                 </Form.Control>
-                                <MdClear
-                                    onClick={() => {
-                                        setFieldValue("card.expirationYear", "");
-                                        setExpirationYear("Year");
-                                    }}
-                                    className="select-clear"
-                                />
+                                {expirationYear !== "Year" ?
+                                    <MdClear
+                                        onClick={() => {
+                                            setFieldValue("card.expirationYear", "");
+                                            setExpirationYear("Year");
+                                        }}
+                                        className="select-clear"
+                                    /> : null}
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationYear')}
                                 </Form.Control.Feedback>
@@ -203,20 +204,21 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationMonth') && getIn(errors, 'card.expirationMonth')}
-                                    style={{ paddingRight: 66 }}
+                                    style={expirationMonth !== "Month" ? { paddingRight: 66 } : null}
                                 >
                                     <option value="Month" disabled hidden>Month</option>
                                     {[...Array(12 - currentMonth).keys()].map(x => (
                                         <option key={x} value={currentMonth + x + 1}>{getMonth(currentMonth + x)}</option>
                                     ))}
                                 </Form.Control>
-                                <MdClear
-                                    onClick={() => {
-                                        setFieldValue("card.expirationMonth", "");
-                                        setExpirationMonth("Month");
-                                    }}
-                                    className="select-clear"
-                                />
+                                {expirationMonth !== "Month" ?
+                                    <MdClear
+                                        onClick={() => {
+                                            setFieldValue("card.expirationMonth", "");
+                                            setExpirationMonth("Month");
+                                        }}
+                                        className="select-clear"
+                                    /> : null}
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationMonth')}
                                 </Form.Control.Feedback>

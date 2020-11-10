@@ -212,20 +212,21 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={color}
                                             size="xl-18"
                                             as="select"
-                                            style={{ paddingRight: 66 }}
+                                            style={color !== "Select Color" ? { paddingRight: 66 } : null}
                                         >
                                             <option value="Select Color" disabled hidden>Select Color</option>
                                             {colors.map(color => (
                                                 <option key={color} value={color}>{color}</option>
                                             ))}
                                         </Form.Control>
-                                        <MdClear
-                                            onClick={() => {
-                                                setFieldValue("color", null);
-                                                setColor("Select Color");
-                                            }}
-                                            className="select-clear"
-                                        />
+                                        {color !== "Select Color" ?
+                                            <MdClear
+                                                onClick={() => {
+                                                    setFieldValue("color", null);
+                                                    setColor("Select Color");
+                                                }}
+                                                className="select-clear"
+                                            /> : null}
                                     </Form.Group>
 
                                     <Form.Group className="form-half-width">
@@ -238,20 +239,21 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                             value={size}
                                             size="xl-18"
                                             as="select"
-                                            style={{ paddingRight: 66 }}
+                                            style={size !== "Select Size" ? { paddingRight: 66 } : null}
                                         >
                                             <option value="Select Size" disabled hidden>Select Size</option>
                                             {sizes.map(size => (
                                                 <option key={size} value={size}>{size.replace("_", " ")}</option>
                                             ))}
                                         </Form.Control>
-                                        <MdClear
-                                            onClick={() => {
-                                                setFieldValue("size", null);
-                                                setSize("Select Size");
-                                            }}
-                                            className="select-clear"
-                                        />
+                                        {size !== "Select Size" ?
+                                            <MdClear
+                                                onClick={() => {
+                                                    setFieldValue("size", null);
+                                                    setSize("Select Size");
+                                                }}
+                                                className="select-clear"
+                                            /> : null}
                                     </Form.Group>
                                 </Form.Group>
 
