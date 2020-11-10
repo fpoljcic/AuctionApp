@@ -20,3 +20,7 @@ export const forgotPassword = async (email) => {
 export const resetPassword = async (token, password) => {
     return (await axios.post(hostUrl + '/auth/reset_password', { token, password })).data;
 };
+
+export const validResetToken = async (token) => {
+    return (await axios.post(hostUrl + '/auth/valid_token', { token })).data;
+};
