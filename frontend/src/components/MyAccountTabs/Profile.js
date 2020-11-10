@@ -28,6 +28,7 @@ const Profile = () => {
     const [uploading, setUploading] = useState(false);
     const [card, setCard] = useState({});
     const [cardEmpty, setCardEmpty] = useState(true);
+    const [isValid, setIsValid] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,6 +58,7 @@ const Profile = () => {
     }
 
     const handleSubmit = async (data) => {
+        setIsValid(true);
         setUploading(true);
         const userData = { ...data };
         userData.dateOfBirth = getDate(data.day, data.month, data.year);
@@ -177,6 +179,7 @@ const Profile = () => {
                             size="xxl"
                             variant="transparent-black-shadow"
                             type="submit"
+                            onClick={() => setIsValid(false)}
                             disabled={uploading}
                         >
                             {uploading ? (
@@ -191,6 +194,10 @@ const Profile = () => {
                                     </>
                                 )}
                         </Button>
+                        {isValid === false ?
+                            <Form.Control.Feedback style={{ display: "block", textAlign: 'right' }} type="invalid">
+                                *Please fill in the required fields
+                            </Form.Control.Feedback> : null}
                     </Form>
                 )
             }
