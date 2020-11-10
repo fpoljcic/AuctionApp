@@ -36,7 +36,8 @@ const ItemPage = ({ match, location }) => {
             try {
                 const data = await getProduct(productId, personId);
                 setActive(moment().isBetween(moment.utc(data.startDate), moment.utc(data.endDate), null, "[)"));
-                setOwnProduct(data.personId === personId);
+                const isOwnProduct = data.personId === personId;
+                setOwnProduct(isOwnProduct);
                 setProduct(data);
                 if (personId === null) {
                     setRelatedProducts(await getRelatedProducts(productId));
@@ -47,6 +48,8 @@ const ItemPage = ({ match, location }) => {
                 setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
                 setWished(data.wished);
                 setBids(bids);
+                if (isOwnProduct)
+                    showMessage("info", "You have added this product!");
                 if (location.state !== undefined && location.state.newProduct)
                     showMessage("success", "You have successfully added a new product!");
             } catch (e) { }
