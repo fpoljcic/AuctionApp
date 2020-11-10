@@ -20,6 +20,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.5.0-b01</version>
+		</dependency>
+		<dependency>
 			<groupId>com.atlascopco</groupId>
 			<artifactId>hunspell-bridj</artifactId>
 			<version>1.0.4</version>

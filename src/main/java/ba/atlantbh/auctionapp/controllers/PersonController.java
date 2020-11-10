@@ -1,12 +1,11 @@
 package ba.atlantbh.auctionapp.controllers;
 
+import ba.atlantbh.auctionapp.exceptions.BadGatewayException;
 import ba.atlantbh.auctionapp.exceptions.BadRequestException;
 import ba.atlantbh.auctionapp.exceptions.ConflictException;
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Person;
-import ba.atlantbh.auctionapp.requests.LoginRequest;
-import ba.atlantbh.auctionapp.requests.RegisterRequest;
-import ba.atlantbh.auctionapp.requests.UpdateProfileRequest;
+import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.responses.LoginResponse;
 import ba.atlantbh.auctionapp.responses.RegisterResponse;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -56,5 +55,22 @@ public class PersonController {
     })
     public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
         return ResponseEntity.ok(personService.update(updateProfileRequest));
+    }
+
+    @PostMapping("/forgot_password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 502, message = "Bad gateway", response = BadGatewayException.class),
+    })
+    public ResponseEntity<String> forgotPassword(@RequestBody @Valid ForgotPassRequest forgotPassRequest) {
+        return ResponseEntity.ok(personService.forgotPassword(forgotPassRequest));
+    }
+
+    @PostMapping("/reset_password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPassRequest resetPassRequest) {
+        return ResponseEntity.ok(personService.resetPassword(resetPassRequest));
     }
 }

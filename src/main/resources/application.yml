@@ -16,6 +16,9 @@ spring:
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationInMs: ${JWT_EXPIRATION}
+  emailUsername: ${EMAIL_USERNAME}
+  emailPassword: ${EMAIL_PASSWORD}
+  hostUrl: ${HOST_URL}
 server:
   error:
     include-message: always

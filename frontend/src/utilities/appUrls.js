@@ -9,6 +9,7 @@ export const myAccountBidsUrl = "/my_account/bids";
 export const myAccountWishlistUrl = "/my_account/wishlist";
 export const myAccountSettingsUrl = "/my_account/settings";
 export const forgotPasswordUrl = "/forgot_password";
+export const resetPasswordUrl = "/reset_password";
 
 export const allCategoryUrl = "/all";
 
