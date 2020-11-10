@@ -114,7 +114,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
             {creditCard ?
                 <>
                     <Form.Text style={{ textAlign: 'left', paddingLeft: '1.5rem' }} className="form-control-description">
-                        We accept the following credit cards.
+                        We accept the following credit cards
                         <div style={{ marginTop: 5 }}>
                             <Image style={{ width: 'max(210px, 14vw)' }} src="/images/cards.png" />
                         </div>
@@ -122,7 +122,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
 
                     <Form.Group style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginTop: 30 }}>
                         <Form.Group className="form-half-width">
-                            <Form.Label>Name on card</Form.Label>
+                            <Form.Label>Name on Card</Form.Label>
                             <Form.Control
                                 className="form-control-gray-no-shadow"
                                 size="xl-18"
