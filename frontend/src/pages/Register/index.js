@@ -42,7 +42,7 @@ const Register = () => {
             .max(255, "*Password can't be longer than 255 characters")
             .required("*Password is required"),
         agreement: yup.bool()
-            .oneOf([true], "*Plese accept our terms")
+            .oneOf([true], "*Please accept our terms")
     });
 
     const handleSubmit = async (user) => {
@@ -149,7 +149,7 @@ const Register = () => {
                                     id="custom-agreement-checkbox"
                                     label={
                                         <>
-                                            By clicking register you agree to our
+                                            By clicking Register, I agree to
                                             {' '}
                                             <Link rel="noopener noreferrer" target="_blank" style={{ display: 'inline', padding: 0 }} className="purple-nav-link nav-link" to={privacyUrl}>
                                                 Privacy Policy

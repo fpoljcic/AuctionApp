@@ -50,7 +50,7 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
-    private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
+    private String photo = "https://i.imgur.com/O0O16un.gif";
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private LocalDateTime dateOfBirth;

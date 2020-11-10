@@ -65,22 +65,24 @@ const OptionalForm = ({ handleChange, touched, errors, values, setFieldValue }) 
                         size="lg-18"
                         as="select"
                         isInvalid={touched.country && errors.country}
-                        style={{ paddingRight: 66 }}
+                        style={country !== "Select Country" ? { paddingRight: 66 } : null}
                     >
                         <option value="Select Country" disabled hidden>Select Country</option>
                         {countries.map(country => (
                             <option key={country} value={country}>{country}</option>
                         ))}
                     </Form.Control>
-                    <MdClear
-                        onClick={() => {
-                            setFieldValue("country", "");
-                            setCountry("Select Country");
-                            setFieldValue("city", "");
-                        }}
-                        className="select-clear"
-                        style={{ top: 'unset', bottom: 8 }}
-                    />
+                    {country !== "Select Country" ?
+                        <MdClear
+                            onClick={() => {
+                                setFieldValue("country", "");
+                                setCountry("Select Country");
+                                setFieldValue("city", "");
+                                setCity("Select City");
+                            }}
+                            className="select-clear"
+                            style={{ top: 'unset', bottom: 8 }}
+                        /> : null}
                     <Form.Control.Feedback type="invalid">
                         {errors.country}
                     </Form.Control.Feedback>
@@ -91,25 +93,29 @@ const OptionalForm = ({ handleChange, touched, errors, values, setFieldValue }) 
                     <Form.Control
                         value={city}
                         name="city"
-                        onChange={handleChange}
+                        onChange={e => {
+                            setCity(e.target.value);
+                            handleChange(e);
+                        }}
                         size="lg-18"
                         as="select"
                         isInvalid={touched.city && errors.city}
-                        style={{ paddingRight: 66 }}
+                        style={city !== "Select City" ? { paddingRight: 66 } : null}
                     >
                         <option value="Select City" hidden>Select City</option>
                         {citiesByCountry(country).map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}
                     </Form.Control>
-                    <MdClear
-                        onClick={() => {
-                            setFieldValue("city", "");
-                            setCity("Select City");
-                        }}
-                        className="select-clear"
-                        style={{ top: 'unset', bottom: 8 }}
-                    />
+                    {city !== "Select City" ?
+                        <MdClear
+                            onClick={() => {
+                                setFieldValue("city", "");
+                                setCity("Select City");
+                            }}
+                            className="select-clear"
+                            style={{ top: 'unset', bottom: 8 }}
+                        /> : null}
                     <Form.Control.Feedback type="invalid">
                         {errors.city}
                     </Form.Control.Feedback>

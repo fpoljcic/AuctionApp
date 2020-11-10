@@ -20,6 +20,12 @@
     color: var(--success);
 }
 
+.alert-info {
+    background: var(--info-background);
+    font-weight: bold;
+    color: var(--info);
+}
+
 .alert-dismissible .close {
     right: 11.1%;
 }
