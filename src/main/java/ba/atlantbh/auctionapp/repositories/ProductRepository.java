@@ -15,13 +15,15 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
+    @Query(value = "SELECT * FROM (SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName, " +
+                   "(SELECT COUNT(*) FROM bid b INNER JOIN product p2 on p2.id = b.product_id " +
+                   "WHERE b.person_id = :id AND p2.subcategory_id = pr.subcategory_id) count " +
                    "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
                    "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
                    "INNER JOIN category c on c.id = s.category_id " +
                    "WHERE pr.featured = true AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
-                   "ORDER BY RANDOM() LIMIT 6", nativeQuery = true)
-    List<SimpleProductProj> getFeaturedRandomProducts();
+                   "ORDER BY count DESC, RANDOM() LIMIT 18) main ORDER BY RANDOM() LIMIT 6", nativeQuery = true)
+    List<SimpleProductProj> getFeaturedProducts(String id);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
                    "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, ListGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { getFeaturedRandomProducts, getNewProducts, getLastProducts } from 'api/product';
-import { getRandomSubcategories } from 'api/subcategory';
+import { getFeaturedProducts, getNewProducts, getLastProducts } from 'api/product';
+import { getFeaturedSubcategories } from 'api/subcategory';
 import { getCategories } from 'api/category';
 import { IoIosArrowForward } from "react-icons/io";
 import { categoryUrl, allCategoryUrl, subcategoryUrl, productUrl } from "utilities/appUrls";
@@ -17,7 +17,7 @@ const LandingPage = () => {
 
   const [categories, setCategories] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [randomSubcategories, setRandomSubcategories] = useState([]);
+  const [featuredSubcategories, setFeaturedSubcategories] = useState([]);
   const [newAndLastProducts, setNewAndLastProducts] = useState([]);
   const [activePage, setActivePage] = useState(0);
 
@@ -26,8 +26,8 @@ const LandingPage = () => {
     const fetchData = async () => {
       try {
         setCategories(await getCategories());
-        setFeaturedProducts(await getFeaturedRandomProducts());
-        setRandomSubcategories(await getRandomSubcategories());
+        setFeaturedProducts(await getFeaturedProducts());
+        setFeaturedSubcategories(await getFeaturedSubcategories());
         const newProducts = await getNewProducts();
         const lastProducts = await getLastProducts();
         setNewAndLastProducts([newProducts, lastProducts]);
@@ -93,7 +93,7 @@ const LandingPage = () => {
       	</h2>
         <div className="gray-line" />
         <div className="featured-items-container">
-          {randomSubcategories.map(subcategory => (
+          {featuredSubcategories.map(subcategory => (
             <ImageCard key={subcategory.id} data={subcategory} size="xxl" url={subcategoryUrl(subcategory)} fromLandingPage={true} />
           ))}
         </div>

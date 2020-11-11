@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { getParams, hostUrl } from './common';
+import { getParams, hostUrl, defaultHeader } from './common';
 
-export const getRandomSubcategories = async () => {
-    return (await axios.get(hostUrl + '/subcategories/random')).data;
+export const getFeaturedSubcategories = async () => {
+    return (await axios.get(hostUrl + '/subcategories/featured', defaultHeader())).data;
 };
 
 export const getSubcategoriesForCategory = async (id) => {

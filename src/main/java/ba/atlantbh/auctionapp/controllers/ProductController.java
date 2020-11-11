@@ -29,9 +29,9 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/featured/random")
-    public ResponseEntity<List<SimpleProductProj>> getFeaturedRandomProducts() {
-        return ResponseEntity.ok(productService.getFeaturedRandomProducts());
+    @GetMapping("/featured")
+    public ResponseEntity<List<SimpleProductProj>> getFeaturedProducts() {
+        return ResponseEntity.ok(productService.getFeaturedProducts());
     }
 
     @GetMapping("/new")
