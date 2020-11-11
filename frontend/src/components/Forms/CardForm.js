@@ -140,7 +140,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                         </Form.Group>
 
                         <Form.Group className="form-half-width">
-                            <Form.Label>Card number</Form.Label>
+                            <Form.Label>Card Number</Form.Label>
                             <Form.Control
                                 className="form-control-gray-no-shadow"
                                 size="xl-18"
