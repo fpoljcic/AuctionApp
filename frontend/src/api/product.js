@@ -6,8 +6,8 @@ export const getProduct = async (productId, userId) => {
     return (await axios.get(hostUrl + '/products', getParams({ productId, userId }))).data;
 };
 
-export const getFeaturedRandomProducts = async () => {
-    return (await axios.get(hostUrl + '/products/featured/random')).data;
+export const getFeaturedProducts = async () => {
+    return (await axios.get(hostUrl + '/products/featured', defaultHeader())).data;
 };
 
 export const getNewProducts = async () => {
