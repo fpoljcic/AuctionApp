@@ -50,7 +50,7 @@ export const AppProvider = ({ children }) => {
     }
 
     const removeBreadcrumb = () => {
-        scrollToTop(true);
+        scrollToTop(false);
         setBreadcrumbTitle(null);
         setAlertVisible(false);
     }

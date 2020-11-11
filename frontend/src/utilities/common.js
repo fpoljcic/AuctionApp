@@ -64,3 +64,5 @@ export const toBase64 = file => new Promise((resolve, reject) => {
 });
 
 export const isTouchDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
+
+export const placeholderImage = "https://i.imgur.com/O0O16un.gif";

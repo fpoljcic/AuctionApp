@@ -125,6 +125,13 @@ h3 {
   box-shadow: 3px 3px 0 0 var(--black-a-2);
 }
 
+.btn-fill-red-shadow {
+  color: var(--white);
+  background: var(--alert);
+  border: none;
+  box-shadow: 3px 3px 0 0 var(--black-a-2);
+}
+
 .btn-fill-purple {
   color: var(--white);
   background: var(--primary);
@@ -136,7 +143,7 @@ h3 {
   box-shadow: 3px 3px 0 0 var(--primary-a);
 }
 
-.btn-fill-purple:hover, .btn-fill-purple-shadow:hover {
+.btn-fill-purple:hover, .btn-fill-purple-shadow:hover, .btn-fill-red-shadow:hover {
   color: var(--white);
 }
 

@@ -7,7 +7,7 @@ import OptionalForm, { optionalFormInitialValues, optionalFormSchema } from 'com
 import { getUser, setUser } from 'utilities/localStorage';
 import { Button, Form, Image, Spinner } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
-import { toBase64 } from 'utilities/common';
+import { placeholderImage, toBase64 } from 'utilities/common';
 import { getDate } from 'utilities/date';
 import { homeUrl } from 'utilities/appUrls';
 import { getCard } from 'api/card';
@@ -67,7 +67,9 @@ const Profile = () => {
         userData.dateOfBirth = getDate(data.day, data.month, data.year);
         deleteProperties(userData);
         try {
-            if (imageFile !== null)
+            if (imageSrc === placeholderImage)
+                userData.photo = imageSrc;
+            else if (imageFile !== null)
                 userData.photo = await uploadImage(imageFile);
             const newUser = await updateUser(userData);
             setUser(newUser);
@@ -85,6 +87,12 @@ const Profile = () => {
             setImageSrc(await toBase64(file));
             setLoading(false);
         }
+    }
+
+    const removeImage = () => {
+        setLoading(true);
+        setImageSrc(placeholderImage);
+        setLoading(false);
     }
 
     return (
@@ -116,12 +124,24 @@ const Profile = () => {
                                     <Button
                                         size="lg-2"
                                         variant="transparent-black-shadow-disabled"
-                                        style={{ width: '100%', marginTop: 10, marginBottom: 10 }}
+                                        block
+                                        style={{ marginTop: 10, marginBottom: 10 }}
                                         onClick={() => inputFile.current.click()}
                                         disabled={loading}
                                     >
                                         {loading ? "LOADING" : "CHANGE PHOTO"}
                                     </Button>
+                                    {imageSrc !== placeholderImage ?
+                                        <Button
+                                            size="lg-2"
+                                            variant="fill-red-shadow"
+                                            block
+                                            style={{ marginTop: 10, marginBottom: 10 }}
+                                            onClick={removeImage}
+                                            disabled={loading}
+                                        >
+                                            {loading ? "LOADING" : "REMOVE PHOTO"}
+                                        </Button> : null}
                                     <input onChange={uploadFile} accept="image/*" type="file" ref={inputFile} style={{ display: 'none' }} />
                                 </div>
 
