@@ -155,4 +155,10 @@ public class PersonService {
 
         return "You have changed your password";
     }
+
+    public Boolean validToken(TokenRequest tokenRequest) {
+        Token token = tokenRepository.getToken(tokenRequest.getToken())
+                .orElse(new Token());
+        return token.getId() != null && personRepository.existsById(token.getPerson().getId());
+    }
 }

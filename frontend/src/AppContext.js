@@ -42,12 +42,15 @@ export const AppProvider = ({ children }) => {
     }
 
     const setBreadcrumb = (title, items) => {
+        if (breadcrumbTitle !== title)
+            scrollToTop(true);
         setBreadcrumbTitle(title);
         setBreadcrumbItems(items);
         setAlertVisible(false);
     }
 
     const removeBreadcrumb = () => {
+        scrollToTop(false);
         setBreadcrumbTitle(null);
         setAlertVisible(false);
     }

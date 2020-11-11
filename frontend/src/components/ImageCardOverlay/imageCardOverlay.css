@@ -13,12 +13,12 @@
 
 .overlay-wishlist-button {
     width: 70%;
-    height: 36px;
+    min-height: 36px;
 }
 
 .overlay-bid-button {
     width: 50%;
-    height: 36px;
+    min-height: 36px;
     margin-top: 60px;
 }
 

@@ -73,4 +73,12 @@ public class PersonController {
     public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPassRequest resetPassRequest) {
         return ResponseEntity.ok(personService.resetPassword(resetPassRequest));
     }
+
+    @PostMapping("/valid_token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
+    public ResponseEntity<Boolean> validToken(@RequestBody @Valid TokenRequest tokenRequest) {
+        return ResponseEntity.ok(personService.validToken(tokenRequest));
+    }
 }

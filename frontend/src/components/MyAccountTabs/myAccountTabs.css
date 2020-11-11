@@ -46,6 +46,20 @@
     width: 75%;
 }
 
+.profile-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+    .profile-tab-picture {
+        width: 35%;
+    }
+    .profile-tab-form {
+        width: 65%;
+    }
+}
+
 @media (max-width: 575px) {
     .profile-tab-picture {
         width: 100%;
