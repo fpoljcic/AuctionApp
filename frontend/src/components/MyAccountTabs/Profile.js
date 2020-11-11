@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import RequiredForm, { requiredFormInitialValues, requiredFormSchema } from 'components/Forms/RequiredForm';
 import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
@@ -8,6 +9,7 @@ import { Button, Form, Image, Spinner } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { toBase64 } from 'utilities/common';
 import { getDate } from 'utilities/date';
+import { homeUrl } from 'utilities/appUrls';
 import { getCard } from 'api/card';
 import { uploadImage } from 'api/image';
 import { updateUser } from 'api/auth';
@@ -19,6 +21,7 @@ import './myAccountTabs.css';
 const Profile = () => {
     const { showMessage } = useAlertContext();
 
+    const history = useHistory();
     const user = getUser();
     const inputFile = useRef(null);
 
@@ -174,26 +177,37 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <Button
-                            style={{ width: 243, marginLeft: 'calc(100% - 243px)' }}
-                            size="xxl"
-                            variant="transparent-black-shadow"
-                            type="submit"
-                            onClick={() => setIsValid(false)}
-                            disabled={uploading}
-                        >
-                            {uploading ? (
-                                <>
-                                    SAVING
-                                    <Spinner className="text-spinner" animation="border" />
-                                </>
-                            ) : (
+                        <div className="profile-buttons">
+                            <Button
+                                style={{ width: 243, marginRight: 20 }}
+                                size="xxl"
+                                variant="transparent-black-shadow-disabled"
+                                onClick={() => history.push(homeUrl)}
+                            >
+                                CANCEL
+                            </Button>
+
+                            <Button
+                                style={{ width: 243 }}
+                                size="xxl"
+                                variant="transparent-black-shadow"
+                                type="submit"
+                                onClick={() => setIsValid(false)}
+                                disabled={uploading}
+                            >
+                                {uploading ? (
                                     <>
-                                        SAVE INFO
-                                        <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                                        SAVING
+                                    <Spinner className="text-spinner" animation="border" />
                                     </>
-                                )}
-                        </Button>
+                                ) : (
+                                        <>
+                                            SAVE INFO
+                                        <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
+                                        </>
+                                    )}
+                            </Button>
+                        </div>
                         {isValid === false ?
                             <Form.Control.Feedback style={{ display: "block", textAlign: 'right' }} type="invalid">
                                 *Please fill in the required fields

@@ -60,6 +60,7 @@ h3 {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  height: auto;
 }
 
 .btn.focus, .btn:focus {
@@ -71,23 +72,23 @@ h3 {
 }
 
 .btn-lg {
-  height: 46px;
+  min-height: 46px;
   font-size: 16px;
   letter-spacing: 0.56px;
 }
 
 .btn-lg-2 {
-  height: 49px;
+  min-height: 49px;
   font-size: 16px;
   letter-spacing: 0.56px;
 }
 
 .btn-xl {
-  height: 54px;
+  min-height: 54px;
 }
 
 .btn-xxl {
-  height: 57px;
+  min-height: 57px;
 }
 
 .btn-transparent {

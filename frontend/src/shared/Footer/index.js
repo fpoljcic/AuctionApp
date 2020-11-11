@@ -54,7 +54,7 @@ const Footer = () => {
           <br />
           about new products. We hate spam!
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <Form.Control className="footer-email-input" size="xl-16" type="text" placeholder="Your Email address" />
           <Button style={{ width: 116 }} size="xl" variant="transparent-white">
             GO

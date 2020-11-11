@@ -21,7 +21,7 @@
     width: 50%;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 991px) {
     .dob-container {
         flex-wrap: wrap;
     }
