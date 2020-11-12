@@ -127,7 +127,8 @@ public class ProductService {
         );
 
         String suggestion = getSuggestion(query);
-        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(query, tsQuery)) {
+        String suggestionTsQuery = formTsQuery(query);
+        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(suggestion, suggestionTsQuery)) {
             suggestion = query;
         }
 
