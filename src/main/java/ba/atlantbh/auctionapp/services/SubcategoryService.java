@@ -1,11 +1,13 @@
 package ba.atlantbh.auctionapp.services;
 
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.Category;
 import ba.atlantbh.auctionapp.projections.SimpleSubcategoryProj;
 import ba.atlantbh.auctionapp.projections.SubcategoryProj;
 import ba.atlantbh.auctionapp.repositories.CategoryRepository;
 import ba.atlantbh.auctionapp.repositories.SubcategoryRepository;
+import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,13 @@ public class SubcategoryService {
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
 
-    public List<SubcategoryProj> getRandomSubcategories() {
-        return subcategoryRepository.getRandomSubcategories();
+    public List<SubcategoryProj> getFeaturedSubcategories() {
+        String id = "";
+        try {
+            id = JwtTokenUtil.getRequestPersonId().toString();
+        } catch (UnauthorizedException ignore) {
+        }
+        return subcategoryRepository.getFeaturedSubcategories(id);
     }
 
     public List<SimpleSubcategoryProj> getSubcategoriesForCategory(String id) {

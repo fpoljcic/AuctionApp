@@ -23,9 +23,9 @@ public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;
 
-    @GetMapping("/random")
-    public ResponseEntity<List<SubcategoryProj>> getRandomSubcategories() {
-        return ResponseEntity.ok(subcategoryService.getRandomSubcategories());
+    @GetMapping("/featured")
+    public ResponseEntity<List<SubcategoryProj>> getFeaturedSubcategories() {
+        return ResponseEntity.ok(subcategoryService.getFeaturedSubcategories());
     }
 
     @GetMapping("/category")

@@ -39,8 +39,13 @@ public class ProductService {
     private final PayPalRepository payPalRepository;
     private final Hunspell speller;
 
-    public List<SimpleProductProj> getFeaturedRandomProducts() {
-        return productRepository.getFeaturedRandomProducts();
+    public List<SimpleProductProj> getFeaturedProducts() {
+        String id = "";
+        try {
+            id = JwtTokenUtil.getRequestPersonId().toString();
+        } catch (UnauthorizedException ignore) {
+        }
+        return productRepository.getFeaturedProducts(id);
     }
 
     public List<SimpleProductProj> getNewProducts() {
@@ -122,7 +127,8 @@ public class ProductService {
         );
 
         String suggestion = getSuggestion(query);
-        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(query, tsQuery)) {
+        String suggestionTsQuery = formTsQuery(query);
+        if (suggestion.toLowerCase().equals(query.toLowerCase()) || !productRepository.searchExists(suggestion, suggestionTsQuery)) {
             suggestion = query;
         }
 
