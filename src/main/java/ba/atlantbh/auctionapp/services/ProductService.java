@@ -211,6 +211,8 @@ public class ProductService {
         BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 8, RoundingMode.HALF_UP);
 
         for (BigDecimal price : prices) {
+            if (divider.compareTo(BigDecimal.ZERO) == 0)
+                continue;
             ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.HALF_UP).intValue()];
         }
 

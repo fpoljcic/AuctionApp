@@ -26,8 +26,8 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
     const [loading, setLoading] = useState(false);
     const maxPhotos = 10;
 
-    const [nameLength, setNameLength] = useState(0);
-    const [descriptionLength, setDescriptionLength] = useState(0);
+    const [nameLength, setNameLength] = useState(product.name !== undefined ? product.name.length : 0);
+    const [descriptionLength, setDescriptionLength] = useState(product.description !== undefined ? product.description.length : 0);
 
     useEffect(() => {
         setCategories(loadedCategories);
