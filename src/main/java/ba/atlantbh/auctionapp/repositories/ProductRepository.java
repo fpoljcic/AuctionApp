@@ -43,7 +43,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, " +
                    "p.start_date startDate, p.end_date endDate, " +
-                   "EXISTS(SELECT * FROM wishlist " +
+                   "EXISTS(SELECT 1 FROM wishlist " +
                           "WHERE product_id = :product_id AND person_id = :user_id) wished " +
                    "FROM product p WHERE p.id = :product_id ", nativeQuery = true)
     Optional<FullProductProj> getProduct(@Param("product_id") String productId, @Param("user_id") String userId);
@@ -62,7 +62,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
             "p.url, c.name categoryName, s.name subcategoryName, pr.date_created, " +
             "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids, " +
-            "(case when :id = '' then false else EXISTS (SELECT * FROM wishlist WHERE product_id = pr.id AND person_id = :id) end) wished, " +
+            "(case when :id = '' then false else EXISTS (SELECT 1 FROM wishlist WHERE product_id = pr.id AND person_id = :id) end) wished, " +
             "similarity(pr.name, :query) similarity " +
             "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
