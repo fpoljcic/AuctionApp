@@ -196,12 +196,15 @@ const Shop = () => {
                 <div className="shop-sorting-bar">
                     <Form.Control className="sort-select" defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg" as="select" >
                         <option value="default">Default Sorting</option>
-                        <option value="popularity">Sort by Popularity</option>
-                        <option value="new">Sort by New</option>
-                        <option value="price">Sort by Price</option>
+                        <option value="popularity">Sort by Popularity: Most Popular first</option>
+                        <option value="popularity_asc">Sort by Popularity: Least Popular first</option>
+                        <option value="new">Sort by New: Newest first</option>
+                        <option value="new_asc">Sort by New: Oldest first</option>
+                        <option value="price">Sort by Price: Highest first</option>
+                        <option value="price_asc">Sort by Price: Lowest first</option>
                     </Form.Control>
                     {loading ? <Spinner className="shop-spinner" animation="border" /> : null}
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex', marginTop: 10 }}>
                         <Button onClick={() => setGridLayout(true)} style={gridLayout ? { color: 'var(--white)', backgroundColor: 'var(--primary)' } : null} size="lg" variant="transparent">
                             <BsGrid3X3GapFill style={{ marginRight: 10 }} />
                             Grid
