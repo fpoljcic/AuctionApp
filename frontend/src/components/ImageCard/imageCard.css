@@ -34,6 +34,8 @@
     cursor: pointer;
     max-width: 14.4vw;
     word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {

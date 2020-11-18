@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { removeWishlistProduct, wishlistProduct } from 'api/wishlist';
 import { loginUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
+import { isTouchDevice } from 'utilities/common';
 
 import './imageCardOverlay.css';
 
@@ -37,7 +38,7 @@ const ImageCardOverlay = ({ children, data, url }) => {
     }
 
     return (
-        <div onMouseEnter={() => setVisible(true)} onMouseLeave={() => setVisible(false)}>
+        <div style={{ position: 'relative' }} onMouseEnter={() => setVisible(!isTouchDevice && true)} onMouseLeave={() => setVisible(false)}>
             {visible ? (
                 <div className="overlay-container">
                     <Button

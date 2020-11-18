@@ -23,12 +23,22 @@
     justify-content: space-evenly;
 }
 
+.list-item-description {
+    color: var(--text-secondary);
+    word-wrap: anywhere;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
+
 .bid-button {
     width: 100px;
     height: 36px;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .list-item-container {
         flex-wrap: wrap;
     }

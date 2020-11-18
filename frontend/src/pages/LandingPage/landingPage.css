@@ -55,9 +55,12 @@
 
 .featured-product-description {
     line-height: 22px;
-    max-height: 10em;
-    overflow-y: hidden;
+    overflow: hidden;
     word-wrap: break-word;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 
 .featured-product-image {
