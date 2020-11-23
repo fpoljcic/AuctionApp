@@ -89,15 +89,19 @@ public class ProductService {
     public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort,
                                       Integer minPrice, Integer maxPrice, Color color, Size size) {
         PageRequest pageRequest;
-        switch (sort) {
+        String[] sortCriterias = sort.split("_");
+        Sort.Direction sortOrder = Sort.Direction.DESC;
+        if (sortCriterias.length > 1 && sortCriterias[1].equals("asc"))
+            sortOrder = Sort.Direction.ASC;
+        switch (sortCriterias[0]) {
             case "popularity":
-                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(bids)"));
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(sortOrder, "(bids)"));
                 break;
             case "new":
-                pageRequest = PageRequest.of(page, 12, Sort.by("start_date").descending());
+                pageRequest = PageRequest.of(page, 12, Sort.by(sortOrder, "start_date"));
                 break;
             case "price":
-                pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));
+                pageRequest = PageRequest.of(page, 12, Sort.by(sortOrder, "start_price"));
                 break;
             default:
                 pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(similarity)")
@@ -211,6 +215,8 @@ public class ProductService {
         BigDecimal divider = max.subtract(min).divide(new BigDecimal(bars - 1), 8, RoundingMode.HALF_UP);
 
         for (BigDecimal price : prices) {
+            if (divider.compareTo(BigDecimal.ZERO) == 0)
+                continue;
             ++pricesCount[price.subtract(min).divide(divider, 0, RoundingMode.HALF_UP).intValue()];
         }
 

@@ -32,8 +32,16 @@
     }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .overlay-container {
-        display: none;
+        width: 100%;
+        height: calc(82% - 25px);
+    }
+    .overlay-wishlist-button {
+        width: 70%;
+    }
+    .overlay-bid-button {
+        width: 50%;
+        margin-top: 60px;
     }
 }

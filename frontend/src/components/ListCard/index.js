@@ -45,10 +45,10 @@ const ListCard = ({ data, url }) => {
                 onClick={() => history.push(url)}
             />
             <div className="list-info-container">
-                <h3 style={{ cursor: 'pointer' }} onClick={() => history.push(url)}>
+                <h3 style={{ cursor: 'pointer', wordWrap: 'anywhere' }} onClick={() => history.push(url)}>
                     {data.name}
                 </h3>
-                <div style={{ color: 'var(--text-secondary)' }}>
+                <div className="list-item-description">
                     {data.description}
                 </div>
                 <div className="featured-product-price">
