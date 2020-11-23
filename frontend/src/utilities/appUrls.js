@@ -27,8 +27,10 @@ export const categoryUrl = (category) => {
     return `/shop/${removeSpaces(category.name)}`;
 }
 
-export const subcategoryUrl = (subcategory) => {
-    return `/shop/${removeSpaces(subcategory.categoryName)}/${removeSpaces(subcategory.name)}`;
+export const subcategoryUrl = (subcategory, category) => {
+    if (category === undefined)
+        return `/shop/${removeSpaces(subcategory.categoryName)}/${removeSpaces(subcategory.name)}`;
+    return `/shop/${removeSpaces(category.name)}/${removeSpaces(subcategory.name)}`;
 }
 
 export const removeSpaces = (name) => name.split(' ').join('_').toLowerCase();
