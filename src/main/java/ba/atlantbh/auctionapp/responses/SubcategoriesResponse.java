@@ -3,8 +3,8 @@ package ba.atlantbh.auctionapp.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -12,7 +12,7 @@ import java.util.UUID;
 public class SubcategoriesResponse {
     private UUID id;
     private String name;
-    private List<SubcategoryResponse> subcategories;
+    private Set<SubcategoryResponse> subcategories;
 
     public void addSubcategory(SubcategoryResponse subcategory) {
         subcategories.add(subcategory);

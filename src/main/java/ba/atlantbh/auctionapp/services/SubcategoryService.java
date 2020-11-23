@@ -48,7 +48,7 @@ public class SubcategoryService {
                 response.add(new SubcategoriesResponse(
                         subcategory.getCategory().getId(),
                         subcategory.getCategory().getName(),
-                        new ArrayList<>()
+                        new TreeSet<>()
                 ));
                 i = response.size() - 1;
             }
