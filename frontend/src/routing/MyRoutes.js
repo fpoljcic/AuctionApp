@@ -8,6 +8,7 @@ import AllCategories from 'pages/AllCategories';
 import Shop from 'pages/Shop';
 import ItemPage from 'pages/ItemPage';
 import About from 'pages/About';
+import Terms from 'pages/Terms';
 import Login from 'pages/Login';
 import Register from 'pages/Register';
 import ForgotPassword from 'pages/ForgotPassword';
@@ -24,6 +25,7 @@ const MyRoutes = () => {
             <Route path="/shop/*/*/:id" component={ItemPage} />
             <Route path="/shop*" component={Shop} />
             <Route path="/about" component={About} />
+            <Route path="/terms" component={Terms} />
             <GuestRoute path="/login" component={Login} />
             <GuestRoute path="/register" component={Register} />
             <GuestRoute path="/forgot_password" component={ForgotPassword} />
