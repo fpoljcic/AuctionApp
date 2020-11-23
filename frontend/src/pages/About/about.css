@@ -1,0 +1,35 @@
+.about-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.about-text {
+    width: 40%;
+    font-size: 18px;
+    color: var(--text-secondary);
+    letter-spacing: 0.63px;
+    line-height: 25px;
+    text-align: left;
+}
+
+.about-images-container {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.small-about-image {
+    width: calc(50% - 10px);
+}
+
+@media (max-width: 991px) {
+    .about-text {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .about-images-container {
+        width: 100%;
+    }
+}

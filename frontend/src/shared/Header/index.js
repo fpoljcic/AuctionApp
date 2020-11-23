@@ -5,7 +5,7 @@ import { GrFormSearch } from "react-icons/gr";
 import { FormControl, Image, ListGroup, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { removeSession, getUser } from 'utilities/localStorage';
-import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl, forgotPasswordUrl, resetPasswordUrl } from 'utilities/appUrls';
+import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl, forgotPasswordUrl, resetPasswordUrl, aboutUrl, termsUrl, privacyUrl } from 'utilities/appUrls';
 import { useUserContext } from 'AppContext';
 import * as qs from 'query-string';
 
@@ -114,7 +114,15 @@ const Header = () => {
                     >
                         HOME
                     </NavLink>
-                    <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to={shopUrl}>SHOP</NavLink>
+                    <NavLink
+                        isActive={(match, location) => ((match !== null && match.url === shopUrl) || location.pathname === aboutUrl || location.pathname === termsUrl ||
+                            location.pathname === privacyUrl)}
+                        className="black-nav-link nav-link"
+                        activeClassName="black-active-nav-link"
+                        to={shopUrl}
+                    >
+                        SHOP
+                    </NavLink>
                     <NavLink
                         style={{ paddingRight: 0, paddingTop: 28, paddingBottom: 28 }}
                         className={"black-nav-link nav-link"}
