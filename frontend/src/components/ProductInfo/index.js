@@ -23,6 +23,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
             case !active:
                 tooltipText = "Auction is yet to start for this product";
                 break;
+            case minPrice === maxPrice + 0.01:
+                tooltipText = "Price can't be higher than $" + maxPrice;
+                break;
             case bidPrice === "":
                 return <div />;
             case isNaN(bidPrice):
@@ -94,10 +97,10 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 </div>
             </div>
             <div className="place-bid-container">
-                <div>
+                <div style={{ marginTop: 10 }}>
                     <Form.Control
                         value={bidPrice}
-                        disabled={ownProduct || !active || loading}
+                        disabled={ownProduct || !active || loading || minPrice === maxPrice + 0.01}
                         maxLength="9"
                         className="form-control-gray place-bid-form"
                         size="xl-18"
@@ -106,23 +109,39 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                         onKeyUp={e => e.key === 'Enter' ? handleBid() : null}
                     />
                     <div className="place-bid-label">
-                        Enter ${minPrice} or more
+                        {minPrice !== maxPrice + 0.01 ?
+                            "Enter $" + minPrice + " or more" :
+                            "You entered the highest possible bid"
+                        }
                     </div>
                 </div>
                 <OverlayTrigger
                     placement="right"
+                    popperConfig={{
+                        modifiers: [
+                            {
+                                name: "flip",
+                                enabled: true,
+                                options: {
+                                    fallbackPlacements: ["bottom", "top"]
+                                }
+                            },
+                        ],
+                    }}
                     overlay={renderTooltip()}
                 >
-                    <Button
-                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice || bidPrice > maxPrice}
-                        style={{ width: 192, padding: 0 }}
-                        size="xxl"
-                        variant="transparent-black-shadow"
-                        onClick={handleBid}
-                    >
-                        PLACE BID
-                        <IoIosArrowForward style={{ fontSize: 24 }} />
-                    </Button>
+                    <div style={{ display: 'inline-block' }}>
+                        <Button
+                            disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice || bidPrice > maxPrice}
+                            style={{ width: 192, padding: 0, marginTop: 10 }}
+                            size="xxl"
+                            variant="transparent-black-shadow"
+                            onClick={handleBid}
+                        >
+                            PLACE BID
+                            <IoIosArrowForward style={{ fontSize: 24 }} />
+                        </Button>
+                    </div>
                 </OverlayTrigger>
             </div>
             <div style={{ color: 'var(--text-secondary)' }}>

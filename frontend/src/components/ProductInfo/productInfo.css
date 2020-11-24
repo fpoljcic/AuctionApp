@@ -23,6 +23,7 @@
     color: var(--text-secondary);
     letter-spacing: 0.52px;
     margin-top: 10px;
+    max-width: 176px;
 }
 
 .wishlist-button {

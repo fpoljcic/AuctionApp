@@ -17,6 +17,7 @@
 
 .product-info-container>div:first-child {
     margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .product-info-container>div:last-child {
