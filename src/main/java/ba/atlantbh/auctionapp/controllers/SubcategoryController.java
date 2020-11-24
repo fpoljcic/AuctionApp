@@ -4,6 +4,7 @@ import ba.atlantbh.auctionapp.exceptions.BadRequestException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.projections.SimpleSubcategoryProj;
 import ba.atlantbh.auctionapp.projections.SubcategoryProj;
+import ba.atlantbh.auctionapp.responses.SubcategoriesResponse;
 import ba.atlantbh.auctionapp.services.SubcategoryService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -35,5 +36,10 @@ public class SubcategoryController {
     })
     public ResponseEntity<List<SimpleSubcategoryProj>> getSubcategoriesForCategory(@RequestParam String id) {
         return ResponseEntity.ok(subcategoryService.getSubcategoriesForCategory(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SubcategoriesResponse>> getSubcategories() {
+        return ResponseEntity.ok(subcategoryService.getSubcategories());
     }
 }

@@ -7,4 +7,8 @@ export const getFeaturedSubcategories = async () => {
 
 export const getSubcategoriesForCategory = async (id) => {
     return (await axios.get(hostUrl + '/subcategories/category', getParams({ id }))).data;
-}
+};
+
+export const getSubcategories = async () => {
+    return (await axios.get(hostUrl + '/subcategories')).data;
+};

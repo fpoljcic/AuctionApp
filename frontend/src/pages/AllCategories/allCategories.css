@@ -1,0 +1,22 @@
+.all-categories-cont {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 290px);
+    gap: 5px;
+    margin: 0 auto;
+    justify-items: center;
+    justify-content: center;
+}
+
+.category-list {
+    text-align: left;
+    width: 160px;
+    margin-bottom: 40px;
+}
+
+.category-list-item {
+    cursor: pointer;
+}
+
+.category-list-item:hover {
+    color: var(--primary);
+}

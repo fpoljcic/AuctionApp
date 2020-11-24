@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { TiPlus, TiMinus } from 'react-icons/ti';
 import { searchCountProducts } from 'api/product';
+import { capitalizeFirstLetter } from 'utilities/common';
 
 const activeItemStyle = {
     fontWeight: 'bold',
@@ -51,8 +52,8 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
                 <React.Fragment key={category.name}>
                     <ListGroup.Item
                         action
-                        onClick={() => categoryClick(category.name)}
-                        style={category.name === activeCategory && activeSubcategory === "" ? activeItemStyle : { color: 'var(--text-primary)' }}
+                        onClick={() => categoryClick(capitalizeFirstLetter(category.name))}
+                        style={capitalizeFirstLetter(category.name) === activeCategory && activeSubcategory === "" ? activeItemStyle : { color: 'var(--text-primary)' }}
                     >
                         {category.name}
                         {' (' + category.count + ')'}
@@ -61,7 +62,7 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
                     </ListGroup.Item>
                     {category.name === activeCategory ? category.subcategories.map(subcategory => (
                         <ListGroup.Item
-                            style={category.name === activeCategory && subcategory.name === activeSubcategory ? activeItemStyle : { color: 'var(--text-secondary)' }}
+                            style={capitalizeFirstLetter(category.name) === activeCategory && capitalizeFirstLetter(subcategory.name) === activeSubcategory ? activeItemStyle : { color: 'var(--text-secondary)' }}
                             key={subcategory.name}
                             action
                             onClick={() => subcategoryClick(subcategory.name)}
