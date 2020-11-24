@@ -56,7 +56,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
         phone: yup.string()
             .required("*Phone is required")
             .max(32, "*Phone can't be longer than 32 characters")
-            .test("digits-only", "*Phone number only contain digits", value => /^\d*$/.test(value))
+            .test("digits-only", "*Phone number can only contain digits", value => /^\d*$/.test(value))
             .test("country-selected", "*Select a country", () => country !== null)
             .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
         shipping: yup.bool(),

@@ -102,15 +102,15 @@ public class PersonService {
     }
 
     private void setBlankPropsToNull(Person person) {
-        if (person.getStreet().equals(""))
+        if (person.getStreet() != null && person.getStreet().equals(""))
             person.setStreet(null);
-        if (person.getCountry().equals(""))
+        if (person.getCountry() != null && person.getCountry().equals(""))
             person.setCountry(null);
-        if (person.getCity().equals(""))
+        if (person.getCity() != null && person.getCity().equals(""))
             person.setCity(null);
-        if (person.getState().equals(""))
+        if (person.getState() != null && person.getState().equals(""))
             person.setState(null);
-        if (person.getZip().equals(""))
+        if (person.getZip() != null && person.getZip().equals(""))
             person.setZip(null);
     }
 
