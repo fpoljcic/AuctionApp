@@ -72,48 +72,52 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
 
     return (
         <>
-            <Form.Check
-                custom
-                type="checkbox"
-                id="custom-paypal-checkbox"
-                label="PayPal"
-                name="payPal"
-                checked={payPal}
-                onChange={e => {
-                    setPayPal(e.target.checked);
-                    setPayPalType(e.target.checked);
-                    if (e.target.checked)
-                        setCreditCard(false);
-                }}
-                disabled={payPalDisabled}
-                style={{ marginBottom: 10 }}
-            />
-            <Form.Check
-                custom
-                type="checkbox"
-                id="custom-credit-card-checkbox"
-                label="Credit Card"
-                name="creditCard"
-                checked={creditCard}
-                onChange={e => {
-                    if (payPalDisabled) {
-                        return;
-                    }
-                    setCreditCard(e.target.checked);
-                    setPayPalType(!e.target.checked);
-                    if (e.target.checked)
-                        setPayPal(false);
-                }}
-                disabled={cardDisabled}
-                style={{ marginBottom: 10 }}
-            />
+            {!payPalDisabled ? (
+                <>
+                    <Form.Check
+                        custom
+                        type="checkbox"
+                        id="custom-paypal-checkbox"
+                        label="PayPal"
+                        name="payPal"
+                        checked={payPal}
+                        onChange={e => {
+                            setPayPal(e.target.checked);
+                            setPayPalType(e.target.checked);
+                            if (e.target.checked)
+                                setCreditCard(false);
+                        }}
+                        disabled={payPalDisabled}
+                        style={{ marginBottom: 10 }}
+                    />
+                    <Form.Check
+                        custom
+                        type="checkbox"
+                        id="custom-credit-card-checkbox"
+                        label="Credit Card"
+                        name="creditCard"
+                        checked={creditCard}
+                        onChange={e => {
+                            if (payPalDisabled) {
+                                return;
+                            }
+                            setCreditCard(e.target.checked);
+                            setPayPalType(!e.target.checked);
+                            if (e.target.checked)
+                                setPayPal(false);
+                        }}
+                        disabled={cardDisabled}
+                        style={{ marginBottom: 10 }}
+                    />
+                </>
+            ) : null}
             {!creditCard && !payPal ?
                 <Form.Control.Feedback className="d-block" type="invalid">
                     *Choose a payment option
             </Form.Control.Feedback> : null}
             {creditCard ?
                 <>
-                    <Form.Text style={{ textAlign: 'left', paddingLeft: '1.5rem' }} className="form-control-description">
+                    <Form.Text style={!payPalDisabled ? { textAlign: 'left', paddingLeft: '1.5rem' } : { textAlign: 'left' }} className="form-control-description">
                         We accept the following credit cards
                         <div style={{ marginTop: 5 }}>
                             <Image style={{ width: 'max(210px, 14vw)' }} src="/images/cards.png" />
