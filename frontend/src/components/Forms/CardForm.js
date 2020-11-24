@@ -15,7 +15,7 @@ export const cardFormSchema = (notRequired, initialCardNumber) => {
             .test("custom-required", "*Card number is required", value => notRequired || value)
             .min(13, "*Card number must have at least 13 characters")
             .max(19, "*Card number can't be longer than 19 characters")
-            .test("digits-only", "Card number can only contain digits", value => notRequired || value === initialCardNumber || /^\d*$/.test(value)),
+            .test("digits-only", "*Card number can only contain digits", value => notRequired || value === initialCardNumber || /^\d*$/.test(value)),
         expirationYear: yup.number()
             .test("custom-required", "*Expiration year is required", value => notRequired || value),
         expirationMonth: yup.number()
