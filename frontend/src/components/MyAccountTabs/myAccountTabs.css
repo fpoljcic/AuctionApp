@@ -49,6 +49,19 @@
     border-bottom: none;
 }
 
+.no-table-items {
+    border: 1px solid var(--light-silver);
+    border-top: none;
+    margin-top: -1rem;
+    padding: .75rem;
+}
+
+.table-spinner {
+    color: var(--primary);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 @media (max-width: 767px) {
     .profile-tab-picture {
         width: 35%;
