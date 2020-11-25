@@ -14,7 +14,9 @@ const ProductPhotos = ({ photos }) => {
     const imagePath = photos[activePhoto] !== undefined ? photos[activePhoto].url : "/images/placeholder-image-gray.png";
 
     useEffect(() => {
-        const downHandler = ({ key }) => {
+        const downHandler = ({ key, target }) => {
+            if (target.tagName === "INPUT")
+                return;
             switch (key) {
                 case 'Left':
                 case 'ArrowLeft':

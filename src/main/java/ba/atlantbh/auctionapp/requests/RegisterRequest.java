@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
@@ -14,11 +15,13 @@ public class RegisterRequest {
     @NotBlank(message = "First name can't be blank")
     @Size(min = 2, message = "First name must have at least 2 characters")
     @Size(max = 100, message = "First name can't be longer than 100 characters")
+    @Pattern(regexp = "^[^\\p{P}\\p{S}]*$", flags = Pattern.Flag.UNICODE_CASE, message = "First name can't contain special characters")
     private String firstName;
 
     @NotBlank(message = "Last name can't be blank")
     @Size(min = 2, message = "Last name must have at least 2 characters")
     @Size(max = 100, message = "Last name can't be longer than 100 characters")
+    @Pattern(regexp = "^[^\\p{P}\\p{S}]*$", flags = Pattern.Flag.UNICODE_CASE, message = "Last name can't contain special characters")
     private String lastName;
 
     @NotBlank(message = "Email can't be blank")

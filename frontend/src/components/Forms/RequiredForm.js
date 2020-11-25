@@ -34,7 +34,7 @@ export const requiredFormSchema = {
         .required("*Year is required"),
     phone: yup.string()
         .required("*Phone number is required")
-        .test("digits-only", "Phone number only contain digits", value => /^\d*$/.test(value))
+        .test("digits-only", "*Phone number can only contain digits", value => /^\d*$/.test(value))
         .max(32, "*Phone number can't be longer than 32 characters"),
     email: yup.string()
         .email("*Email must be valid")

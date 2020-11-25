@@ -34,6 +34,7 @@ public class UpdateProfileRequest {
 
     @NotBlank(message = "Phone can't be blank")
     @Size(max = 32, message = "Phone can't be longer than 32 characters")
+    @Pattern(regexp = "^(\\d*)$", message = "Phone number can only contain digits")
     private String phone;
 
     private Boolean verified = false;
