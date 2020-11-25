@@ -37,12 +37,31 @@
     justify-content: flex-end;
 }
 
+.seller-tab-buttons {
+    display: flex;
+    position: relative;
+}
+
+.seller-tab-middle-button {
+    width: 120px;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
 @media (max-width: 767px) {
     .profile-tab-picture {
         width: 35%;
     }
     .profile-tab-form {
         width: 65%;
+    }
+    .seller-tab-buttons {
+        flex-direction: column;
+    }
+    .seller-tab-middle-button {
+        border-right: 1px solid var(--light-silver);
+        border-left: 1px solid var(--light-silver);
     }
 }
 
