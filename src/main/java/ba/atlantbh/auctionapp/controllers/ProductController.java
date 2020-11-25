@@ -132,4 +132,9 @@ public class ProductController {
     public ResponseEntity<List<UserProductProj>> getUserProducts() {
         return ResponseEntity.ok(productService.getUserProducts());
     }
+
+    @GetMapping("/user/bid")
+    public ResponseEntity<List<UserProductProj>> getUserBidProducts() {
+        return ResponseEntity.ok(productService.getUserBidProducts());
+    }
 }
