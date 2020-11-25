@@ -102,7 +102,7 @@ const RequiredForm = ({ initialPhoneNumber, handleChange, touched, errors, value
     return (
         <>
             <Form.Group>
-                <Form.Label>First name</Form.Label>
+                <Form.Label>First Name</Form.Label>
                 <Form.Control
                     className="form-control-gray-no-shadow"
                     size="lg-18"
@@ -119,7 +119,7 @@ const RequiredForm = ({ initialPhoneNumber, handleChange, touched, errors, value
             </Form.Group>
 
             <Form.Group>
-                <Form.Label>Last name</Form.Label>
+                <Form.Label>Last Name</Form.Label>
                 <Form.Control
                     className="form-control-gray-no-shadow"
                     size="lg-18"
