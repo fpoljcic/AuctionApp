@@ -50,3 +50,7 @@ export const addProduct = async (product) => {
 export const getUserProducts = async () => {
     return (await axios.get(hostUrl + '/products/user', defaultHeader())).data;
 };
+
+export const getUserBidProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user/bid', defaultHeader())).data;
+};

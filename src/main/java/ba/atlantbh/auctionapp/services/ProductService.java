@@ -347,4 +347,9 @@ public class ProductService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         return productRepository.getUserProducts(personId.toString());
     }
+
+    public List<UserProductProj> getUserBidProducts() {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserBidProducts(personId.toString());
+    }
 }

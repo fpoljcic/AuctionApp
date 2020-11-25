@@ -8,11 +8,12 @@ public interface UserProductProj {
     UUID getId();
     String getName();
     String getUrl();
-    BigDecimal getStartPrice();
+    BigDecimal getPrice();
     String getCategoryName();
     String getSubcategoryName();
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
     Integer getBidCount();
     BigDecimal getMaxBid();
+    UUID getPersonId();
 }

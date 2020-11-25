@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 import ProductTable from 'components/ProductTable';
 import StartSellingTab from 'components/StartSellingTab';
@@ -17,6 +17,7 @@ const Seller = () => {
     const [scheduledProducts, setScheduledProducts] = useState([]);
     const [activeProducts, setActiveProducts] = useState([]);
     const [soldProducts, setSoldProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const tabs = [
         <ProductTable type="scheduled" products={scheduledProducts} />,
@@ -26,14 +27,30 @@ const Seller = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getUserProducts();
-            setScheduledProducts(data.filter(product => moment.utc(product.startDate).isAfter(moment())));
-            setActiveProducts(data.filter(product => moment.utc(product.endDate).isAfter(moment()) && moment(product.startDate).isSameOrBefore(moment())));
-            setSoldProducts(data.filter(product => moment.utc(product.endDate).isSameOrBefore(moment())));
+            try {
+                const data = await getUserProducts();
+                setScheduledProducts(data.filter(product => moment.utc(product.startDate).isAfter(moment())));
+                setActiveProducts(data.filter(product => moment.utc(product.endDate).isAfter(moment()) && moment(product.startDate).isSameOrBefore(moment())));
+                setSoldProducts(data.filter(product => moment.utc(product.endDate).isSameOrBefore(moment())));
+            } catch (e) { }
+            setLoading(false);
         }
 
         fetchData();
     }, [])
+
+    const renderEmpty = () => {
+        switch (true) {
+            case activeTab === 0 && scheduledProducts.length === 0:
+                return <StartSellingTab />;
+            case activeTab === 1 && activeProducts.length === 0:
+                return <div className="no-table-items font-18"> No active items found </div>;
+            case activeTab === 2 && soldProducts.length === 0:
+                return <div className="no-table-items font-18"> No sold items found </div>;
+            default:
+                return null;
+        }
+    }
 
     return (
         <>
@@ -53,8 +70,10 @@ const Seller = () => {
                 </Button>
             </div>
             {tabs[activeTab]}
-            {activeTab === 0 && scheduledProducts.length === 0 ?
-                <StartSellingTab /> : null}
+            {loading ?
+                <div className="no-table-items font-18">
+                    <Spinner className="table-spinner" animation="border" />
+                </div> : renderEmpty()}
         </>
     );
 }
