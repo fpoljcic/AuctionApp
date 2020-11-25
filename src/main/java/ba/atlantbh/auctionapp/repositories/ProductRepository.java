@@ -2,6 +2,7 @@ package ba.atlantbh.auctionapp.repositories;
 
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.projections.*;
+import ba.atlantbh.auctionapp.projections.UserProductProj;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -152,4 +153,13 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "AND start_date <= now() AND end_date > now() ORDER BY start_price",
             nativeQuery = true)
     List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
+
+    @Query(value = "SELECT p.id, p.name, p2.url, p.start_price startPrice, s.name subcategoryName, c.name categoryName, " +
+            "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.price) maxBid " +
+            "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id "+
+            "WHERE p.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
+            "GROUP BY (p.id, p.name, p.start_price, s.name, c.name, p2.url, p.start_price, p.start_date, p.end_date) " +
+            "ORDER BY p.date_created DESC", nativeQuery = true)
+    List<UserProductProj> getUserProducts(@Param("user_id") String userId);
 }

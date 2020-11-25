@@ -46,3 +46,7 @@ export const getProductFilters = async () => {
 export const addProduct = async (product) => {
     return (await axios.post(hostUrl + '/products/add', { ...product }, defaultHeader())).data;
 };
+
+export const getUserProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user', defaultHeader())).data;
+};

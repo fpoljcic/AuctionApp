@@ -5,6 +5,7 @@ import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.exceptions.UnprocessableException;
 import ba.atlantbh.auctionapp.models.enums.Color;
 import ba.atlantbh.auctionapp.models.enums.Size;
+import ba.atlantbh.auctionapp.projections.UserProductProj;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
 import ba.atlantbh.auctionapp.requests.FilterCountRequest;
 import ba.atlantbh.auctionapp.requests.ProductRequest;
@@ -125,5 +126,10 @@ public class ProductController {
     public ResponseEntity<UUID> add(@RequestBody @Valid ProductRequest productRequest) {
         UUID productId = productService.add(productRequest);
         return ResponseEntity.ok(productId);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<UserProductProj>> getUserProducts() {
+        return ResponseEntity.ok(productService.getUserProducts());
     }
 }

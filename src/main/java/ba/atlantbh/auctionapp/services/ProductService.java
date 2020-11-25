@@ -342,4 +342,9 @@ public class ProductService {
         photos.get(0).setFeatured(true);
         photoRepository.saveAll(photos);
     }
+
+    public List<UserProductProj> getUserProducts() {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserProducts(personId.toString());
+    }
 }

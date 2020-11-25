@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ListGroup } from 'react-bootstrap';
-import { TiPlus, TiMinus } from 'react-icons/ti';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 import { searchCountProducts } from 'api/product';
 import { capitalizeFirstLetter } from 'utilities/common';
 
@@ -58,7 +58,7 @@ const CategoriesFilter = ({ query, filter, handleClick }) => {
                         {category.name}
                         {' (' + category.count + ')'}
                         {category.name === activeCategory ?
-                            <TiMinus style={{ fontSize: 24, color: 'var(--primary)' }} /> : <TiPlus style={{ fontSize: 24 }} />}
+                            <FaMinus style={{ fontSize: 19, color: 'var(--primary)' }} /> : <FaPlus style={{ fontSize: 19 }} />}
                     </ListGroup.Item>
                     {category.name === activeCategory ? category.subcategories.map(subcategory => (
                         <ListGroup.Item
