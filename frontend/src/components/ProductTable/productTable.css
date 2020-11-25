@@ -1,0 +1,17 @@
+.product-table-header>th {
+    background-color: var(--secondary-background);
+}
+
+.product-table-name {
+    font-weight: bold;
+    max-width: 325px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-table-id {
+    color: var(--primary);
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    width: max-content;
+}
