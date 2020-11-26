@@ -352,4 +352,9 @@ public class ProductService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         return productRepository.getUserBidProducts(personId.toString());
     }
+
+    public List<UserProductProj> getUserWishlistProducts() {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserWishlistProducts(personId.toString());
+    }
 }
