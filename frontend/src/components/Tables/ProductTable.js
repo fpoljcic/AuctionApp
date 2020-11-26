@@ -31,7 +31,7 @@ const ProductTable = ({ products, type }) => {
                 return moment.utc(product.endDate).local().format(longDateTimeFormat);
             default:
                 const productEndDate = moment.utc(product.endDate);
-                return moment().isSameOrAfter(productEndDate) ? 0 : getDurationBetweenDates(moment(), productEndDate);
+                return moment().isSameOrAfter(productEndDate) ? "0s" : getDurationBetweenDates(moment(), productEndDate);
         }
     }
 

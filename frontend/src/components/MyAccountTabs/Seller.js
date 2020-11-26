@@ -30,7 +30,7 @@ const Seller = () => {
             try {
                 const data = await getUserProducts();
                 setScheduledProducts(data.filter(product => moment.utc(product.startDate).isAfter(moment())));
-                setActiveProducts(data.filter(product => moment.utc(product.endDate).isAfter(moment()) && moment(product.startDate).isSameOrBefore(moment())));
+                setActiveProducts(data.filter(product => moment.utc(product.endDate).isAfter(moment()) && moment.utc(product.startDate).isSameOrBefore(moment())));
                 setSoldProducts(data.filter(product => moment.utc(product.endDate).isSameOrBefore(moment())));
             } catch (e) { }
             setLoading(false);

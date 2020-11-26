@@ -20,6 +20,9 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
             case ownProduct:
                 tooltipText = "You can't bid on your own product";
                 break;
+            case moment().isSameOrAfter(moment.utc(product.endDate)):
+                tooltipText = "Auction has ended for this product"
+                break;
             case !active:
                 tooltipText = "Auction is yet to start for this product";
                 break;
@@ -59,7 +62,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                     Time end: {productEndDate.local().format(longDateTimeFormat)}
                 </>
             );
-        const timeLeft = !active ? 0 : getDurationBetweenDates(moment(), productEndDate);
+        const timeLeft = !active ? "0s" : getDurationBetweenDates(moment(), productEndDate);
         return (
             <>
                 Time left: {timeLeft}
