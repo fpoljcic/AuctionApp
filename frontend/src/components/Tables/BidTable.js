@@ -8,7 +8,7 @@ const BidTable = ({ bids }) => {
         <Table variant="gray-transparent" responsive>
             <thead>
                 <tr>
-                    <th colSpan="2">Bider</th>
+                    <th colSpan="2">Bidder</th>
                     <th>Date</th>
                     <th>Bid</th>
                 </tr>
