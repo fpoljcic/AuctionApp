@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
-import ProductTable from 'components/ProductTable';
+import ProductTable from 'components/Tables/ProductTable';
 import StartSellingTab from 'components/StartSellingTab';
 import { myAccountSellerSellUrl } from 'utilities/appUrls';
 import { getUserProducts } from 'api/product';

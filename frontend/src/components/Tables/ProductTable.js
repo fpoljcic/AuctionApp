@@ -6,7 +6,7 @@ import { productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 import moment from 'moment';
 
-import './productTable.css';
+import './tables.css';
 
 const ProductTable = ({ products, type }) => {
     const history = useHistory();

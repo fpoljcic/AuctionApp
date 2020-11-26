@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
-import ProductTable from 'components/ProductTable';
+import ProductTable from 'components/Tables/ProductTable';
 import { getUserBidProducts } from 'api/product';
 
 import './myAccountTabs.css';
