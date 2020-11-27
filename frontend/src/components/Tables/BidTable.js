@@ -2,6 +2,8 @@ import React from 'react';
 import { Image, Table } from 'react-bootstrap';
 import { getLongDate } from 'utilities/date';
 
+import './tables.css';
+
 const BidTable = ({ bids }) => {
 
     return (
@@ -9,16 +11,20 @@ const BidTable = ({ bids }) => {
             <thead>
                 <tr>
                     <th colSpan="2">Bidder</th>
-                    <th>Date</th>
-                    <th>Bid</th>
+                    <th style={{ minWidth: 190 }}>Date</th>
+                    <th style={{ minWidth: 135 }}>Bid</th>
                 </tr>
             </thead>
             <tbody>
                 {bids.map((bid, i) => (
                     <tr key={bid.id}>
-                        <td style={{ fontWeight: 'bold' }} colSpan="2">
-                            <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
-                            {bid.firstName + ' ' + bid.lastName}
+                        <td colSpan="2">
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Image style={{ marginRight: 20 }} className="avatar-image-small" src={bid.photo} roundedCircle />
+                                <div className="bid-table-bidder">
+                                    {bid.firstName + ' ' + bid.lastName}
+                                </div>
+                            </div>
                         </td>
                         <td>{getLongDate(bid.date)}</td>
                         <td style={i === 0 ? { color: 'var(--strong-green)', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
