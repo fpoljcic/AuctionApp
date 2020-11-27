@@ -15,3 +15,10 @@
     letter-spacing: 0.56px;
     width: max-content;
 }
+
+.wishlist-table-button:disabled {
+    width: 105px;
+    opacity: 1;
+    font-size: 14px;
+    letter-spacing: 0.49px;
+}

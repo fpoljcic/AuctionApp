@@ -54,3 +54,7 @@ export const getUserProducts = async () => {
 export const getUserBidProducts = async () => {
     return (await axios.get(hostUrl + '/products/user/bid', defaultHeader())).data;
 };
+
+export const getUserWishlistProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user/wishlist', defaultHeader())).data;
+};

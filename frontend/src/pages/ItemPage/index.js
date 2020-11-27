@@ -7,7 +7,7 @@ import { wishlistProduct, removeWishlistProduct } from 'api/wishlist';
 import { productUrl } from 'utilities/appUrls';
 import { scrollToTop } from 'utilities/common';
 import ImageCard from 'components/ImageCard';
-import BidTable from 'components/BidTable';
+import BidTable from 'components/Tables/BidTable';
 import ProductPhotos from 'components/ProductPhotos';
 import ProductInfo from 'components/ProductInfo';
 import { useAlertContext, useBreadcrumbContext } from 'AppContext';

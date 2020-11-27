@@ -174,4 +174,16 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.start_date, p.end_date) " +
             "ORDER BY p.end_date", nativeQuery = true)
     List<UserProductProj> getUserBidProducts(@Param("user_id") String userId);
+
+    @Query(value = "SELECT p.id, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, " +
+            "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
+            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid " +
+            "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
+            "INNER JOIN wishlist w on p.id = w.product_id " +
+            "WHERE w.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
+            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.start_date, p.end_date, w.date) " +
+            "ORDER BY w.date DESC", nativeQuery = true)
+    List<UserProductProj> getUserWishlistProducts(@Param("user_id") String userId);
 }

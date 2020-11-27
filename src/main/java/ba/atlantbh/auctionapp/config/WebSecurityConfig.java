@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/products/add",
             "/products/user",
             "/products/user/bid",
+            "/products/user/wishlist",
             "/auth/update",
             "/cards/person"
     };
