@@ -28,6 +28,9 @@
     cursor: pointer;
     max-width: 18.2vw;
     word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .word-wrap-xl, .word-wrap-lg {
@@ -36,6 +39,7 @@
     word-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .featured-item-image-xxl:hover, .featured-item-image-xl:hover, .featured-item-image-lg:hover {

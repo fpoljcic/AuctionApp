@@ -27,9 +27,9 @@ const WishlistTable = ({ products }) => {
                 <tr className="product-table-header">
                     <th style={{ width: 80 }}>Item</th>
                     <th>Name</th>
-                    <th style={{ minWidth: 110 }}>Time Left</th>
-                    <th style={{ minWidth: 130 }}>Highest Bid</th>
-                    <th style={{ minWidth: 130 }}>Status</th>
+                    <th style={{ minWidth: 178 }}>Time Left</th>
+                    <th style={{ minWidth: 135 }}>Highest Bid</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -63,7 +63,7 @@ const WishlistTable = ({ products }) => {
                             {product.maxBid !== null ? "$ " + product.maxBid : "/"}
                         </td>
                         <td>
-                            <div style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Button
                                     size="lg"
                                     variant="fill-gray"

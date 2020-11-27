@@ -80,7 +80,7 @@ const ItemPage = ({ match, location }) => {
             const minPrice = Math.max(...newBids.map(bid => bid.personId === personId ? bid.price : 0), 0) + 0.01;
             setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
             if (personId === newBids[0].personId)
-                showMessage("success", "Congratulations! You are the highest bider!");
+                showMessage("success", "Congratulations! You are the highest bidder!");
             else
                 showMessage("warning", "There are higher bids than yours. You could give a second try!");
             setBids(newBids);
