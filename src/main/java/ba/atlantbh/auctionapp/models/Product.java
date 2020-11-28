@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -38,7 +40,8 @@ public class Product {
     @javax.validation.constraints.Size(max = 700)
     private String description;
 
-    @Min(value = 0)
+    @DecimalMin("0.01")
+    @DecimalMax("999999.99")
     @Column(precision = 8, scale = 2, nullable = false)
     private BigDecimal startPrice;
 
@@ -89,14 +92,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
-
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
-
-    @ManyToOne
-    @JoinColumn(name = "paypal_id")
-    private PayPal payPal;
 
     public Product(@NotBlank String name, @Min(value = 0) BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate, @NotBlank String street, @NotBlank String city, @NotBlank String zip, @NotBlank String country, @NotBlank String phone, Person person, Subcategory subcategory) {
         this.name = name;
