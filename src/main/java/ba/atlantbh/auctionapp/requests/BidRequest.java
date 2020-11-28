@@ -12,7 +12,7 @@ import java.util.UUID;
 public class BidRequest {
 
     @NotNull(message = "Price is required")
-    @DecimalMin(value = "0.01", message = "Price can't be lower than $0.01")
+    @DecimalMin(value = "0.50", message = "Price can't be lower than $0.50")
     @DecimalMax(value = "999999.99", message = "Price can't be higher than $999999.99")
     private BigDecimal price;
 
