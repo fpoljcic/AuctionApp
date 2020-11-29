@@ -1,5 +1,10 @@
-:root {
+.modal-content {
   --arrow: #573BAC;
+  --secondary-background: #FAFAFA;
+  --lighter-silver: #ECECEC;
+  --primary: #8367D8;
+  --primary-a: rgba(131, 103, 216, 0.31);
+  --white: #FFF;
 }
 
 .purple-theme {

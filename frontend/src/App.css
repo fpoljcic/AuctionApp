@@ -580,6 +580,10 @@ img {
   margin-top: 2px;
 }
 
+.modal-content {
+  border-radius: 0;
+}
+
 @media (max-width: 767px) {
   .verify-phone {
     width: unset;

@@ -1,0 +1,22 @@
+.receipt-label {
+    font-weight: bold;
+    margin-right: 5px;
+    word-break: break-all;
+}
+
+.receipt-part-title {
+    font-size: 20px;
+    letter-spacing: 0.7px;
+}
+
+.receipt-part {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: -5px;
+    margin-bottom: 40px;
+}
+
+.receipt-part>span {
+    margin: 5px;
+}
