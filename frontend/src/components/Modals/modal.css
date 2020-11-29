@@ -19,4 +19,5 @@
 
 .receipt-part>span {
     margin: 5px;
+    word-wrap: anywhere;
 }
