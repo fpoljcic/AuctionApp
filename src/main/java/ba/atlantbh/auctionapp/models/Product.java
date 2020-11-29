@@ -40,7 +40,7 @@ public class Product {
     @javax.validation.constraints.Size(max = 700)
     private String description;
 
-    @DecimalMin("0.01")
+    @DecimalMin("0.50")
     @DecimalMax("999999.99")
     @Column(precision = 8, scale = 2, nullable = false)
     private BigDecimal startPrice;

@@ -17,7 +17,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
         startPrice: yup.number()
             .typeError("*Start price must be a number")
             .required("*Start price is required")
-            .min(0.01, "*Start price can't be lower than $0.01")
+            .min(0.50, "*Start price can't be lower than $0.50")
             .max(999999.99, "*Start price can't be higher than $999999.99"),
         startDate: yup.string()
             .nullable()
