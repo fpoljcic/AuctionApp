@@ -17,4 +17,5 @@ public interface UserProductProj {
     Integer getBidCount();
     BigDecimal getMaxBid();
     UUID getPersonId();
+    Boolean getPaid();
 }
