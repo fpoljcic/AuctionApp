@@ -29,6 +29,20 @@
     height: 51px;
 }
 
+.list-group-categories>.categories-list-title {
+    color: var(--primary);
+    font-weight: bold;
+    border-bottom: none;
+}
+
+.list-group-categories>.list-group-item:hover {
+    background-color: var(--lighter-silver);
+}
+
+.list-group-categories>.categories-list-title:hover {
+    background-color: var(--primary-background);
+}
+
 .featured-product-container {
     display: flex;
     align-items: stretch;

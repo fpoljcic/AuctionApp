@@ -42,7 +42,7 @@ const LandingPage = () => {
     <>
       <div className="landing-page-top-container">
         <ListGroup variant="categories">
-          <ListGroup.Item style={{ color: 'var(--primary)', fontWeight: 'bold', borderBottom: 'none' }}>CATEGORIES</ListGroup.Item>
+          <ListGroup.Item className="categories-list-title">CATEGORIES</ListGroup.Item>
           {categories.map(category => (
             <ListGroup.Item
               key={category.name}
