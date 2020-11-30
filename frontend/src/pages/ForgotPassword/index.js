@@ -74,6 +74,7 @@ const ForgotPassword = () => {
                                             defaultValue=""
                                             onChange={handleChange}
                                             isInvalid={touched.email && errors.email}
+                                            autoFocus
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.email}

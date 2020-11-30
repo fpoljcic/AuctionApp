@@ -90,6 +90,7 @@ const ResetPassword = () => {
                                                 defaultValue=""
                                                 onChange={handleChange}
                                                 isInvalid={touched.password && errors.password}
+                                                autoFocus
                                             />
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.password}

@@ -128,6 +128,7 @@ const SellTab1 = ({ categories: loadedCategories, subcategories: loadedSubcatego
                                         }}
                                         maxLength={60}
                                         isInvalid={touched.name && errors.name}
+                                        autoFocus
                                     />
                                     <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                         {errors.name}

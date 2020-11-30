@@ -136,6 +136,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                         onChange={handleChange}
                                         maxLength={255}
                                         isInvalid={touched.street && errors.street}
+                                        autoFocus
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.street}
