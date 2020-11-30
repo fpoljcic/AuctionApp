@@ -79,7 +79,7 @@ const WishlistTable = ({ products }) => {
                                     style={{ width: 105, marginLeft: 20 }}
                                     onClick={() => history.push(productUrl(product))}
                                 >
-                                    {isClosed(product.endDate) ? "VIEW" : "BID"}
+                                    {isClosed(product.endDate) || product.personAddedId === userId ? "VIEW" : "BID"}
                                 </Button>
                             </div>
                         </td>
