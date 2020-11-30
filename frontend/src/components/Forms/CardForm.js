@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getIn } from 'formik';
-import { Form, Image } from 'react-bootstrap';
+import { Form, Image, OverlayTrigger, Popover } from 'react-bootstrap';
 import { getCurrentMonth, getCurrentYear, getNextYears, getMonth } from 'utilities/date';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { MdClear } from 'react-icons/md';
+import { FaQuestionCircle } from 'react-icons/fa';
 import * as yup from 'yup';
 
 export const cardFormSchema = (notRequired, initialCardNumber) => {
@@ -234,7 +235,7 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                         </Form.Group>
 
                         <Form.Group className="form-half-width">
-                            <Form.Label>CVC/CW</Form.Label>
+                            <Form.Label>CVC/CVV</Form.Label>
                             <Form.Control
                                 className="form-control-gray-no-shadow"
                                 size="xl-18"
@@ -246,6 +247,23 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                 maxLength={4}
                                 isInvalid={getIn(touched, 'card.cvc') && getIn(errors, 'card.cvc')}
                             />
+                            <OverlayTrigger
+                                trigger="click"
+                                placement="right"
+                                popperConfig={{ modifiers: [{ name: "flip", enabled: true, options: { fallbackPlacements: ["bottom", "top"] } },], }}
+                                overlay={
+                                    <Popover>
+                                        <Popover.Title as="h3">What is CVC/CVV code and where can I find it on my card?</Popover.Title>
+                                        <Popover.Content>
+                                            The CVC/CVV code (Card Verification Code/Value) is located on the back of your credit/debit card on the right side of the white signature strip. It is always the last 3 digits in case of VISA and MasterCard.
+                                            <Image style={{ marginTop: 5 }} width="100%" src="/images/cvc.png" />
+                                        </Popover.Content>
+                                    </Popover>
+                                }
+                                rootClose
+                            >
+                                <FaQuestionCircle className="cvc-question" />
+                            </OverlayTrigger>
                             <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                 {getIn(errors, 'card.cvc')}
                             </Form.Control.Feedback>

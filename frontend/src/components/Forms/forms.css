@@ -21,6 +21,14 @@
     width: 50%;
 }
 
+.cvc-question {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
 @media (max-width: 991px) {
     .dob-container {
         flex-wrap: wrap;

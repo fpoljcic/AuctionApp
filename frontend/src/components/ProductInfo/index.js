@@ -120,17 +120,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 </div>
                 <OverlayTrigger
                     placement="right"
-                    popperConfig={{
-                        modifiers: [
-                            {
-                                name: "flip",
-                                enabled: true,
-                                options: {
-                                    fallbackPlacements: ["bottom", "top"]
-                                }
-                            },
-                        ],
-                    }}
+                    popperConfig={{ modifiers: [{ name: "flip", enabled: true, options: { fallbackPlacements: ["bottom", "top"] } },], }}
                     overlay={renderTooltip()}
                 >
                     <div style={{ display: 'inline-block' }}>
