@@ -116,9 +116,13 @@ public class PersonService {
                 throw new BadRequestException(e.getStripeError().getMessage());
             }
             if (createNewCard) {
-                oldCard.setPerson(null);
                 newCard.setPerson(person);
                 newCard.setStripeCardId(stripeCardId);
+                if (oldCard.getId() == null) {
+                    cardRepository.save(newCard);
+                    return;
+                }
+                oldCard.setPerson(null);
                 List<Card> cards = Arrays.asList(oldCard, newCard);
                 cardRepository.saveAll(cards);
                 return;
