@@ -1,6 +1,9 @@
 package ba.atlantbh.auctionapp.services;
 
-import ba.atlantbh.auctionapp.exceptions.*;
+import ba.atlantbh.auctionapp.exceptions.BadGatewayException;
+import ba.atlantbh.auctionapp.exceptions.BadRequestException;
+import ba.atlantbh.auctionapp.exceptions.ConflictException;
+import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.models.Token;
@@ -10,6 +13,7 @@ import ba.atlantbh.auctionapp.repositories.TokenRepository;
 import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import ba.atlantbh.auctionapp.utilities.UpdateMapper;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +38,7 @@ public class PersonService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final UpdateMapper updateMapper;
+    private final StripeService stripeService;
 
     private String hostUrl;
 
@@ -77,6 +83,10 @@ public class PersonService {
         updateCard(updateProfileRequest.getCard(), person);
         updateMapper.updatePerson(updateProfileRequest, person);
         setBlankPropsToNull(person);
+        try {
+            stripeService.updateCustomer(person);
+        } catch (StripeException ignore) {
+        }
         Person savedPerson = personRepository.save(person);
         savedPerson.setPassword(null);
         return savedPerson;
@@ -84,14 +94,37 @@ public class PersonService {
 
     private void updateCard(CardRequest updatedCard, Person person) {
         if (updatedCard != null) {
-            Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
-            String maskedCardNumber = card.getMaskedCardNumber();
+            Card oldCard = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
+            String maskedCardNumber = oldCard.getMaskedCardNumber();
             if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
-                updatedCard.setCardNumber(card.getCardNumber());
+                updatedCard.setCardNumber(oldCard.getCardNumber());
             else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
                 throw new BadRequestException("Card number can only contain digits");
-            updateMapper.updateCard(updatedCard, card);
-            cardRepository.save(card);
+            boolean createNewCard = false;
+            if (!updatedCard.getCardNumber().equals(oldCard.getCardNumber()) || !updatedCard.getCvc().equals(oldCard.getCvc()))
+                createNewCard = true;
+            Card newCard = new Card();
+            updateMapper.updateCard(updatedCard, newCard);
+            newCard.setStripeCardId(oldCard.getStripeCardId());
+            String stripeCardId;
+            try {
+                if (createNewCard)
+                    stripeCardId = stripeService.saveCard(newCard, person, true);
+                else
+                    stripeCardId = stripeService.updateCard(newCard, person);
+            } catch (StripeException e) {
+                throw new BadRequestException(e.getStripeError().getMessage());
+            }
+            if (createNewCard) {
+                oldCard.setPerson(null);
+                newCard.setPerson(person);
+                newCard.setStripeCardId(stripeCardId);
+                List<Card> cards = Arrays.asList(oldCard, newCard);
+                cardRepository.saveAll(cards);
+                return;
+            }
+            updateMapper.updateCard(updatedCard, oldCard);
+            cardRepository.save(oldCard);
         } else {
             List<Card> cards = cardRepository.findAllByPersonId(person.getId());
             for (Card card : cards) {

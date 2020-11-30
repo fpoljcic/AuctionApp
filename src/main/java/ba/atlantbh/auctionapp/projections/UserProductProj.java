@@ -11,9 +11,11 @@ public interface UserProductProj {
     BigDecimal getPrice();
     String getCategoryName();
     String getSubcategoryName();
+    Boolean getShipping();
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
     Integer getBidCount();
     BigDecimal getMaxBid();
     UUID getPersonId();
+    Boolean getPaid();
 }

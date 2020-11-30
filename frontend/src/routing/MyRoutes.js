@@ -15,6 +15,7 @@ import Register from 'pages/Register';
 import ForgotPassword from 'pages/ForgotPassword';
 import ResetPassword from 'pages/ResetPassword';
 import Sell from 'pages/Sell';
+import Payment from 'pages/Payment';
 import MyAccount from 'pages/MyAccount';
 import PageNotFound from 'pages/PageNotFound';
 
@@ -33,6 +34,7 @@ const MyRoutes = () => {
             <GuestRoute path="/forgot_password" component={ForgotPassword} />
             <GuestRoute path="/reset_password" component={ResetPassword} />
             <PrivateRoute path="/my_account/seller/sell" component={Sell} />
+            <PrivateRoute path="/my_account/bids/payment" component={Payment} />
             <PrivateRoute path="/my_account" component={MyAccount} />
             <Route component={PageNotFound} />
         </Switch>

@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import RequiredForm, { requiredFormInitialValues, requiredFormSchema } from 'components/Forms/RequiredForm';
 import CardForm, { cardFormInitialValues, cardFormSchema } from 'components/Forms/CardForm';
 import OptionalForm, { optionalFormInitialValues, optionalFormSchema } from 'components/Forms/OptionalForm';
-import { getUser, setUser } from 'utilities/localStorage';
+import { getUser, setSession } from 'utilities/localStorage';
 import { Button, Form, Image, Spinner } from 'react-bootstrap';
 import { IoIosArrowForward } from 'react-icons/io';
 import { placeholderImage, toBase64 } from 'utilities/common';
@@ -71,8 +71,8 @@ const Profile = () => {
                 userData.photo = imageSrc;
             else if (imageFile !== null)
                 userData.photo = await uploadImage(imageFile);
-            const newUser = await updateUser(userData);
-            setUser(newUser);
+            const data = await updateUser(userData);
+            setSession(data.person, data.token);
             showMessage("success", "You have successfully updated your profile info!");
         } catch (e) { }
         setUploading(false);

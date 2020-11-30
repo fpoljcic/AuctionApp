@@ -1,0 +1,11 @@
+.payment-done-button {
+    width: 183px;
+    margin-left: calc(100% - 183px);
+}
+
+@media (max-width: 767px) {
+    .payment-done-button {
+        width: 100%;
+        margin-left: unset;
+    }
+}

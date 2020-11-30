@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Image, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { getDurationBetweenDates, longDateTimeFormat } from 'utilities/date';
-import { productUrl } from 'utilities/appUrls';
+import { myAccountBidsPayUrl, productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
+import Receipt from 'components/Modals/Receipt';
 import moment from 'moment';
 
 import './tables.css';
@@ -11,6 +12,9 @@ import './tables.css';
 const ProductTable = ({ products, type }) => {
     const history = useHistory();
     const userId = getUserId();
+
+    const [showModal, setShowModal] = useState(false);
+    const [productId, setProductId] = useState(null);
 
     const getTimeColumnName = () => {
         switch (type) {
@@ -41,15 +45,28 @@ const ProductTable = ({ products, type }) => {
         switch (true) {
             case product.maxBid === null:
                 return { fontWeight: 'bold' };
-            case product.personId === userId:
+            case product.personId === userId || (type === "sold" && product.paid):
                 return { color: 'var(--strong-green)', fontWeight: 'bold' };
             default:
                 return { color: 'var(--cyan-blue)', fontWeight: 'bold' };
         }
     }
 
+    const handlePayClick = (product) => {
+        if (product.paid) {
+            setProductId(product.id);
+            setShowModal(true);
+            return;
+        }
+        history.push({
+            pathname: myAccountBidsPayUrl,
+            state: { product }
+        });
+    }
+
     return (
         <Table variant="gray-transparent" responsive>
+            <Receipt showModal={showModal} setShowModal={setShowModal} productId={productId} />
             <thead>
                 <tr className="product-table-header">
                     <th style={{ width: 80 }}>Item</th>
@@ -98,11 +115,11 @@ const ProductTable = ({ products, type }) => {
                             {type === "bids" && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId ?
                                 <Button
                                     size="lg-2"
-                                    variant="fill-purple-shadow"
+                                    variant={product.paid ? "transparent-black-shadow-disabled" : "fill-purple-shadow"}
                                     style={{ width: 105 }}
-                                    onClick={() => alert("TODO")}
+                                    onClick={() => handlePayClick(product)}
                                 >
-                                    PAY
+                                    {product.paid ? "RECEIPT" : "PAY"}
                                 </Button> :
                                 <Button
                                     size="lg-2"

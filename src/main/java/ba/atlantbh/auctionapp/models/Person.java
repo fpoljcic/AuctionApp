@@ -68,6 +68,8 @@ public class Person {
     @Column(nullable = false)
     private Boolean active = true;
 
+    private String stripeCustomerId;
+
     public Person(@NotBlank @Size(max = 100) @Size(min = 2) String firstName, @NotBlank @Size(max = 100) @Size(min = 2) String lastName, @NotBlank @Size(max = 100) String email, @NotBlank String password) {
         this.firstName = firstName;
         this.lastName = lastName;

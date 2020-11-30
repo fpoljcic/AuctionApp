@@ -29,7 +29,7 @@ const WishlistTable = ({ products }) => {
                     <th>Name</th>
                     <th style={{ minWidth: 178 }}>Time Left</th>
                     <th style={{ minWidth: 135 }}>Highest Bid</th>
-                    <th>Status</th>
+                    <th style={{ width: 230 }}>Status</th>
                     <th></th>
                 </tr>
             </thead>

@@ -58,3 +58,7 @@ export const getUserBidProducts = async () => {
 export const getUserWishlistProducts = async () => {
     return (await axios.get(hostUrl + '/products/user/wishlist', defaultHeader())).data;
 };
+
+export const pay = async (data) => {
+    return (await axios.post(hostUrl + '/products/pay', { ...data }, defaultHeader())).data;
+};

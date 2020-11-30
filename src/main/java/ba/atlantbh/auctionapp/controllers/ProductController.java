@@ -7,10 +7,7 @@ import ba.atlantbh.auctionapp.models.enums.Color;
 import ba.atlantbh.auctionapp.models.enums.Size;
 import ba.atlantbh.auctionapp.projections.UserProductProj;
 import ba.atlantbh.auctionapp.projections.SimpleProductProj;
-import ba.atlantbh.auctionapp.requests.FilterCountRequest;
-import ba.atlantbh.auctionapp.requests.ProductRequest;
-import ba.atlantbh.auctionapp.requests.SearchCountRequest;
-import ba.atlantbh.auctionapp.requests.SearchRequest;
+import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.services.ProductService;
 import io.swagger.annotations.ApiResponse;
@@ -129,17 +126,37 @@ public class ProductController {
     }
 
     @GetMapping("/user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
     public ResponseEntity<List<UserProductProj>> getUserProducts() {
         return ResponseEntity.ok(productService.getUserProducts());
     }
 
     @GetMapping("/user/bid")
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
     public ResponseEntity<List<UserProductProj>> getUserBidProducts() {
         return ResponseEntity.ok(productService.getUserBidProducts());
     }
 
     @GetMapping("/user/wishlist")
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
     public ResponseEntity<List<UserProductProj>> getUserWishlistProducts() {
         return ResponseEntity.ok(productService.getUserWishlistProducts());
+    }
+
+    @PostMapping("/pay")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
+    public ResponseEntity<String> pay(@RequestBody @Valid PaymentRequest paymentRequest) {
+        productService.pay(paymentRequest);
+        return ResponseEntity.ok("Product paid");
     }
 }

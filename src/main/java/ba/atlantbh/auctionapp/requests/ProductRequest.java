@@ -32,7 +32,7 @@ public class ProductRequest {
     private List<String> photos;
 
     @NotNull(message = "Start price is required")
-    @DecimalMin(value = "0.01", message = "Start price can't be lower than $0.01")
+    @DecimalMin(value = "0.50", message = "Start price can't be lower than $0.50")
     @DecimalMax(value = "999999.99", message = "Start price can't be higher than $999999.99")
     private BigDecimal startPrice;
 

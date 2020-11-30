@@ -154,36 +154,39 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             nativeQuery = true)
     List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 
-    @Query(value = "SELECT p.id, p.name, p2.url, p.start_price price, s.name subcategoryName, c.name categoryName, " +
+    @Query(value = "SELECT p.id, p.name, p2.url, p.start_price price, s.name subcategoryName, c.name categoryName, p.shipping, " +
             "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.price) maxBid, " +
-            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId " +
+            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id != :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id "+
             "WHERE p.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
-            "GROUP BY (p.id, p.name, p2.url, p.start_price, s.name, c.name, p.start_date, p.end_date) " +
+            "GROUP BY (p.id, p.name, p2.url, p.start_price, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
             "ORDER BY p.date_created DESC", nativeQuery = true)
     List<UserProductProj> getUserProducts(@Param("user_id") String userId);
 
-    @Query(value = "SELECT p.id, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, " +
+    @Query(value = "SELECT p.id, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, p.shipping, " +
             "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
             "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
-            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid " +
+            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid, " +
+            "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
             "WHERE b.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
-            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.start_date, p.end_date) " +
+            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
             "ORDER BY p.end_date", nativeQuery = true)
     List<UserProductProj> getUserBidProducts(@Param("user_id") String userId);
 
-    @Query(value = "SELECT p.id, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, " +
+    @Query(value = "SELECT p.id, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, p.shipping, " +
             "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
             "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
-            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid " +
+            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid, " +
+            "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
             "INNER JOIN wishlist w on p.id = w.product_id " +
             "WHERE w.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
-            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.start_date, p.end_date, w.date) " +
+            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.shipping, p.start_date, p.end_date, w.date) " +
             "ORDER BY w.date DESC", nativeQuery = true)
     List<UserProductProj> getUserWishlistProducts(@Param("user_id") String userId);
 }

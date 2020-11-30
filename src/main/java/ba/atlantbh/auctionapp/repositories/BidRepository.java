@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BidRepository extends JpaRepository<Bid, UUID> {
@@ -18,4 +19,7 @@ public interface BidRepository extends JpaRepository<Bid, UUID> {
 
     @Query(value = "SELECT MAX(price) FROM bid WHERE person_id = :person_id AND product_id = :product_id", nativeQuery = true)
     BigDecimal getMaxBidFromPersonForProduct(@Param("person_id") String personId, @Param("product_id") String productId);
+
+    @Query(value = "SELECT * FROM bid b WHERE product_id = :product_id ORDER BY b.price DESC, b.date LIMIT 1", nativeQuery = true)
+    Optional<Bid> getHighestBidForProduct(@Param("product_id") String productId);
 }

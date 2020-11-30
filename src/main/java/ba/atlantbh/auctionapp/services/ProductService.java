@@ -10,10 +10,12 @@ import ba.atlantbh.auctionapp.projections.*;
 import ba.atlantbh.auctionapp.repositories.*;
 import ba.atlantbh.auctionapp.requests.CardRequest;
 import ba.atlantbh.auctionapp.requests.PayPalRequest;
+import ba.atlantbh.auctionapp.requests.PaymentRequest;
 import ba.atlantbh.auctionapp.requests.ProductRequest;
 import ba.atlantbh.auctionapp.responses.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlascopco.hunspell.Hunspell;
+import com.stripe.exception.StripeException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -37,7 +39,10 @@ public class ProductService {
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
     private final PayPalRepository payPalRepository;
+    private final BidRepository bidRepository;
+    private final PaymentRepository paymentRepository;
     private final Hunspell speller;
+    private final StripeService stripeService;
 
     public List<SimpleProductProj> getFeaturedProducts() {
         String id = "";
@@ -237,6 +242,48 @@ public class ProductService {
                 .replace(" ", " | ");
     }
 
+    private void payWithCard(BigDecimal amount, CardRequest cardRequest, Person person, Product product,
+                             String description, Optional<PaymentRequest> paymentRequest) {
+        Card card = getAndSaveCard(cardRequest, person);
+        String chargeId;
+        try {
+            chargeId = stripeService.pay(
+                    amount.multiply(BigDecimal.valueOf(100)).intValue(),
+                    person.getStripeCustomerId(),
+                    card.getStripeCardId(),
+                    description
+            );
+            Payment payment = new Payment(amount, person, product);
+            payment.setCard(card);
+            payment.setStripeChargeId(chargeId);
+            paymentRequest.ifPresent(payRequest -> {
+                payment.setStreet(payRequest.getStreet());
+                payment.setCountry(payRequest.getCountry());
+                payment.setCity(payRequest.getCity());
+                payment.setZip(payRequest.getZip());
+                payment.setPhone(payRequest.getPhone());
+            });
+            paymentRepository.save(payment);
+        } catch (StripeException e) {
+            throw new BadRequestException(e.getStripeError().getMessage());
+        }
+    }
+
+    private void payWithPayPal(BigDecimal amount, PayPalRequest payPalRequest, Person person, Product product,
+                               Optional<PaymentRequest> paymentRequest) {
+        PayPal payPal = getAndSavePayPal(payPalRequest);
+        Payment payment = new Payment(amount, person, product);
+        paymentRequest.ifPresent(payRequest -> {
+            payment.setStreet(payRequest.getStreet());
+            payment.setCountry(payRequest.getCountry());
+            payment.setCity(payRequest.getCity());
+            payment.setZip(payRequest.getZip());
+            payment.setPhone(payRequest.getPhone());
+        });
+        payment.setPayPal(payPal);
+        paymentRepository.save(payment);
+    }
+
     public UUID add(ProductRequest productRequest) {
         Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
                 .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
@@ -258,9 +305,6 @@ public class ProductService {
         if (cardRequest != null && payPalRequest != null)
             throw new BadRequestException("Conflicting payment details");
 
-        Card card = getAndSaveCard(cardRequest, person.getId());
-        PayPal payPal = getAndSavePayPal(payPalRequest);
-
         Product product = new Product(
                 productRequest.getName(),
                 productRequest.getStartPrice(),
@@ -279,15 +323,35 @@ public class ProductService {
         product.setSize(productRequest.getSize());
         product.setFeatured(productRequest.getFeatured());
         product.setShipping(productRequest.getShipping());
-        product.setCard(card);
-        product.setPayPal(payPal);
 
         Product savedProduct = productRepository.save(product);
+
+        BigDecimal amount = BigDecimal.ZERO;
+        String description = person.getFirstName() + " " + person.getLastName() + " (" + person.getId() + ") paid for ";
+        if (productRequest.getShipping()) {
+            amount = amount.add(BigDecimal.valueOf(10));
+            description += "shipping ";
+        }
+        if (productRequest.getFeatured()) {
+            if (productRequest.getShipping())
+                description += ", ";
+            description += "featuring ";
+            amount = amount.add(BigDecimal.valueOf(5));
+        }
+        description += product.getName() + " (" + product.getId() + ")";
+
+        if (!amount.equals(BigDecimal.ZERO)) {
+            if (payPalRequest != null)
+                payWithPayPal(amount, payPalRequest, person, product, Optional.empty());
+            else
+                payWithCard(amount, cardRequest, person, savedProduct, description, Optional.empty());
+        }
+
         savePhotos(productRequest.getPhotos(), savedProduct);
         return savedProduct.getId();
     }
 
-    private Card getAndSaveCard(CardRequest cardRequest, UUID personId) {
+    private Card getAndSaveCard(CardRequest cardRequest, Person person) {
         Card card = null;
         if (cardRequest != null) {
             if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
@@ -295,7 +359,7 @@ public class ProductService {
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
             if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
-                List<Card> cards = cardRepository.findAllByPersonId(personId);
+                List<Card> cards = cardRepository.findAllByPersonId(person.getId());
                 if (cards.isEmpty() || !cards.get(0).getMaskedCardNumber().equals(cardRequest.getCardNumber()))
                     throw new BadRequestException("Card number can only contain digits");
                 Card existingCard = cards.get(0);
@@ -320,6 +384,13 @@ public class ProductService {
                         cardRequest.getExpirationMonth(),
                         cardRequest.getCvc()
                 );
+                String stripeCardId;
+                try {
+                    stripeCardId = stripeService.saveCard(newCard, person, false);
+                } catch (StripeException e) {
+                    throw new BadRequestException(e.getStripeError().getMessage());
+                }
+                newCard.setStripeCardId(stripeCardId);
                 cardRepository.save(newCard);
                 return newCard;
             });
@@ -356,5 +427,41 @@ public class ProductService {
     public List<UserProductProj> getUserWishlistProducts() {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         return productRepository.getUserWishlistProducts(personId.toString());
+    }
+
+    public void pay(PaymentRequest paymentRequest) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
+        Product product = productRepository.findById(paymentRequest.getProductId())
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+
+        if (product.getEndDate().isAfter(LocalDateTime.now()))
+            throw new BadRequestException("Auction hasn't ended for this product");
+
+        CardRequest cardRequest = paymentRequest.getCard();
+        PayPalRequest payPalRequest = paymentRequest.getPayPal();
+        if (cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Payment details missing");
+        if (cardRequest != null && payPalRequest != null)
+            throw new BadRequestException("Conflicting payment details");
+
+        Bid bid = bidRepository.getHighestBidForProduct(product.getId().toString())
+                .orElseThrow(() -> new BadRequestException("This product doesn't have any bids"));
+        if (!bid.getPerson().getId().equals(person.getId()))
+            throw new BadRequestException("You aren't the highest bidder for this product");
+
+        boolean alreadyPaid = paymentRepository.isProductPaidByUser(person.getId().toString(), product.getId().toString());
+        if (alreadyPaid)
+            throw new BadRequestException("You already paid for this product");
+
+        if (cardRequest != null) {
+            String description = person.getFirstName() + " " + person.getLastName() + " (" + person.getId() + ") "
+                    + "paid for " + product.getName() + " (" + product.getId() + ")";
+            payWithCard(bid.getPrice(), cardRequest, person, product, description, Optional.of(paymentRequest));
+        } else {
+            payWithPayPal(bid.getPrice(), payPalRequest, person, product, Optional.of(paymentRequest));
+        }
     }
 }
