@@ -61,7 +61,7 @@ const LandingPage = () => {
         {featuredProducts.length !== 0 ?
           <div className="featured-product-container">
             <div className="featured-product-container-inner">
-              <h1 style={{ maxHeight: 156, overflowY: 'hidden' }}>
+              <h1>
                 {featuredProducts[0].name}
               </h1>
 
