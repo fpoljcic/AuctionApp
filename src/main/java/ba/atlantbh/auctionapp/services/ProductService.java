@@ -330,15 +330,15 @@ public class ProductService {
         String description = person.getFirstName() + " " + person.getLastName() + " (" + person.getId() + ") paid for ";
         if (productRequest.getShipping()) {
             amount = amount.add(BigDecimal.valueOf(10));
-            description += "shipping ";
+            description += "shipping";
         }
         if (productRequest.getFeatured()) {
             if (productRequest.getShipping())
                 description += ", ";
-            description += "featuring ";
+            description += "featuring";
             amount = amount.add(BigDecimal.valueOf(5));
         }
-        description += product.getName() + " (" + product.getId() + ")";
+        description += " " + product.getName() + " (" + product.getId() + ")";
 
         if (!amount.equals(BigDecimal.ZERO)) {
             if (payPalRequest != null)
