@@ -140,6 +140,12 @@ const Receipt = ({ showModal, setShowModal, productId }) => {
                     <div className="receipt-part">
                         <span>
                             <span className="receipt-label">
+                                Full Name:
+                            </span>
+                            {receipt.bidderName}
+                        </span>
+                        <span>
+                            <span className="receipt-label">
                                 Street:
                             </span>
                             {receipt.street}
