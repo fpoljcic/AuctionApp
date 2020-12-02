@@ -150,6 +150,7 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
                                             name="country"
                                             onChange={(e) => {
                                                 setCountry(e.target.value);
+                                                setFieldValue("city", "");
                                                 handleChange(e);
                                             }}
                                             size="xl-18"
