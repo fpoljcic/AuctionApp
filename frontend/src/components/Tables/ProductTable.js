@@ -5,6 +5,7 @@ import { getDurationBetweenDates, getLongDateTime } from 'utilities/date';
 import { myAccountBidsPayUrl, productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 import Receipt from 'components/Modals/Receipt';
+import MyScrollToTop from 'components/MyScrollToTop';
 import moment from 'moment';
 
 import './tables.css';
@@ -143,6 +144,7 @@ const ProductTable = ({ products, type }) => {
                     </tr>
                 ))}
             </tbody>
+            <MyScrollToTop />
         </Table>
     );
 }

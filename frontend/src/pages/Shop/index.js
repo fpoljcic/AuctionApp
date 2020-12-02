@@ -15,6 +15,7 @@ import ItemNotFound from 'components/ItemNotFound';
 import ListCard from 'components/ListCard';
 import ImageCard from 'components/ImageCard';
 import ImageCardOverlay from 'components/ImageCardOverlay';
+import MyScrollToTop from 'components/MyScrollToTop';
 import { useAlertContext, useBreadcrumbContext } from 'AppContext';
 import * as qs from 'query-string';
 
@@ -236,6 +237,7 @@ const Shop = () => {
                         </Button>
                     </div> : null}
             </div>
+            <MyScrollToTop />
         </div>
     );
 }

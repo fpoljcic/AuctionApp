@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Table } from 'react-bootstrap';
 import { getLongDateTime } from 'utilities/date';
+import MyScrollToTop from 'components/MyScrollToTop';
 
 import './tables.css';
 
@@ -31,6 +32,7 @@ const BidTable = ({ bids }) => {
                     </tr>
                 ))}
             </tbody>
+            <MyScrollToTop />
         </Table>
     );
 }
