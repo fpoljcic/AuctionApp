@@ -57,8 +57,8 @@ const SellTab3 = ({ product, setProduct, setActiveTab, onDone }) => {
             .required("*Phone is required")
             .max(32, "*Phone can't be longer than 32 characters")
             .test("digits-only", "*Phone number can only contain digits", value => /^\d*$/.test(value))
-            .test("country-selected", "*Select a country", () => country !== null)
-            .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
+            .test("country-selected", '*Select a country', function () { return this.parent.country !== undefined })
+            .test("valid-phone", "*Phone must be valid", function (value) { return validPhoneNumber(value, this.parent.country, false) }),
         shipping: yup.bool(),
         featured: yup.bool(),
         card: !payPal && (shipping || featured) ? cardFormSchema(false, initialCardNumber) : null,
