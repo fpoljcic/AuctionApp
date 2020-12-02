@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Table } from 'react-bootstrap';
-import { getLongDate } from 'utilities/date';
+import { getLongDateTime } from 'utilities/date';
 
 import './tables.css';
 
@@ -26,7 +26,7 @@ const BidTable = ({ bids }) => {
                                 </div>
                             </div>
                         </td>
-                        <td>{getLongDate(bid.date)}</td>
+                        <td>{getLongDateTime(bid.date)}</td>
                         <td style={i === 0 ? { color: 'var(--strong-green)', fontWeight: 'bold' } : { fontWeight: 'bold' }}>{'$ ' + bid.price}</td>
                     </tr>
                 ))}

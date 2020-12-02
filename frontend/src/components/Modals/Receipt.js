@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { getReceipt } from 'api/payment';
-import { longDateTimeFormat } from 'utilities/date';
-import moment from 'moment';
+import { getLongDateTime } from 'utilities/date';
 
 import './modal.css';
 
@@ -44,7 +43,7 @@ const Receipt = ({ showModal, setShowModal, productId }) => {
                             <span className="receipt-label">
                                 Date:
                             </span>
-                            {moment.utc(receipt.date).local().format(longDateTimeFormat)}
+                            {getLongDateTime(receipt.date)}
                         </span>
                         <span>
                             <span className="receipt-label">
