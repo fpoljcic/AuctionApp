@@ -64,6 +64,15 @@ const ProductTable = ({ products, type }) => {
         });
     }
 
+    const handleViewClick = (product) => {
+        if (type === "sold" && product.paid) {
+            setProductId(product.id);
+            setShowModal(true);
+            return;
+        }
+        history.push(productUrl(product));
+    }
+
     return (
         <Table variant="gray-transparent" responsive>
             <Receipt showModal={showModal} setShowModal={setShowModal} productId={productId} />
@@ -125,9 +134,9 @@ const ProductTable = ({ products, type }) => {
                                     size="lg-2"
                                     variant="transparent-black-shadow-disabled"
                                     style={{ width: 105 }}
-                                    onClick={() => history.push(productUrl(product))}
+                                    onClick={() => handleViewClick(product)}
                                 >
-                                    VIEW
+                                    {type === "sold" && product.paid ? "RECEIPT" : "VIEW"}
                                 </Button>
                             }
                         </td>
