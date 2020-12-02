@@ -50,7 +50,11 @@ public class ProductService {
             id = JwtTokenUtil.getRequestPersonId().toString();
         } catch (UnauthorizedException ignore) {
         }
-        return productRepository.getFeaturedProducts(id);
+        List<SimpleProductProj> featuredProducts = productRepository.getFeaturedProducts(id, true, 6);
+        if (featuredProducts.size() < 6)
+            featuredProducts.addAll(productRepository.getFeaturedProducts(id, false, 6 - featuredProducts.size()));
+
+        return featuredProducts;
     }
 
     public List<SimpleProductProj> getNewProducts() {

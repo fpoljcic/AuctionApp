@@ -22,9 +22,10 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                    "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
                    "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
                    "INNER JOIN category c on c.id = s.category_id " +
-                   "WHERE pr.featured = true AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
-                   "ORDER BY count DESC, RANDOM() LIMIT 18) main ORDER BY RANDOM() LIMIT 6", nativeQuery = true)
-    List<SimpleProductProj> getFeaturedProducts(String id);
+                   "WHERE (SELECT b2.person_id FROM bid b2 WHERE b2.product_id = pr.id ORDER BY b2.price DESC LIMIT 1) != :id AND " +
+                   "pr.featured = :featured AND (p.featured = true OR p.featured IS NULL) AND start_date <= now() AND end_date > now() " +
+                   "AND pr.person_id != :id ORDER BY count DESC, RANDOM() LIMIT 18) main ORDER BY RANDOM() LIMIT :limit", nativeQuery = true)
+    List<SimpleProductProj> getFeaturedProducts(String id, boolean featured, int limit);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName " +
                    "FROM product pr LEFT OUTER JOIN photo p on pr.id = p.product_id " +
