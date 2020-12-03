@@ -9,8 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -69,6 +69,14 @@ public class Person {
     private Boolean active = true;
 
     private String stripeCustomerId;
+
+    @DecimalMin("0")
+    @DecimalMax("5")
+    @Column(precision = 7, scale = 6, nullable = false)
+    private BigDecimal rating = BigDecimal.ZERO;
+    @Min(0)
+    @Column(nullable = false)
+    private Integer ratingCount = 0;
 
     public Person(@NotBlank @Size(max = 100) @Size(min = 2) String firstName, @NotBlank @Size(max = 100) @Size(min = 2) String lastName, @NotBlank @Size(max = 100) String email, @NotBlank String password) {
         setFirstName(firstName);
