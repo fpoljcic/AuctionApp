@@ -12,11 +12,13 @@ export const requiredFormSchema = {
     firstName: yup.string()
         .min(2, "*First name must have at least 2 characters")
         .max(100, "*First name can't be longer than 100 characters")
-        .required("*First name is required"),
+        .required("*First name is required")
+        .test("symbol-test", "*First name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value)),
     lastName: yup.string()
         .min(2, "*Last name must have at least 2 characters")
         .max(100, "*Last name can't be longer than 100 characters")
-        .required("*Last name is required"),
+        .required("*Last name is required")
+        .test("symbol-test", "*Last name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value)),
     gender: yup.string()
         .required("*Gender is required")
         .test("gender-test", "*Gender is required", value => value === "Male" || value === "Female"),

@@ -90,6 +90,7 @@ const Register = () => {
                                     maxLength={100}
                                     onChange={handleChange}
                                     isInvalid={touched.firstName && errors.firstName}
+                                    autoFocus
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.firstName}

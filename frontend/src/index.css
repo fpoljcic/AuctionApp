@@ -1,4 +1,4 @@
-.modal-content {
+.modal, .popover {
   --arrow: #573BAC;
   --secondary-background: #FAFAFA;
   --lighter-silver: #ECECEC;

@@ -91,6 +91,7 @@ const SellTab2 = ({ product, setProduct, setActiveTab }) => {
                                             onChange={e => handlStartPrice(e, handleChange)}
                                             maxLength={9}
                                             isInvalid={touched.startPrice && errors.startPrice}
+                                            autoFocus
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.startPrice}

@@ -71,9 +71,17 @@ public class Person {
     private String stripeCustomerId;
 
     public Person(@NotBlank @Size(max = 100) @Size(min = 2) String firstName, @NotBlank @Size(max = 100) @Size(min = 2) String lastName, @NotBlank @Size(max = 100) String email, @NotBlank String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        setFirstName(firstName);
+        setLastName(lastName);
         this.email = email;
         this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName.trim().replaceAll("\\s+"," ");
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName.trim().replaceAll("\\s+"," ");
     }
 }

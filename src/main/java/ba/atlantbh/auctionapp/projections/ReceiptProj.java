@@ -11,6 +11,7 @@ public interface ReceiptProj {
     LocalDateTime getDate();
     BigDecimal getAmount();
 
+    String getBidderName();
     String getStreet();
     String getCountry();
     String getCity();

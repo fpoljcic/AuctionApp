@@ -580,8 +580,12 @@ img {
   margin-top: 2px;
 }
 
-.modal-content {
+.modal-content, .popover, .popover-header {
   border-radius: 0;
+}
+
+.popover-header {
+  background-color: var(--secondary-background);
 }
 
 @media (max-width: 767px) {

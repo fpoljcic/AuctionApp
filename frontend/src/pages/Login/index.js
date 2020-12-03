@@ -87,6 +87,7 @@ const Login = () => {
                                     defaultValue={rememberInfo.email || ""}
                                     onChange={handleChange}
                                     isInvalid={(touched.email && errors.email) || loginError}
+                                    autoFocus
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.email}

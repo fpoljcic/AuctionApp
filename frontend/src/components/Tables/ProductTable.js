@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Image, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
-import { getDurationBetweenDates, longDateTimeFormat } from 'utilities/date';
+import { getDurationBetweenDates, getLongDateTime } from 'utilities/date';
 import { myAccountBidsPayUrl, productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 import Receipt from 'components/Modals/Receipt';
+import MyScrollToTop from 'components/MyScrollToTop';
 import moment from 'moment';
 
 import './tables.css';
@@ -30,9 +31,9 @@ const ProductTable = ({ products, type }) => {
     const getTimeColumn = (product) => {
         switch (type) {
             case "scheduled":
-                return moment.utc(product.startDate).local().format(longDateTimeFormat);
+                return getLongDateTime(product.startDate);
             case "sold":
-                return moment.utc(product.endDate).local().format(longDateTimeFormat);
+                return getLongDateTime(product.endDate);
             default:
                 const productEndDate = moment.utc(product.endDate);
                 return moment().isSameOrAfter(productEndDate) ? "0s" : getDurationBetweenDates(moment(), productEndDate);
@@ -62,6 +63,15 @@ const ProductTable = ({ products, type }) => {
             pathname: myAccountBidsPayUrl,
             state: { product }
         });
+    }
+
+    const handleViewClick = (product) => {
+        if (type === "sold" && product.paid) {
+            setProductId(product.id);
+            setShowModal(true);
+            return;
+        }
+        history.push(productUrl(product));
     }
 
     return (
@@ -125,15 +135,16 @@ const ProductTable = ({ products, type }) => {
                                     size="lg-2"
                                     variant="transparent-black-shadow-disabled"
                                     style={{ width: 105 }}
-                                    onClick={() => history.push(productUrl(product))}
+                                    onClick={() => handleViewClick(product)}
                                 >
-                                    VIEW
+                                    {type === "sold" && product.paid ? "RECEIPT" : "VIEW"}
                                 </Button>
                             }
                         </td>
                     </tr>
                 ))}
             </tbody>
+            <MyScrollToTop />
         </Table>
     );
 }

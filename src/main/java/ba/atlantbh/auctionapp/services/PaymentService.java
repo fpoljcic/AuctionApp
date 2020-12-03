@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @AllArgsConstructor
 @Service
@@ -15,7 +16,10 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     public ReceiptProj getReceipt(String productId) {
-        UUID personId = JwtTokenUtil.getRequestPersonId();
+        AtomicReference<UUID> personId = new AtomicReference<>(JwtTokenUtil.getRequestPersonId());
+
+        paymentRepository.getBidderIdFromReceipt(personId.toString(), productId)
+                .ifPresent(personId::set);
 
         return paymentRepository.getReceipt(personId.toString(), productId)
                 .orElseThrow(() -> new BadRequestException("You don't have a receipt for this product"));

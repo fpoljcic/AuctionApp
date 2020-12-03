@@ -60,6 +60,7 @@ const OptionalForm = ({ handleChange, touched, errors, values, setFieldValue }) 
                         name="country"
                         onChange={(e) => {
                             setCountry(e.target.value);
+                            setFieldValue("city", "");
                             handleChange(e);
                         }}
                         size="lg-18"

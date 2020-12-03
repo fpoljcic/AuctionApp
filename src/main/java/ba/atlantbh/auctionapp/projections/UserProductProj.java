@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public interface UserProductProj {
     UUID getId();
+    UUID getPersonAddedId();
     String getName();
     String getUrl();
     BigDecimal getPrice();

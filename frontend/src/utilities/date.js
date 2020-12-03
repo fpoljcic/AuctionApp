@@ -1,7 +1,6 @@
 import moment, { months } from "moment";
 
 export const longDateTimeFormat = "D MMMM YYYY [at] HH:mm";
-export const longDateFormat = "D MMMM YYYY";
 
 export const getMonth = (n) => {
     return months(n);
@@ -35,8 +34,8 @@ export const getDaysInMonth = (month, year) => {
     return moment(year + "-" + month, "YYYY-MM").daysInMonth();
 }
 
-export const getLongDate = (date) => {
-    return moment.utc(date).local().format(longDateFormat);
+export const getLongDateTime = (date) => {
+    return moment.utc(date).local().format(longDateTimeFormat);
 }
 
 export const getCurrentYear = () => {

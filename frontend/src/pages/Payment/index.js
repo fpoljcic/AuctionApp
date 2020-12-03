@@ -59,8 +59,8 @@ const Payment = () => {
             .required("*Phone is required")
             .max(32, "*Phone can't be longer than 32 characters")
             .test("digits-only", "*Phone number can only contain digits", value => /^\d*$/.test(value))
-            .test("country-selected", "*Select a country", () => country !== null)
-            .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
+            .test("country-selected", '*Select a country', function () { return this.parent.country !== undefined })
+            .test("valid-phone", "*Phone must be valid", function (value) { return validPhoneNumber(value, this.parent.country, false) }),
         card: !payPal ? cardFormSchema(false, card.cardNumber) : null,
         payPal: payPal ? payPalFormSchema : null
     });
@@ -123,6 +123,7 @@ const Payment = () => {
                                         onChange={handleChange}
                                         maxLength={255}
                                         isInvalid={touched.street && errors.street}
+                                        autoFocus
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.street}
@@ -136,6 +137,7 @@ const Payment = () => {
                                             name="country"
                                             onChange={(e) => {
                                                 setCountry(e.target.value);
+                                                setFieldValue("city", "");
                                                 handleChange(e);
                                             }}
                                             size="xl-18"

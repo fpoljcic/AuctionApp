@@ -14,11 +14,13 @@ public class UpdateProfileRequest {
     @NotBlank(message = "First name can't be blank")
     @Size(min = 2, message = "First name must have at least 2 characters")
     @Size(max = 100, message = "First name can't be longer than 100 characters")
+    @Pattern(regexp = "^[^\\p{P}\\p{S}]*$", flags = Pattern.Flag.UNICODE_CASE, message = "First name can't contain special characters")
     private String firstName;
 
     @NotBlank(message = "Last name can't be blank")
     @Size(min = 2, message = "Last name must have at least 2 characters")
     @Size(max = 100, message = "Last name can't be longer than 100 characters")
+    @Pattern(regexp = "^[^\\p{P}\\p{S}]*$", flags = Pattern.Flag.UNICODE_CASE, message = "Last name can't contain special characters")
     private String lastName;
 
     @NotNull(message = "Gender is required")

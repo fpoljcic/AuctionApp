@@ -4,6 +4,7 @@ import { Button, Image, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { getDurationBetweenDates } from 'utilities/date';
 import { productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
+import MyScrollToTop from 'components/MyScrollToTop';
 import moment from 'moment';
 
 import './tables.css';
@@ -79,13 +80,14 @@ const WishlistTable = ({ products }) => {
                                     style={{ width: 105, marginLeft: 20 }}
                                     onClick={() => history.push(productUrl(product))}
                                 >
-                                    {isClosed(product.endDate) ? "VIEW" : "BID"}
+                                    {isClosed(product.endDate) || product.personAddedId === userId ? "VIEW" : "BID"}
                                 </Button>
                             </div>
                         </td>
                     </tr>
                 ))}
             </tbody>
+            <MyScrollToTop />
         </Table>
     );
 }
