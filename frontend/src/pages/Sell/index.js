@@ -42,6 +42,7 @@ const Sell = () => {
             const id = await addProduct(product);
             const categoryName = categories.filter(category => category.id === product.categoryId)[0].name;
             const subcategoryName = subcategories.filter(subcategory => subcategory.id === product.subcategoryId)[0].name;
+            setPromptVisible(false);
             return {
                 id, categoryName, subcategoryName
             };
