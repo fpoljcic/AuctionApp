@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -57,6 +58,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 body.setMessage("Invalid gender");
             else if (Objects.equals(requiredType, Integer.class))
                 body.setMessage(fieldError.getField() + " must be a whole number");
+            else if (Objects.equals(requiredType, UUID.class))
+                body.setMessage(fieldError.getField() + " must be a valid uuid");
+            else
+                body.setMessage("Parametar type mismatch");
         } else
             body.setMessage(fieldError.getDefaultMessage());
         return new ResponseEntity<>(body, headers, status);

@@ -468,4 +468,26 @@ public class ProductService {
             payWithPayPal(bid.getPrice(), payPalRequest, person, product, Optional.of(paymentRequest));
         }
     }
+
+    public void rate(UUID productId, Integer rating) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+
+        if (product.getRated())
+            throw new BadRequestException("You already rated this product");
+        paymentRepository.getReceipt(personId.toString(), productId.toString());
+        if (!paymentRepository.isProductPaidByUser(personId.toString(), productId.toString()))
+            throw new BadRequestException("You didn't pay for this product");
+
+        Person sellerPerson = product.getPerson();
+        Integer oldRatingCount = sellerPerson.getRatingCount();
+        BigDecimal newRating = ((sellerPerson.getRating().multiply(BigDecimal.valueOf(oldRatingCount))).add(BigDecimal.valueOf(rating)))
+                .divide(BigDecimal.valueOf(oldRatingCount + 1), RoundingMode.HALF_UP);
+
+        sellerPerson.setRating(newRating);
+        sellerPerson.setRatingCount(oldRatingCount + 1);
+        product.setRated(true);
+        productRepository.save(product);
+    }
 }
