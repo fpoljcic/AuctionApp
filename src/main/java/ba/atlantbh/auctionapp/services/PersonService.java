@@ -7,6 +7,7 @@ import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.models.Token;
+import ba.atlantbh.auctionapp.projections.PersonInfoProj;
 import ba.atlantbh.auctionapp.repositories.CardRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.repositories.TokenRepository;
@@ -197,5 +198,10 @@ public class PersonService {
         Token token = tokenRepository.getToken(tokenRequest.getToken())
                 .orElse(new Token());
         return token.getId() != null && personRepository.existsById(token.getPerson().getId());
+    }
+
+    public PersonInfoProj getUserInfo(String userId) {
+        return personRepository.getUserInfo(userId)
+                .orElseThrow(() -> new BadRequestException("Wrong person id"));
     }
 }
