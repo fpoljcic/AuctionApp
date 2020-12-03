@@ -6,9 +6,10 @@ import { myAccountBidsUrl, myAccountUrl } from 'utilities/appUrls';
 import CardForm, { cardFormInitialValues, cardFormSchema, payPalFormSchema, payPalInitialValues } from 'components/Forms/CardForm';
 import { callCodeForCountry, citiesByCountry, countries, validPhoneNumber } from 'utilities/common';
 import { getUser } from 'utilities/localStorage';
+import RateUser from 'components/Modals/RateUser';
 import { Formik, getIn } from 'formik';
 import { getCard } from 'api/card';
-import { pay } from 'api/product';
+import { pay, rate } from 'api/product';
 import * as yup from 'yup';
 
 import './payment.css';
@@ -25,6 +26,7 @@ const Payment = () => {
     const [card, setCard] = useState({});
     const [payPal, setPayPal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         setBreadcrumb("MY ACCOUNT", [{ text: "MY ACCOUNT", href: myAccountUrl }, { text: "BIDS", href: myAccountBidsUrl }, { text: "PAYMENT" }]);
@@ -78,6 +80,16 @@ const Payment = () => {
             setLoading(false);
             return;
         }
+        setShowModal(true);
+    }
+
+    const onDone = async (rating) => {
+        if (rating >= 1 && rating <= 5) {
+            try {
+                await rate(product.id, rating);
+            } catch (e) { }
+        }
+        setShowModal(false);
         setLoading(false);
         history.push({
             pathname: myAccountBidsUrl,
@@ -87,6 +99,7 @@ const Payment = () => {
 
     return (
         <div className="tab-container">
+            <RateUser onDone={onDone} showModal={showModal} personAddedId={product.personAddedId} />
             <div className="tab-title">
                 PAYMENT
             </div>
