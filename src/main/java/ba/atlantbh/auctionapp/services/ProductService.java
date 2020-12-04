@@ -476,7 +476,6 @@ public class ProductService {
 
         if (product.getRated())
             throw new BadRequestException("You already rated this product");
-        paymentRepository.getReceipt(personId.toString(), productId.toString());
         if (!paymentRepository.isProductPaidByUser(personId.toString(), productId.toString()))
             throw new BadRequestException("You didn't pay for this product");
 

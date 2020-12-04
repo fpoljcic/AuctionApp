@@ -13,6 +13,6 @@ public interface PersonRepository extends JpaRepository<Person, UUID> {
 
     Optional<Person> findByEmail(String email);
 
-    @Query(value = "SELECT p.first_name || ' ' || p.last_name as name, p.photo FROM person p WHERE id = :id", nativeQuery = true)
+    @Query(value = "SELECT p.first_name || ' ' || p.last_name as name, p.photo, p.rating FROM person p WHERE id = :id", nativeQuery = true)
     Optional<PersonInfoProj> getUserInfo(String id);
 }
