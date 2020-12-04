@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Prompt } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useBreadcrumbContext } from 'AppContext';
 import { Step, Stepper } from 'react-form-stepper';
 import { myAccountSellerSellUrl, myAccountSellerUrl, myAccountUrl } from 'utilities/appUrls';
@@ -9,6 +8,7 @@ import { addProduct, getProductFilters } from 'api/product';
 import SellTab1 from 'components/SellTabs/SellTab1';
 import SellTab2 from 'components/SellTabs/SellTab2';
 import SellTab3 from 'components/SellTabs/SellTab3';
+import MyPrompt from 'components/MyPrompt';
 import { getUser } from 'utilities/localStorage';
 import { scrollToTop } from 'utilities/common';
 
@@ -19,7 +19,6 @@ const Sell = () => {
 
     const user = getUser();
 
-    const mounted = useRef();
     const [activeTab, setActiveTab] = useState(0);
     const [promptVisible, setPromptVisible] = useState(false);
     const [product, setProduct] = useState({ street: user.street, country: user.country, city: user.city, zip: user.zip, phone: user.phone });
@@ -80,10 +79,6 @@ const Sell = () => {
         }
 
         fetchData();
-
-        return () => {
-            window.onbeforeunload = null;
-        }
         // eslint-disable-next-line 
     }, [])
 
@@ -96,18 +91,6 @@ const Sell = () => {
             setPromptVisible(true);
     }, [activeTab])
 
-    useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true;
-        } else {
-            if (promptVisible) {
-                window.onbeforeunload = () => true
-            } else {
-                window.onbeforeunload = undefined
-            }
-        }
-    }, [promptVisible])
-
     const renderStep = (active) => (
         <Step>
             <div className="white-circle">
@@ -118,10 +101,7 @@ const Sell = () => {
 
     return (
         <>
-            <Prompt
-                when={promptVisible}
-                message="You have unsaved changes, are you sure you want to leave?"
-            />
+            <MyPrompt promptVisible={promptVisible} />
             <Stepper
                 activeStep={activeTab}
                 styleConfig={{

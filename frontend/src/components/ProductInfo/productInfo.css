@@ -30,3 +30,12 @@
     width: 140px;
     min-height: 36px;
 }
+
+.congrats-alert {
+    padding-left: 1.25rem;
+    padding-right: 4rem;
+}
+
+.congrats-alert>.close {
+    right: 0;
+}

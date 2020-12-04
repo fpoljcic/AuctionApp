@@ -74,6 +74,13 @@ const ProductTable = ({ products, type }) => {
         history.push(productUrl(product));
     }
 
+    const handleCheckClick = (product) => {
+        history.push({
+            pathname: productUrl(product),
+            state: { withMessage: type === "bids" && product.paid }
+        });
+    }
+
     return (
         <>
             <Table variant="gray-transparent" responsive>
@@ -93,10 +100,10 @@ const ProductTable = ({ products, type }) => {
                     {products.map(product => (
                         <tr key={product.id}>
                             <td>
-                                <Image style={{ cursor: 'pointer' }} onClick={() => history.push(productUrl(product))} className="avatar-image-medium" src={getImageSrc(product)} />
+                                <Image style={{ cursor: 'pointer' }} onClick={() => handleCheckClick(product)} className="avatar-image-medium" src={getImageSrc(product)} />
                             </td>
                             <td>
-                                <div style={{ cursor: 'pointer' }} onClick={() => history.push(productUrl(product))} className="product-table-name">
+                                <div style={{ cursor: 'pointer' }} onClick={() => handleCheckClick(product)} className="product-table-name">
                                     {product.name}
                                 </div>
                                 <OverlayTrigger

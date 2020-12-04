@@ -22,9 +22,10 @@ const RateUser = ({ onDone, showModal, personAddedId }) => {
         fetchData();
     }, [personAddedId])
 
-    const handleClick = (rating) => {
+    const handleClick = async (rating) => {
         setLoading(true);
-        onDone(rating);
+        await onDone(rating);
+        setLoading(false);
     }
 
     return (

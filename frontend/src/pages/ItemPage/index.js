@@ -4,6 +4,7 @@ import { getUserId } from 'utilities/localStorage';
 import { getProduct, getRelatedProducts } from 'api/product';
 import { bidForProduct, getBidsForProduct } from 'api/bid';
 import { wishlistProduct, removeWishlistProduct } from 'api/wishlist';
+import { getUserInfo } from 'api/auth';
 import { productUrl } from 'utilities/appUrls';
 import { scrollToTop } from 'utilities/common';
 import ImageCard from 'components/ImageCard';
@@ -27,6 +28,9 @@ const ItemPage = ({ match, location }) => {
     const [ownProduct, setOwnProduct] = useState(false);
     const [wished, setWished] = useState(false);
     const [minPrice, setMinPrice] = useState(0);
+    const [seller, setSeller] = useState(null);
+
+    const withMessage = location.state != null && location.state.withMessage;
 
     useEffect(() => {
         formBreadcrumb();
@@ -41,6 +45,9 @@ const ItemPage = ({ match, location }) => {
                 setProduct(data);
                 if (personId === null) {
                     setRelatedProducts(await getRelatedProducts(productId));
+                }
+                if (withMessage) {
+                    setSeller(await getUserInfo(data.personId));
                 }
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.price : 0), 0);
@@ -119,6 +126,7 @@ const ItemPage = ({ match, location }) => {
                         ownProduct={ownProduct}
                         active={active}
                         wished={wished}
+                        seller={seller}
                     />
                 </div>
             ) : null}
