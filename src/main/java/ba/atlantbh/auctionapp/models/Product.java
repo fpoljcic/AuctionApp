@@ -79,6 +79,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean featured = false;
 
+    @Column(nullable = false)
+    private Boolean rated = false;
+
     @Enumerated(EnumType.STRING)
     private Color color;
 

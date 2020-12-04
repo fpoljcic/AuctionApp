@@ -21,3 +21,9 @@
     margin: 5px;
     word-wrap: anywhere;
 }
+
+.rate-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -159,4 +159,15 @@ public class ProductController {
         productService.pay(paymentRequest);
         return ResponseEntity.ok("Product paid");
     }
+
+    @PostMapping("/rate")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
+    public ResponseEntity<String> rate(@RequestBody @Valid RateRequest rateRequest) {
+        productService.rate(rateRequest.getProductId(), rateRequest.getRating());
+        return ResponseEntity.ok("Product rated");
+    }
 }

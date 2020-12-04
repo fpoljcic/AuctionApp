@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { defaultHeader, hostUrl } from './common';
+import { defaultHeader, getParams, hostUrl } from './common';
 
 export const registerUser = async (user) => {
     return (await axios.post(hostUrl + '/auth/register', user)).data;
@@ -23,4 +23,9 @@ export const resetPassword = async (token, password) => {
 
 export const validResetToken = async (token) => {
     return (await axios.post(hostUrl + '/auth/valid_token', { token })).data;
+};
+
+export const getUserInfo = async (userId) => {
+    const headers = { ...defaultHeader(), ...getParams({ userId }) };
+    return (await axios.get(hostUrl + '/auth', headers)).data;
 };

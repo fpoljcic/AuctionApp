@@ -5,6 +5,7 @@ import ba.atlantbh.auctionapp.exceptions.BadRequestException;
 import ba.atlantbh.auctionapp.exceptions.ConflictException;
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Person;
+import ba.atlantbh.auctionapp.projections.PersonInfoProj;
 import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.responses.LoginResponse;
 import ba.atlantbh.auctionapp.responses.RegisterResponse;
@@ -81,5 +82,13 @@ public class PersonController {
     })
     public ResponseEntity<Boolean> validToken(@RequestBody @Valid TokenRequest tokenRequest) {
         return ResponseEntity.ok(personService.validToken(tokenRequest));
+    }
+
+    @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
+    public ResponseEntity<PersonInfoProj> getUserInfo(@RequestParam String userId) {
+        return ResponseEntity.ok(personService.getUserInfo(userId));
     }
 }

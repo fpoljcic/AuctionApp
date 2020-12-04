@@ -555,6 +555,11 @@ a:hover {
   height: 60px;
 }
 
+.avatar-image-small-2 {
+  width: 45px;
+  height: 45px;
+}
+
 .avatar-image-tiny {
   width: 30px;
   height: 30px;
@@ -581,11 +586,32 @@ img {
 }
 
 .modal-content, .popover, .popover-header {
+  color: var(--text-primary);
+  font-size: 16px;
+  letter-spacing: 0.56px;
   border-radius: 0;
 }
 
 .popover-header {
   background-color: var(--secondary-background);
+}
+
+.rc-rate-star-second>svg {
+  stroke: var(--primary);
+  stroke-width: 0.7px;
+}
+
+.rc-rate-star {
+  color: transparent;
+  margin-right: 10px;
+}
+
+.rc-rate-star-focused {
+  transform: unset;
+}
+
+.rc-rate-star-full .rc-rate-star-second, .rc-rate-star-full:hover .rc-rate-star-second {
+  color: var(--primary);
 }
 
 @media (max-width: 767px) {

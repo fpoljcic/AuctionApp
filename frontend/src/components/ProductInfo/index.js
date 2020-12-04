@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Alert, Button, Form, Image, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { RiHeartFill } from "react-icons/ri";
 import { IoIosArrowForward } from "react-icons/io";
+import { GoStar } from 'react-icons/go';
 import { getDurationBetweenDates, longDateTimeFormat } from 'utilities/date';
 import moment from 'moment';
 
 import './productInfo.css';
 
-const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, active, wished }) => {
+const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, active, wished, seller }) => {
 
     const [loading, setLoading] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const [bidPrice, setBidPrice] = useState("");
+    const [alertVisible, setAlertVisible] = useState(true);
     const maxPrice = 999999.99;
 
     const renderTooltip = () => {
@@ -98,6 +100,24 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 <div style={{ marginTop: 10 }} className="featured-product-price">
                     Start from ${product.startPrice}
                 </div>
+                {seller !== null ?
+                    <div style={{ marginTop: 10, maxWidth: 500, minWidth: 220 }}>
+                        <Alert className="congrats-alert" dismissible onClose={() => setAlertVisible(false)} transition={false} show={alertVisible} variant="info">
+                            Congratulations!
+                            <span style={{ fontWeight: 'normal' }}>
+                                {' '}You outbid the competition.
+                            </span>
+                        </Alert>
+                        <div style={{ marginTop: 10, display: 'flex', alignItems: 'center' }}>
+                            <span style={{ color: 'var(--text-secondary)' }}>
+                                Seller:
+                            </span>
+                            <Image style={{ marginLeft: 5 }} className="avatar-image-small-2" src={seller.photo} roundedCircle />
+                            {seller.name}
+                            <GoStar style={{ marginLeft: 20, color: 'var(--primary)', fontSize: 22, marginRight: 5 }} />
+                            {seller.rating !== 0 ? (Math.round((seller.rating + Number.EPSILON) * 100) / 100 + "/5") : "No ratings"}
+                        </div>
+                    </div> : null}
             </div>
             <div className="place-bid-container">
                 <div style={{ marginTop: 10 }}>

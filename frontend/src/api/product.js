@@ -62,3 +62,7 @@ export const getUserWishlistProducts = async () => {
 export const pay = async (data) => {
     return (await axios.post(hostUrl + '/products/pay', { ...data }, defaultHeader())).data;
 };
+
+export const rate = async (productId, rating) => {
+    return (await axios.post(hostUrl + '/products/rate', { productId, rating }, defaultHeader())).data;
+};
