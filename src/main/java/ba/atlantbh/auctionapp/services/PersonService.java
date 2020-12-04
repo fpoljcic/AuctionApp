@@ -204,4 +204,20 @@ public class PersonService {
         return personRepository.getUserInfo(userId)
                 .orElseThrow(() -> new BadRequestException("Wrong person id"));
     }
+
+    public void updateNotifications(UpdateNotifRequest updateNotifRequest) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
+        if (updateNotifRequest.getEmailNotify() == null && updateNotifRequest.getPushNotify() == null)
+            throw new BadRequestException("You must supply emailNotify or pushNotify attributes");
+
+        if (updateNotifRequest.getEmailNotify() != null)
+            person.setEmailNotify(updateNotifRequest.getEmailNotify());
+        if (updateNotifRequest.getPushNotify() != null)
+            person.setPushNotify(updateNotifRequest.getPushNotify());
+
+        personRepository.save(person);
+    }
 }

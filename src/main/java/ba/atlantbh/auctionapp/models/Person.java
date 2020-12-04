@@ -66,6 +66,10 @@ public class Person {
     private String country;
 
     @Column(nullable = false)
+    private Boolean emailNotify = false;
+    @Column(nullable = false)
+    private Boolean pushNotify = true;
+    @Column(nullable = false)
     private Boolean active = true;
 
     private String stripeCustomerId;
