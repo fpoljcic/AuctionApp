@@ -55,7 +55,7 @@ public class ScheduleService {
         return body.replace("maxBid", winner.getMaxBid().toPlainString())
                 .replace("productName", winner.getProductName())
                 .replace("productId", winner.getProductId().toString())
-                .replace("paymentUrl", hostUrl + "/my_account/bids")
+                .replace("paymentUrl", hostUrl + "/my_account/bids?id=" + winner.getProductId().toString())
                 .replace("settingsUrl", hostUrl + "/my_account/settings");
     }
 

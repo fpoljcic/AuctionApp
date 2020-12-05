@@ -4,6 +4,7 @@ import { Spinner } from 'react-bootstrap';
 import ProductTable from 'components/Tables/ProductTable';
 import { getUserBidProducts } from 'api/product';
 import { useAlertContext } from 'AppContext';
+import * as qs from 'query-string';
 
 import './myAccountTabs.css';
 
@@ -15,6 +16,8 @@ const Bids = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
         if (productName) {
@@ -35,7 +38,7 @@ const Bids = () => {
 
     return (
         <>
-            <ProductTable type="bids" products={products} />
+            <ProductTable type="bids" products={products} id={urlParams.id} />
             {loading || products.length === 0 ?
                 <div className="no-table-items font-18">
                     {loading ? <Spinner className="table-spinner" animation="border" /> : "No bids found"}
