@@ -175,7 +175,7 @@ public class PersonService {
     }
 
     private String formEmailBody(String hostUrl, UUID uuid) {
-        String body = getResourceFileAsString("static/mail.html");
+        String body = getResourceFileAsString("static/reset_password.html");
         return body.replace("hostUrl", hostUrl + "/reset_password?token=" + uuid);
     }
 

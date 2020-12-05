@@ -190,4 +190,16 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "GROUP BY (p.id, p.person_id, p.name, p2.url, s.name, c.name, p.shipping, p.start_date, p.end_date, w.date) " +
             "ORDER BY w.date DESC", nativeQuery = true)
     List<UserProductProj> getUserWishlistProducts(@Param("user_id") String userId);
+
+    @Query(value = "SELECT p.id productId, p.name productName, max(b.price) maxBid, " +
+            "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id WHERE b2.product_id = p.id " +
+            "ORDER BY b2.price DESC, b2.date LIMIT 1) email," +
+            "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id WHERE b3.product_id = p.id " +
+            "ORDER BY b3.price DESC, b3.date LIMIT 1) pushNotify, " +
+            "(SELECT p4.email_notify FROM bid b4 INNER JOIN person p4 on p4.id = b4.person_id WHERE b4.product_id = p.id " +
+            "ORDER BY b4.price DESC, b4.date LIMIT 1) emailNotify " +
+            "FROM product p INNER JOIN bid b on p.id = b.product_id " +
+            "WHERE end_date <= now() AND NOT notified AND NOT EXISTS (SELECT 1 FROM payment p3 WHERE p3.product_id = p.id) " +
+            "GROUP BY (p.id, p.name)", nativeQuery = true)
+    List<WinnerProj> getNotNotifiedWinners();
 }
