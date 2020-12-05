@@ -31,7 +31,7 @@ public class ScheduleService {
         this.hostUrl = hostUrl;
     }
 
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRateString = "${app.scheduleRate}")
     public void notifyHighestBidders() {
         List<WinnerProj> winners = productRepository.getNotNotifiedWinners();
         for (WinnerProj winner : winners) {
