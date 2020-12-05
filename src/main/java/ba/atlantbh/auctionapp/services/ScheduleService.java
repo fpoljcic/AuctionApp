@@ -36,9 +36,10 @@ public class ScheduleService {
         List<WinnerProj> winners = productRepository.getNotNotifiedWinners();
         for (WinnerProj winner : winners) {
             try {
-                String body = formEmailBody(hostUrl, winner);
-                if (winner.getEmailNotify())
+                if (winner.getEmailNotify()) {
+                    String body = formEmailBody(hostUrl, winner);
                     emailService.sendMail(winner.getEmail(), "Bid winner", body);
+                }
                 Product product = productRepository.findById(winner.getProductId())
                         .orElseThrow(() -> new UnprocessableException("Wrong product id"));
                 product.setNotified(true);
