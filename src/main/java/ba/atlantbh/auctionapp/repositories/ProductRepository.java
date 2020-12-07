@@ -16,6 +16,17 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
+    @Query(value = "SELECT * FROM product p " +
+            "INNER JOIN person p2 on p2.id = p.person_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE p2.active AND p.id = :id", nativeQuery = true)
+    Optional<Product> findByIdAndIsActive(String id);
+
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM product p INNER JOIN person p2 on p2.id = p.person_id " +
+                   "AND p2.active AND p.id = :id)", nativeQuery = true)
+    Boolean existsByIdAndIsActive(String id);
+
     @Query(value = "SELECT * FROM (SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url, c.name categoryName, s.name subcategoryName, " +
                    "(SELECT COUNT(*) FROM bid b INNER JOIN product p2 on p2.id = b.product_id " +
                    "WHERE b.person_id = :id AND p2.subcategory_id = pr.subcategory_id) count " +

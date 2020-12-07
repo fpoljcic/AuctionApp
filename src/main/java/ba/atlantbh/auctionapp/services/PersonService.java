@@ -67,7 +67,7 @@ public class PersonService {
         if (!passwordEncoder.matches(loginRequest.getPassword(), person.getPassword()))
             throw new UnauthorizedException("Wrong email or password");
         if (!person.getActive())
-            throw new UnauthorizedException("User account disabled");
+            throw new UnauthorizedException("User account is deactivated");
         person.setPassword(null); // No need to return password
         return person;
     }
@@ -155,7 +155,7 @@ public class PersonService {
     public String forgotPassword(ForgotPassRequest forgotPassRequest) {
         String message = "We sent you an email with a link to reset your password. " +
                 "The link will expire after 24 hours.";
-        Optional<Person> personOptional = personRepository.findByEmail(forgotPassRequest.getEmail());
+        Optional<Person> personOptional = personRepository.findByEmailAndActiveIsTrue(forgotPassRequest.getEmail());
         if (personOptional.isEmpty())
             return message;
         Person person = personOptional.get();
@@ -182,7 +182,7 @@ public class PersonService {
     public String resetPassword(ResetPassRequest resetPassRequest) {
         Token token = tokenRepository.getToken(resetPassRequest.getToken().toString())
                 .orElseThrow(() -> new BadRequestException("Invalid token"));
-        Person person = personRepository.findById(token.getPerson().getId())
+        Person person = personRepository.findByIdAndActiveIsTrue(token.getPerson().getId())
                 .orElseThrow(() -> new BadRequestException("Invalid token"));
 
         person.setPassword(passwordEncoder.encode(resetPassRequest.getPassword()));
@@ -197,7 +197,7 @@ public class PersonService {
     public Boolean validToken(TokenRequest tokenRequest) {
         Token token = tokenRepository.getToken(tokenRequest.getToken())
                 .orElse(new Token());
-        return token.getId() != null && personRepository.existsById(token.getPerson().getId());
+        return token.getId() != null && personRepository.existsByIdAndActiveIsTrue(token.getPerson().getId());
     }
 
     public PersonInfoProj getUserInfo(String userId) {
@@ -218,6 +218,16 @@ public class PersonService {
         if (updateNotifRequest.getPushNotify() != null)
             person.setPushNotify(updateNotifRequest.getPushNotify());
 
+        personRepository.save(person);
+    }
+
+    public void deactivate(String password) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+        if (!passwordEncoder.matches(password, person.getPassword()))
+            throw new UnauthorizedException("Wrong password");
+        person.setActive(false);
         personRepository.save(person);
     }
 }
