@@ -232,7 +232,7 @@ const Shop = () => {
 
                 {!lastPage ?
                     <div style={{ width: '100%', marginTop: 50 }}>
-                        <Button disabled={loading} onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
+                        <Button id="btn-explore-more" disabled={loading} onClick={exploreMore} style={{ width: 250, margin: '0 auto' }} variant="fill-purple" size="xxl">
                             EXPLORE MORE
                         </Button>
                     </div> : null}
