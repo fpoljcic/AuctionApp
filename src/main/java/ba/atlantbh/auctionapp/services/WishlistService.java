@@ -28,7 +28,7 @@ public class WishlistService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        Product product = productRepository.findById(wishlistRequest.getProductId())
+        Product product = productRepository.findByIdAndIsActive(wishlistRequest.getProductId().toString())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (wishlistRepository.existsByPersonAndProduct(person, product))
             throw new BadRequestException("You already wishlisted this product");
@@ -39,7 +39,7 @@ public class WishlistService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        Product product = productRepository.findById(wishlistRequest.getProductId())
+        Product product = productRepository.findByIdAndIsActive(wishlistRequest.getProductId().toString())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         Wishlist wishlist = wishlistRepository.findByPersonAndProduct(person, product)
                 .orElseThrow(() -> new BadRequestException("You didn't wishlist this product"));
