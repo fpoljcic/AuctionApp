@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import DeactivateAcc from 'components/Modals/DeactivateAcc';
 import { getUser, setUser } from 'utilities/localStorage';
 import { updateNotifications } from 'api/auth';
 
@@ -11,6 +12,7 @@ const Settings = () => {
 
     const [emailLoading, setEmailLoading] = useState(false);
     const [pushLoading, setPushLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const handleEmailClick = async (emailNotify) => {
         setEmailLoading(true);
@@ -100,9 +102,11 @@ const Settings = () => {
                         size="xxl"
                         style={{ width: 243, marginTop: 38 }}
                         variant="transparent-black-shadow-disabled"
+                        onClick={() => setShowModal(true)}
                     >
                         DEACTIVATE
                     </Button>
+                    <DeactivateAcc showModal={showModal} setShowModal={setShowModal} />
                 </div>
             </div>
         </div>
