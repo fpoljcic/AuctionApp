@@ -91,4 +91,14 @@ public class PersonController {
     public ResponseEntity<PersonInfoProj> getUserInfo(@RequestParam String userId) {
         return ResponseEntity.ok(personService.getUserInfo(userId));
     }
+
+    @PostMapping("/notifications/update")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
+    public ResponseEntity<String> updateNotifications(@RequestBody @Valid UpdateNotifRequest updateNotifRequest) {
+        personService.updateNotifications(updateNotifRequest);
+        return ResponseEntity.ok("Notification preferences updated");
+    }
 }

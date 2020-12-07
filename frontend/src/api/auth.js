@@ -29,3 +29,7 @@ export const getUserInfo = async (userId) => {
     const headers = { ...defaultHeader(), ...getParams({ userId }) };
     return (await axios.get(hostUrl + '/auth', headers)).data;
 };
+
+export const updateNotifications = async (emailNotify, pushNotify) => {
+    return (await axios.post(hostUrl + '/auth/notifications/update', { emailNotify, pushNotify }, defaultHeader())).data;
+};

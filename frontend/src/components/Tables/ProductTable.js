@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Image, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { getDurationBetweenDates, getLongDateTime } from 'utilities/date';
@@ -6,11 +6,14 @@ import { myAccountBidsPayUrl, productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 import Receipt from 'components/Modals/Receipt';
 import MyScrollToTop from 'components/MyScrollToTop';
+import { useAlertContext } from 'AppContext';
+import { IoIosCheckmarkCircle } from "react-icons/io";
 import moment from 'moment';
 
 import './tables.css';
 
-const ProductTable = ({ products, type }) => {
+const ProductTable = ({ products, type, id }) => {
+    const { showMessage } = useAlertContext();
     const history = useHistory();
     const userId = getUserId();
 
@@ -81,6 +84,24 @@ const ProductTable = ({ products, type }) => {
         });
     }
 
+    useEffect(() => {
+        if (type === "bids" && id !== undefined) {
+            if (products.some(product => product.id === id && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId && !product.paid))
+                showMessage("info",
+                    <>
+                        <IoIosCheckmarkCircle style={{ fontSize: 18, marginBottom: 4, marginRight: 5 }} />
+                        Congratulations!
+                        <span style={{ fontWeight: 'normal' }}>
+                            {' '}You outbid the competition.
+                         </span>
+                    </>
+                );
+        }
+        // eslint-disable-next-line
+    }, [products, id, userId, type])
+
+    const isHighlighted = (product) => product.id === id && type === "bids" && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId && !product.paid;
+
     return (
         <>
             <Table variant="gray-transparent" responsive>
@@ -98,7 +119,7 @@ const ProductTable = ({ products, type }) => {
                 </thead>
                 <tbody>
                     {products.map(product => (
-                        <tr key={product.id}>
+                        <tr style={isHighlighted(product) ? { backgroundColor: 'var(--info-background)' } : null} key={product.id}>
                             <td>
                                 <Image style={{ cursor: 'pointer' }} onClick={() => handleCheckClick(product)} className="avatar-image-medium" src={getImageSrc(product)} />
                             </td>

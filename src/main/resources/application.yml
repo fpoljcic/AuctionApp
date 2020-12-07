@@ -20,6 +20,7 @@ app:
   emailPassword: ${EMAIL_PASSWORD}
   hostUrl: ${HOST_URL}
   stripeApiKey: ${STRIPE_API_KEY}
+  scheduleRate: ${SCHEDULE_RATE}
 server:
   error:
     include-message: always

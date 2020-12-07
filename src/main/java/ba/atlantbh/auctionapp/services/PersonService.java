@@ -175,7 +175,7 @@ public class PersonService {
     }
 
     private String formEmailBody(String hostUrl, UUID uuid) {
-        String body = getResourceFileAsString("static/mail.html");
+        String body = getResourceFileAsString("static/reset_password.html");
         return body.replace("hostUrl", hostUrl + "/reset_password?token=" + uuid);
     }
 
@@ -203,5 +203,21 @@ public class PersonService {
     public PersonInfoProj getUserInfo(String userId) {
         return personRepository.getUserInfo(userId)
                 .orElseThrow(() -> new BadRequestException("Wrong person id"));
+    }
+
+    public void updateNotifications(UpdateNotifRequest updateNotifRequest) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
+        if (updateNotifRequest.getEmailNotify() == null && updateNotifRequest.getPushNotify() == null)
+            throw new BadRequestException("You must supply emailNotify or pushNotify attributes");
+
+        if (updateNotifRequest.getEmailNotify() != null)
+            person.setEmailNotify(updateNotifRequest.getEmailNotify());
+        if (updateNotifRequest.getPushNotify() != null)
+            person.setPushNotify(updateNotifRequest.getPushNotify());
+
+        personRepository.save(person);
     }
 }

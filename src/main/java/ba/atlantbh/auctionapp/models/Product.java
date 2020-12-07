@@ -82,6 +82,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean rated = false;
 
+    @Column(nullable = false)
+    private Boolean notified = false;
+
     @Enumerated(EnumType.STRING)
     private Color color;
 
