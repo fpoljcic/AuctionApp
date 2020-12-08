@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
+const SubmitButtons = ({ onBack, lastTab, loading, uploading, id }) => {
 
     const renderNextButton = () => {
         switch (true) {
@@ -38,6 +38,7 @@ const SubmitButtons = ({ onBack, lastTab, loading, uploading }) => {
                 BACK
             </Button>
             <Button
+                id="btn-sell-done"
                 className="sell-submit-button"
                 type="submit"
                 size="xxl"

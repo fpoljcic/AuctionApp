@@ -5,6 +5,11 @@
   --primary: #8367D8;
   --primary-a: rgba(131, 103, 216, 0.31);
   --white: #FFF;
+  --almost-white: #FCFCFC;
+  --light-silver: #D8D8D8;
+  --alert: #D86767;
+  --red: #FF0000;
+  --red-alert: #CB2431;
 }
 
 .purple-theme {
@@ -39,6 +44,7 @@
   --pale-purple: #C4BFD6;
   --white: #FFF;
   --red: #FF0000;
+  --red-alert: #CB2431;
   --black-a: rgba(0, 0, 0, 0.11);
   --black-a-2: rgba(0, 0, 0, 0.05);
   --black-a-3: rgba(0, 0, 0, 0.08);
@@ -78,6 +84,7 @@
   --pale-purple: #C4BFD6;
   --white: #FFF;
   --red: #FF0000;
+  --red-alert: #CB2431;
   --black-a: rgba(0, 0, 0, 0.11);
   --black-a-2: rgba(0, 0, 0, 0.05);
   --black-a-3: rgba(0, 0, 0, 0.08);

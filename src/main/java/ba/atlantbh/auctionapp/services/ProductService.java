@@ -50,10 +50,13 @@ public class ProductService {
             id = JwtTokenUtil.getRequestPersonId().toString();
         } catch (UnauthorizedException ignore) {
         }
-        List<SimpleProductProj> featuredProducts = productRepository.getFeaturedProducts(id, true, 6);
+        List<SimpleProductProj> featuredProducts = productRepository.getFeaturedProducts(id, true, 6, false);
         if (featuredProducts.size() < 6)
-            featuredProducts.addAll(productRepository.getFeaturedProducts(id, false, 6 - featuredProducts.size()));
-
+            featuredProducts.addAll(productRepository.getFeaturedProducts(id, false, 6 - featuredProducts.size(), false));
+        if (featuredProducts.size() < 6)
+            featuredProducts.addAll(productRepository.getFeaturedProducts(id, true, 6 - featuredProducts.size(), true));
+        if (featuredProducts.size() < 6)
+            featuredProducts.addAll(productRepository.getFeaturedProducts(id, false, 6 - featuredProducts.size(), true));
         return featuredProducts;
     }
 
@@ -73,7 +76,7 @@ public class ProductService {
     }
 
     public List<SimpleProductProj> getRelatedProducts(String id) {
-        Product product = productRepository.findById(UUID.fromString(id))
+        Product product = productRepository.findByIdAndIsActive(id)
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         return productRepository.getRelatedProducts(id, product.getSubcategory().getId().toString(),
                 product.getSubcategory().getCategory().getId().toString());
@@ -107,14 +110,14 @@ public class ProductService {
                 pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(sortOrder, "(bids)"));
                 break;
             case "new":
-                pageRequest = PageRequest.of(page, 12, Sort.by(sortOrder, "start_date"));
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(sortOrder, "(pr.start_date)"));
                 break;
             case "price":
-                pageRequest = PageRequest.of(page, 12, Sort.by(sortOrder, "start_price"));
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(sortOrder, "(pr.start_price)"));
                 break;
             default:
                 pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(similarity)")
-                        .and(Sort.by("name")).and(Sort.by("id")));
+                        .and(JpaSort.unsafe("(pr.name)")).and(JpaSort.unsafe("(pr.id)")));
                 break;
         }
 
@@ -438,7 +441,7 @@ public class ProductService {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
 
-        Product product = productRepository.findById(paymentRequest.getProductId())
+        Product product = productRepository.findByIdAndIsActive(paymentRequest.getProductId().toString())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
 
         if (product.getEndDate().isAfter(LocalDateTime.now()))
@@ -471,7 +474,7 @@ public class ProductService {
 
     public void rate(UUID productId, Integer rating) {
         UUID personId = JwtTokenUtil.getRequestPersonId();
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findByIdAndIsActive(productId.toString())
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
 
         if (product.getRated())

@@ -33,3 +33,7 @@ export const getUserInfo = async (userId) => {
 export const updateNotifications = async (emailNotify, pushNotify) => {
     return (await axios.post(hostUrl + '/auth/notifications/update', { emailNotify, pushNotify }, defaultHeader())).data;
 };
+
+export const deactivate = async (password) => {
+    return (await axios.post(hostUrl + '/auth/deactivate', { password }, defaultHeader())).data;
+};

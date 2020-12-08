@@ -183,6 +183,16 @@ h3 {
   padding: 0;
 }
 
+.btn-danger {
+  color: var(--white);
+  background: var(--red-alert);
+  border: none;
+}
+
+.btn-danger:hover {
+  color: var(--light-silver);
+}
+
 /*--------------FORM--------------*/
 
 .form-control {
