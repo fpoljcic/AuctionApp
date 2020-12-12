@@ -6,10 +6,12 @@ import ba.atlantbh.auctionapp.exceptions.ConflictException;
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
+import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.models.Token;
 import ba.atlantbh.auctionapp.projections.PersonInfoProj;
 import ba.atlantbh.auctionapp.repositories.CardRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
+import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.repositories.TokenRepository;
 import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -34,6 +36,7 @@ import static ba.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsStr
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final ProductRepository productRepository;
     private final CardRepository cardRepository;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
@@ -243,6 +246,10 @@ public class PersonService {
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         if (!passwordEncoder.matches(password, person.getPassword()))
             throw new UnauthorizedException("Wrong password");
+        List<Product> notPaidProducts = productRepository.getNotPaidProducts(person.getId().toString());
+        for (Product product : notPaidProducts)
+            product.setNotified(false);
+        productRepository.saveAll(notPaidProducts);
         person.setActive(false);
         personRepository.save(person);
     }
