@@ -73,12 +73,13 @@ const Payment = () => {
     const handleSubmit = async (data) => {
         setLoading(true);
         data.productId = product.id;
+        const submitData = { ...data };
         if (data.payPal.orderId !== "")
-            delete data.card;
+            delete submitData.card;
         else
-            delete data.payPal;
+            delete submitData.payPal;
         try {
-            await pay(data);
+            await pay(submitData);
         } catch (e) {
             setLoading(false);
             return;
