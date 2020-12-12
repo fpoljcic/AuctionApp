@@ -175,7 +175,16 @@ const CardForm = ({ card, payPal: payPalObj, payPalDisabled, cardDisabled, handl
                                     value={expirationYear}
                                     name="card.expirationYear"
                                     onChange={e => {
-                                        setCurrentMonth(parseInt(e.target.value) === getCurrentYear() ? getCurrentMonth() : 0);
+                                        if (parseInt(e.target.value) === getCurrentYear()) {
+                                            const currMonth = getCurrentMonth();
+                                            if (expirationMonth - 1 < currMonth) {
+                                                setFieldValue("card.expirationMonth", "");
+                                                setExpirationMonth("Month");
+                                            }
+                                            setCurrentMonth(currMonth);
+                                        } else {
+                                            setCurrentMonth(0);
+                                        }
                                         handleChange(e);
                                         setExpirationYear(e.target.value);
                                     }}

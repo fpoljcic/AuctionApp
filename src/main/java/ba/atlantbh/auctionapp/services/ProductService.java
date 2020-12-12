@@ -363,7 +363,7 @@ public class ProductService {
         if (cardRequest != null) {
             if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
-                            cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
+                            cardRequest.getExpirationMonth() < Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
             if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
                 Card existingCard = cardRepository.findByPersonIdAndSavedIsTrue(person.getId())
