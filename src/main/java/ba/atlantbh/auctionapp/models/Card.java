@@ -49,18 +49,23 @@ public class Card {
     private Short cvc;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
     @Column(nullable = false)
     private String stripeCardId;
 
-    public Card(@NotBlank String name, @NotBlank @Size(max = 19) @Size(min = 13) String cardNumber, @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(12) Integer expirationMonth, @Min(100) @Max(9999) Short cvc) {
+    @Column(nullable = false)
+    private Boolean saved;
+
+    public Card(@NotBlank String name, @NotBlank @Size(max = 19) @Size(min = 13) String cardNumber, @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(12) Integer expirationMonth, @Min(100) @Max(9999) Short cvc, Person person, Boolean saved) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.cvc = cvc;
+        this.person = person;
+        this.saved = saved;
     }
 
     public Card(Person person) {
