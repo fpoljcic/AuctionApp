@@ -70,7 +70,7 @@ public class ProductService {
 
     public ProductResponse getProduct(String productId, String userId) {
         FullProductProj product = productRepository.getProduct(productId, userId)
-                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("This product does not exist or has been removed by the seller"));
         List<SimplePhotoProj> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
         return new ProductResponse(product, productPhotos);
     }
