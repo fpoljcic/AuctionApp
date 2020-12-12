@@ -31,7 +31,7 @@ const Footer = () => {
           GET IN TOUCH
         </div>
         <a className="silver-nav-link" href="tel:+387 62-345-678">Call Us at +387 62-345-678</a>
-        <a className="silver-nav-link" target="_blank" rel="noopener noreferrer" href="mailto:support@auction.com">support@auction.com</a>
+        <a className="silver-nav-link" target="_blank" rel="noopener noreferrer" href="mailto:auctionapp.atlantbh@gmail.com">auctionapp.atlantbh@gmail.com</a>
         <div className="socials-container">
           <a className="social-link" rel="noopener noreferrer" href="https://www.facebook.com/AtlantBH" target="_blank">
             <SiFacebook />
