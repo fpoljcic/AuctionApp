@@ -27,13 +27,13 @@ const WishlistTable = ({ products, setProducts }) => {
 
     return (
         <>
-            <Table variant="gray-transparent" responsive>
+            <Table style={products.length === 0 ? { borderBottom: 'none' } : null} variant="gray-transparent" responsive>
                 <thead>
                     <tr className="product-table-header">
-                        <SortTh style={{ width: 142 }} active={active === "defaultSort"} setActive={setActive} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
-                        <SortTh active={active === "name"} setActive={setActive} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
-                        <SortTh style={{ minWidth: 178 }} active={active === "endDate"} setActive={setActive} data={products} setData={setProducts} name="endDate" type="date">Time Left</SortTh>
-                        <SortTh style={{ minWidth: 135 }} active={active === "maxBid"} setActive={setActive} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
+                        <SortTh style={{ width: 142 }} active={active} setActive={setActive} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
+                        <SortTh active={active} setActive={setActive} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
+                        <SortTh style={{ minWidth: 178 }} active={active} setActive={setActive} data={products} setData={setProducts} name="endDate" type="date">Time Left</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
                         <th style={{ width: 230 }}>Status</th>
                         <th></th>
                     </tr>

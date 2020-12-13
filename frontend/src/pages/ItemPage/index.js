@@ -131,7 +131,7 @@ const ItemPage = ({ match, location }) => {
                 </div>
             ) : null}
             {personId !== null && bids.length !== 0 ? (
-                <BidTable bids={bids} />
+                <BidTable bids={bids} setBids={setBids} />
             ) : null}
             {personId === null && product !== null ? (
                 <div style={{ marginTop: 150 }} className="featured-container">

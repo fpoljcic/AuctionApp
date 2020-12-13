@@ -38,7 +38,7 @@ const Bids = () => {
 
     return (
         <>
-            <ProductTable type="bids" products={products} id={urlParams.id} />
+            <ProductTable type="bids" products={products} id={urlParams.id} setProducts={setProducts} />
             {loading || products.length === 0 ?
                 <div className="no-table-items font-18">
                     {loading ? <Spinner className="table-spinner" animation="border" /> : "No bids found"}

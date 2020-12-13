@@ -42,6 +42,8 @@
 .product-table-header>th.sortable-th {
     cursor: pointer;
     position: relative;
+    left: -0.5px;
+    padding-right: 26px;
 }
 
 .product-table-header>th.sortable-th:hover {

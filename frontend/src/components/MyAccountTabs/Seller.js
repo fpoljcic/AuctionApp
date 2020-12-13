@@ -20,9 +20,9 @@ const Seller = () => {
     const [loading, setLoading] = useState(true);
 
     const tabs = [
-        <ProductTable type="scheduled" products={scheduledProducts} />,
-        <ProductTable type="active" products={activeProducts} />,
-        <ProductTable type="sold" products={soldProducts} />
+        <ProductTable type="scheduled" products={scheduledProducts} setProducts={setScheduledProducts} />,
+        <ProductTable type="active" products={activeProducts} setProducts={setActiveProducts} />,
+        <ProductTable type="sold" products={soldProducts} setProducts={setSoldProducts} />
     ];
 
     useEffect(() => {

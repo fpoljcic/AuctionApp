@@ -4,9 +4,9 @@ import { dateCompare } from 'utilities/date';
 
 import './tables.css';
 
-const SortTh = ({ children, data, setData, name, type, active, setActive, style }) => {
+const SortTh = ({ children, data, setData, name, type, active, setActive, style, desc, colSpan }) => {
 
-    const [order, setOrder] = useState(true);
+    const [order, setOrder] = useState(desc !== true);
 
     const handleSort = () => {
         setActive(name);
@@ -27,7 +27,7 @@ const SortTh = ({ children, data, setData, name, type, active, setActive, style 
     }
 
     const renderSort = () => {
-        if (!active)
+        if (active !== name)
             return <FaSort className="sort-icon" />
         if (order)
             return <FaSortDown style={{ top: 'calc(50% - 10px)' }} className="active-sort-icon" />
@@ -35,7 +35,12 @@ const SortTh = ({ children, data, setData, name, type, active, setActive, style 
     }
 
     return (
-        <th style={active ? { ...style, backgroundColor: 'var(--white-smoke)' } : { ...style }} className="sortable-th" onClick={handleSort}>
+        <th
+            colSpan={colSpan || 1}
+            style={active === name ? { ...style, backgroundColor: 'var(--white-smoke)' } : { ...style }}
+            className="sortable-th"
+            onClick={handleSort}
+        >
             {children}
             {renderSort()}
         </th>

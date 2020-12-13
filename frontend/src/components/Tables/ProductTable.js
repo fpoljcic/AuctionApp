@@ -8,17 +8,19 @@ import Receipt from 'components/Modals/Receipt';
 import MyScrollToTop from 'components/MyScrollToTop';
 import { useAlertContext } from 'AppContext';
 import { IoIosCheckmarkCircle } from "react-icons/io";
+import SortTh from './SortTh';
 import moment from 'moment';
 
 import './tables.css';
 
-const ProductTable = ({ products, type, id }) => {
+const ProductTable = ({ products, type, id, setProducts }) => {
     const { showMessage } = useAlertContext();
     const history = useHistory();
     const userId = getUserId();
 
     const [showModal, setShowModal] = useState(false);
     const [productId, setProductId] = useState(null);
+    const [active, setActive] = useState("defaultSort");
 
     const getTimeColumnName = () => {
         switch (type) {
@@ -104,16 +106,21 @@ const ProductTable = ({ products, type, id }) => {
 
     return (
         <>
-            <Table variant="gray-transparent" responsive>
+            <Table style={products.length === 0 ? { borderBottom: 'none' } : null} variant="gray-transparent" responsive>
                 <Receipt showModal={showModal} setShowModal={setShowModal} productId={productId} />
                 <thead>
                     <tr className="product-table-header">
-                        <th style={{ width: 80 }}>Item</th>
-                        <th>Name</th>
-                        <th style={{ minWidth: 178 }}>{getTimeColumnName()}</th>
-                        <th style={{ minWidth: 135 }}>Your Price</th>
-                        <th style={{ minWidth: 96 }}>No. Bids</th>
-                        <th style={{ minWidth: 135 }}>Highest Bid</th>
+                        {type === "bids" ?
+                            <th style={{ width: 142 }}>
+                                Item
+                            </th> :
+                            <SortTh style={{ width: 142 }} active={active} setActive={setActive} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
+                        }
+                        <SortTh active={active} setActive={setActive} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
+                        <SortTh desc={type === "bids"} style={{ minWidth: 178 }} active={active} setActive={setActive} data={products} setData={setProducts} name={type === "bids" ? "defaultSort" : "endDate"} type="date">{getTimeColumnName()}</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="price" type="number">Your Price</SortTh>
+                        <SortTh style={{ minWidth: 96 }} active={active} setActive={setActive} data={products} setData={setProducts} name="bidCount" type="number">No. Bids</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
                         <th></th>
                     </tr>
                 </thead>
