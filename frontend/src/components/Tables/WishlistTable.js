@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Image, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { getDurationBetweenDates } from 'utilities/date';
 import { productUrl } from 'utilities/appUrls';
 import { getUserId } from 'utilities/localStorage';
 import MyScrollToTop from 'components/MyScrollToTop';
+import SortTh from './SortTh';
 import moment from 'moment';
 
 import './tables.css';
 
-const WishlistTable = ({ products }) => {
+const WishlistTable = ({ products, setProducts }) => {
     const history = useHistory();
     const userId = getUserId();
+
+    const [active, setActive] = useState("defaultSort");
 
     const getTimeColumn = (product) => {
         const productEndDate = moment.utc(product.endDate);
@@ -24,13 +27,13 @@ const WishlistTable = ({ products }) => {
 
     return (
         <>
-            <Table variant="gray-transparent" responsive>
+            <Table style={products.length === 0 ? { borderBottom: 'none' } : null} variant="gray-transparent" responsive>
                 <thead>
                     <tr className="product-table-header">
-                        <th style={{ width: 80 }}>Item</th>
-                        <th>Name</th>
-                        <th style={{ minWidth: 178 }}>Time Left</th>
-                        <th style={{ minWidth: 135 }}>Highest Bid</th>
+                        <SortTh style={{ width: 142 }} active={active} setActive={setActive} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
+                        <SortTh active={active} setActive={setActive} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
+                        <SortTh style={{ minWidth: 178 }} active={active} setActive={setActive} data={products} setData={setProducts} name="endDate" type="date">Time Left</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
                         <th style={{ width: 230 }}>Status</th>
                         <th></th>
                     </tr>

@@ -56,9 +56,9 @@ INSERT INTO public.subcategory (id, name, category_id, photo_url) VALUES ('7bc8d
 INSERT INTO public.subcategory (id, name, category_id, photo_url) VALUES ('e3d6ca53-bc92-4a97-ad6f-d693f5f4f232', 'Watches', 'cfbffcc5-65ca-4f07-8d6d-08a9df900d60', 'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
 INSERT INTO public.subcategory (id, name, category_id, photo_url) VALUES ('29372d3d-f73a-4931-a963-611d8f8f0dcc', 'Handbags', 'cfbffcc5-65ca-4f07-8d6d-08a9df900d60', 'https://images.unsplash.com/photo-1570032686516-2fe01ea09f5b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
 
-INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id) VALUES ('99448baa-9e87-4965-a093-7cb7491375bb', '4242424242424242', 433, 11, 2026, 'Faris Poljčić', 'ac8779e0-dff3-4504-8229-576ecf611716', 'card_1HsS1KJGqQm1VELVobVnuM7C');
-INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id) VALUES ('aba4446e-137f-11eb-adc1-0242ac120002', '5555555555554444', 686, 2, 2030, 'Emir Spahić', 'f0f72ca0-f48f-4c5c-8fc1-02f50aca7e2a', 'card_1HsQoPJGqQm1VELVNfeMoOio');
-INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id) VALUES ('cc63c8e6-137f-11eb-adc1-0242ac120002', '378282246310005', 9771, 7, 2026, 'Amra Džeko', '48178ae6-fbfd-47f1-930f-4aef69a4bc63', 'card_1HsQp1JGqQm1VELVYEWWEdCq');
+INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id, saved) VALUES ('99448baa-9e87-4965-a093-7cb7491375bb', '4242424242424242', 433, 11, 2026, 'Faris Poljčić', 'ac8779e0-dff3-4504-8229-576ecf611716', 'card_1HsS1KJGqQm1VELVobVnuM7C', true);
+INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id, saved) VALUES ('aba4446e-137f-11eb-adc1-0242ac120002', '5555555555554444', 686, 2, 2030, 'Emir Spahić', 'f0f72ca0-f48f-4c5c-8fc1-02f50aca7e2a', 'card_1HsQoPJGqQm1VELVNfeMoOio', true);
+INSERT INTO public.card (id, card_number, cvc, expiration_month, expiration_year, name, person_id, stripe_card_id, saved) VALUES ('cc63c8e6-137f-11eb-adc1-0242ac120002', '378282246310005', 9771, 7, 2026, 'Amra Džeko', '48178ae6-fbfd-47f1-930f-4aef69a4bc63', 'card_1HsQp1JGqQm1VELVYEWWEdCq', true);
 
 INSERT INTO public.paypal (id, order_id) VALUES ('e3431f0a-e376-4ed9-8580-01842827b3d9', '54871028CA896874T');
 

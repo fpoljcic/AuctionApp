@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import './productInfo.css';
 
-const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, active, wished, seller }) => {
+const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, active, wished, seller, withMessage }) => {
 
     const [loading, setLoading] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
@@ -102,13 +102,14 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                 </div>
                 {seller !== null ?
                     <div style={{ marginTop: 10, maxWidth: 500, minWidth: 220 }}>
-                        <Alert className="congrats-alert" dismissible onClose={() => setAlertVisible(false)} transition={false} show={alertVisible} variant="info">
-                            Congratulations!
-                            <span style={{ fontWeight: 'normal' }}>
-                                {' '}You outbid the competition.
-                            </span>
-                        </Alert>
-                        <div style={{ marginTop: 10, display: 'flex', alignItems: 'center' }}>
+                        {withMessage === true ?
+                            <Alert className="congrats-alert" dismissible onClose={() => setAlertVisible(false)} transition={false} show={alertVisible} variant="info">
+                                Congratulations!
+                                <span style={{ fontWeight: 'normal' }}>
+                                    {' '}You outbid the competition.
+                                </span>
+                            </Alert> : null}
+                        <div style={{ marginTop: 15, display: 'flex', alignItems: 'center' }}>
                             <span style={{ color: 'var(--text-secondary)' }}>
                                 Seller:
                             </span>

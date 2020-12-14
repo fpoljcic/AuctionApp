@@ -70,7 +70,7 @@ public class ProductService {
 
     public ProductResponse getProduct(String productId, String userId) {
         FullProductProj product = productRepository.getProduct(productId, userId)
-                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+                .orElseThrow(() -> new UnprocessableException("This product does not exist or has been removed by the seller"));
         List<SimplePhotoProj> productPhotos = photoRepository.findAllByProductIdOrderByFeaturedDesc(UUID.fromString(productId));
         return new ProductResponse(product, productPhotos);
     }
@@ -363,13 +363,13 @@ public class ProductService {
         if (cardRequest != null) {
             if (cardRequest.getExpirationYear() < Calendar.getInstance().get(Calendar.YEAR) ||
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
-                            cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
+                            cardRequest.getExpirationMonth() < Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
             if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
-                List<Card> cards = cardRepository.findAllByPersonId(person.getId());
-                if (cards.isEmpty() || !cards.get(0).getMaskedCardNumber().equals(cardRequest.getCardNumber()))
+                Card existingCard = cardRepository.findByPersonIdAndSavedIsTrue(person.getId())
+                        .orElseThrow(() -> new BadRequestException("Card number can only contain digits"));
+                if (!existingCard.getMaskedCardNumber().equals(cardRequest.getCardNumber()))
                     throw new BadRequestException("Card number can only contain digits");
-                Card existingCard = cards.get(0);
                 if (!existingCard.getName().equals(cardRequest.getName()) ||
                         !existingCard.getExpirationYear().equals(cardRequest.getExpirationYear()) ||
                         !existingCard.getExpirationMonth().equals(cardRequest.getExpirationMonth()) ||
@@ -377,19 +377,22 @@ public class ProductService {
                     throw new BadRequestException("Wrong card info");
                 return existingCard;
             }
-            card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
+            card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvcAndPerson(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),
                     cardRequest.getExpirationYear(),
                     cardRequest.getExpirationMonth(),
-                    cardRequest.getCvc()
+                    cardRequest.getCvc(),
+                    person
             ).orElseGet(() -> {
                 Card newCard = new Card(
                         cardRequest.getName(),
                         cardRequest.getCardNumber(),
                         cardRequest.getExpirationYear(),
                         cardRequest.getExpirationMonth(),
-                        cardRequest.getCvc()
+                        cardRequest.getCvc(),
+                        person,
+                        false
                 );
                 String stripeCardId;
                 try {

@@ -6,10 +6,12 @@ import ba.atlantbh.auctionapp.exceptions.ConflictException;
 import ba.atlantbh.auctionapp.exceptions.UnauthorizedException;
 import ba.atlantbh.auctionapp.models.Card;
 import ba.atlantbh.auctionapp.models.Person;
+import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.models.Token;
 import ba.atlantbh.auctionapp.projections.PersonInfoProj;
 import ba.atlantbh.auctionapp.repositories.CardRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
+import ba.atlantbh.auctionapp.repositories.ProductRepository;
 import ba.atlantbh.auctionapp.repositories.TokenRepository;
 import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -34,6 +36,7 @@ import static ba.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsStr
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final ProductRepository productRepository;
     private final CardRepository cardRepository;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
@@ -95,47 +98,63 @@ public class PersonService {
 
     private void updateCard(CardRequest updatedCard, Person person) {
         if (updatedCard != null) {
-            Card oldCard = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
-            String maskedCardNumber = oldCard.getMaskedCardNumber();
-            if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
-                updatedCard.setCardNumber(oldCard.getCardNumber());
-            else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
-                throw new BadRequestException("Card number can only contain digits");
-            boolean createNewCard = false;
-            if (!updatedCard.getCardNumber().equals(oldCard.getCardNumber()) || !updatedCard.getCvc().equals(oldCard.getCvc()))
-                createNewCard = true;
-            Card newCard = new Card();
-            updateMapper.updateCard(updatedCard, newCard);
-            newCard.setStripeCardId(oldCard.getStripeCardId());
-            String stripeCardId;
-            try {
-                if (createNewCard)
-                    stripeCardId = stripeService.saveCard(newCard, person, true);
-                else
-                    stripeCardId = stripeService.updateCard(newCard, person);
-            } catch (StripeException e) {
-                throw new BadRequestException(e.getStripeError().getMessage());
-            }
-            if (createNewCard) {
-                newCard.setPerson(person);
-                newCard.setStripeCardId(stripeCardId);
-                if (oldCard.getId() == null) {
-                    cardRepository.save(newCard);
+            cardRepository.findByCardNumberAndCvcAndPerson(
+                    updatedCard.getCardNumber(),
+                    updatedCard.getCvc(),
+                    person
+            ).ifPresentOrElse(oldCard -> {
+                updateMapper.updateCard(updatedCard, oldCard);
+                oldCard.setSaved(true);
+                try {
+                    stripeService.updateCard(oldCard, person);
+                } catch (StripeException e) {
+                    throw new BadRequestException(e.getStripeError().getMessage());
+                }
+                cardRepository.save(oldCard);
+            }, () -> {
+                Card savedCard = cardRepository.findByPersonIdAndSavedIsTrue(person.getId()).orElse(new Card(person));
+                String maskedCardNumber = savedCard.getMaskedCardNumber();
+                if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
+                    updatedCard.setCardNumber(savedCard.getCardNumber());
+                else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
+                    throw new BadRequestException("Card number can only contain digits");
+                boolean createNewCard = false;
+                if (!updatedCard.getCardNumber().equals(savedCard.getCardNumber()) || !updatedCard.getCvc().equals(savedCard.getCvc()))
+                    createNewCard = true;
+                Card newCard = new Card();
+                updateMapper.updateCard(updatedCard, newCard);
+                newCard.setStripeCardId(savedCard.getStripeCardId());
+                String stripeCardId;
+                try {
+                    if (createNewCard)
+                        stripeCardId = stripeService.saveCard(newCard, person, true);
+                    else
+                        stripeCardId = stripeService.updateCard(newCard, person);
+                } catch (StripeException e) {
+                    throw new BadRequestException(e.getStripeError().getMessage());
+                }
+                if (createNewCard) {
+                    newCard.setPerson(person);
+                    newCard.setSaved(true);
+                    newCard.setStripeCardId(stripeCardId);
+                    if (savedCard.getId() == null) {
+                        cardRepository.save(newCard);
+                        return;
+                    }
+                    savedCard.setSaved(false);
+                    List<Card> cards = Arrays.asList(savedCard, newCard);
+                    cardRepository.saveAll(cards);
                     return;
                 }
-                oldCard.setPerson(null);
-                List<Card> cards = Arrays.asList(oldCard, newCard);
-                cardRepository.saveAll(cards);
-                return;
-            }
-            updateMapper.updateCard(updatedCard, oldCard);
-            cardRepository.save(oldCard);
+                updateMapper.updateCard(updatedCard, savedCard);
+                cardRepository.save(savedCard);
+            });
         } else {
-            List<Card> cards = cardRepository.findAllByPersonId(person.getId());
-            for (Card card : cards) {
-                card.setPerson(null);
-                cardRepository.save(card);
-            }
+            cardRepository.findByPersonIdAndSavedIsTrue(person.getId())
+                    .ifPresent(card -> {
+                        card.setSaved(false);
+                        cardRepository.save(card);
+                    });
         }
     }
 
@@ -227,6 +246,10 @@ public class PersonService {
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         if (!passwordEncoder.matches(password, person.getPassword()))
             throw new UnauthorizedException("Wrong password");
+        List<Product> notPaidProducts = productRepository.getNotPaidProducts(person.getId().toString());
+        for (Product product : notPaidProducts)
+            product.setNotified(false);
+        productRepository.saveAll(notPaidProducts);
         person.setActive(false);
         personRepository.save(person);
     }

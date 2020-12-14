@@ -45,8 +45,7 @@ const ItemPage = ({ match, location }) => {
                 setProduct(data);
                 if (personId === null) {
                     setRelatedProducts(await getRelatedProducts(productId));
-                }
-                if (withMessage) {
+                } else {
                     setSeller(await getUserInfo(data.personId));
                 }
                 const bids = await getBidsForProduct(productId);
@@ -127,11 +126,12 @@ const ItemPage = ({ match, location }) => {
                         active={active}
                         wished={wished}
                         seller={seller}
+                        withMessage={withMessage}
                     />
                 </div>
             ) : null}
             {personId !== null && bids.length !== 0 ? (
-                <BidTable bids={bids} />
+                <BidTable bids={bids} setBids={setBids} />
             ) : null}
             {personId === null && product !== null ? (
                 <div style={{ marginTop: 150 }} className="featured-container">

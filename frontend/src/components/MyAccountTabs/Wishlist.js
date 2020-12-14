@@ -22,7 +22,7 @@ const Wishlist = () => {
 
     return (
         <>
-            <WishlistTable products={products} />
+            <WishlistTable products={products} setProducts={setProducts} />
             {loading || products.length === 0 ?
                 <div className="no-table-items font-18">
                     {loading ? <Spinner className="table-spinner" animation="border" /> : "No wishlisted items found"}

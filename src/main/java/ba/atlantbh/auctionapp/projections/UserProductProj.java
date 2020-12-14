@@ -19,4 +19,5 @@ public interface UserProductProj {
     BigDecimal getMaxBid();
     UUID getPersonId();
     Boolean getPaid();
+    LocalDateTime getDefaultSort();
 }

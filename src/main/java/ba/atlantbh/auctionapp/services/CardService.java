@@ -17,7 +17,7 @@ public class CardService {
 
     public CardResponse getCard() {
         UUID personId = JwtTokenUtil.getRequestPersonId();
-        Card card = cardRepository.findByPersonId(personId).orElse(new Card());
+        Card card = cardRepository.findByPersonIdAndSavedIsTrue(personId).orElse(new Card());
         return new CardResponse(card);
     }
 }

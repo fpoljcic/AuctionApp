@@ -74,7 +74,7 @@ public class BidService {
                         if (bidder.getEmailNotify() && !email.equals(bidder.getEmail())
                                 && bidder.getMaxBid().compareTo(price) < 0) {
                             String body = formEmailBody(hostUrl, product, bidder.getMaxBid().toPlainString());
-                            emailService.sendMail(bidder.getEmail(), "Lost highest bid place", body);
+                            emailService.sendMail(bidder.getEmail(), "Lost the highest bid place", body);
                         }
                     } catch (MessagingException ignore) {
                     }

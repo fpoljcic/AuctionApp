@@ -170,50 +170,68 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 
     @Query(value = "SELECT p.id, p.person_id personAddedId, p.name, p2.url, p.start_price price, s.name subcategoryName, c.name categoryName, p.shipping, " +
-            "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.price) maxBid, " +
-            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
+            "p.start_date startDate, p.end_date endDate, p.date_created defaultSort, (SELECT count(*) FROM bid b2 " +
+            "INNER JOIN person p3 on b2.person_id = p3.id WHERE p3.active AND b2.product_id = p.id) bidCount, " +
+            "(SELECT max(b2.price) FROM bid b2 INNER JOIN person p4 on b2.person_id = p4.id WHERE p4.active AND b2.product_id = p.id) maxBid, " +
+            "(SELECT b2.person_id FROM bid b2 INNER JOIN person p3 on b2.person_id = p3.id WHERE " +
+            "(p3.active OR (SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = p3.id))) " +
+            "AND b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
             "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id != :user_id)) paid " +
-            "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+            "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id "+
             "WHERE p.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
-            "GROUP BY (p.id, p.person_id, p.name, p2.url, p.start_price, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
+            "GROUP BY (p.id, p.person_id, p.name, p2.url, p.start_price, s.name, c.name, p.shipping, p.start_date, p.end_date, p.date_created) " +
             "ORDER BY p.date_created DESC", nativeQuery = true)
     List<UserProductProj> getUserProducts(@Param("user_id") String userId);
 
     @Query(value = "SELECT p.id, p.person_id personAddedId, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, p.shipping, " +
-            "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
-            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
-            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid, " +
+            "p.start_date startDate, p.end_date endDate, p.end_date defaultSort, (SELECT count(*) FROM bid b2 " +
+            "INNER JOIN person p3 on b2.person_id = p3.id WHERE p3.active AND b2.product_id = p.id) bidCount, " +
+            "(SELECT b2.person_id FROM bid b2 INNER JOIN person p3 on b2.person_id = p3.id WHERE " +
+            "(p3.active OR (SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = p3.id))) " +
+            "AND b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT max(b2.price) FROM bid b2 INNER JOIN person p4 on b2.person_id = p4.id WHERE p4.active AND b2.product_id = p.id) maxBid, " +
             "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
-            "WHERE b.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
+            "INNER JOIN person ps on p.person_id = ps.id WHERE ps.active AND " +
+            "b.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
             "GROUP BY (p.id, p.person_id, p.name, p2.url, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
             "ORDER BY p.end_date", nativeQuery = true)
     List<UserProductProj> getUserBidProducts(@Param("user_id") String userId);
 
     @Query(value = "SELECT p.id, p.person_id personAddedId, p.name, p2.url, max(b.price) price, s.name subcategoryName, c.name categoryName, p.shipping, " +
-            "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
-            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
-            "(SELECT max(b2.price) FROM bid b2 WHERE b2.product_id = p.id) maxBid, " +
+            "p.start_date startDate, p.end_date endDate, w.date defaultSort, (SELECT count(*) FROM bid b2 " +
+            "INNER JOIN person p3 on b2.person_id = p3.id WHERE p3.active AND b2.product_id = p.id) bidCount, " +
+            "(SELECT b2.person_id FROM bid b2 INNER JOIN person p3 on b2.person_id = p3.id WHERE " +
+            "(p3.active OR (SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = p3.id))) " +
+            "AND b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT max(b2.price) FROM bid b2 INNER JOIN person p3 on b2.person_id = p3.id WHERE p3.active AND b2.product_id = p.id) maxBid, " +
             "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN photo p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
-            "INNER JOIN wishlist w on p.id = w.product_id " +
-            "WHERE w.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
+            "INNER JOIN wishlist w on p.id = w.product_id INNER JOIN person ps on p.person_id = ps.id " +
+            "WHERE ps.active AND w.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
             "GROUP BY (p.id, p.person_id, p.name, p2.url, s.name, c.name, p.shipping, p.start_date, p.end_date, w.date) " +
             "ORDER BY w.date DESC", nativeQuery = true)
     List<UserProductProj> getUserWishlistProducts(@Param("user_id") String userId);
 
-    @Query(value = "SELECT p.id productId, p.name productName, max(b.price) maxBid, " +
+    @Query(value = "SELECT p.id productId, p.name productName, " +
+            "(SELECT max(b2.price) FROM bid b2 INNER JOIN person p5 on b2.person_id = p5.id WHERE p5.active AND b2.product_id = p.id) maxBid, " +
             "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id WHERE b2.product_id = p.id " +
-            "ORDER BY b2.price DESC, b2.date LIMIT 1) email," +
+            "AND p2.active ORDER BY b2.price DESC, b2.date LIMIT 1) email," +
             "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id WHERE b3.product_id = p.id " +
-            "ORDER BY b3.price DESC, b3.date LIMIT 1) pushNotify, " +
+            "AND p3.active ORDER BY b3.price DESC, b3.date LIMIT 1) pushNotify, " +
             "(SELECT p4.email_notify FROM bid b4 INNER JOIN person p4 on p4.id = b4.person_id WHERE b4.product_id = p.id " +
-            "ORDER BY b4.price DESC, b4.date LIMIT 1) emailNotify " +
+            "AND p4.active ORDER BY b4.price DESC, b4.date LIMIT 1) emailNotify " +
             "FROM product p INNER JOIN bid b on p.id = b.product_id INNER JOIN person p2 on p.person_id = p2.id " +
             "WHERE end_date <= now() AND NOT notified AND NOT EXISTS (SELECT 1 FROM payment p3 WHERE p3.product_id = p.id) " +
+            "AND (SELECT EXISTS(SELECT 1 FROM bid b5 INNER JOIN person p5 on p5.id = b5.person_id WHERE b5.product_id = p.id AND p5.active)) " +
             "AND p2.active GROUP BY (p.id, p.name)", nativeQuery = true)
     List<WinnerProj> getNotNotifiedWinners();
+
+    @Query(value = "SELECT * FROM product p WHERE p.end_date <= now() AND " +
+            "NOT (SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id)) AND " +
+            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.price DESC, b2.date LIMIT 1) = :user_id", nativeQuery = true)
+    List<Product> getNotPaidProducts(@Param("user_id") String userId);
 }
