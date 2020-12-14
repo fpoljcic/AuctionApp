@@ -66,3 +66,5 @@ export const toBase64 = file => new Promise((resolve, reject) => {
 export const isTouchDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
 
 export const placeholderImage = "https://i.imgur.com/O0O16un.gif";
+
+export const soundUrl = "https://ia800203.us.archive.org/14/items/slack_sfx/confirm_delivery.mp3";

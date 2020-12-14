@@ -19,6 +19,7 @@
     font-size: 16px;
     letter-spacing: 0.56px;
     width: max-content;
+    font-weight: normal;
 }
 
 .wishlist-table-button:disabled {
