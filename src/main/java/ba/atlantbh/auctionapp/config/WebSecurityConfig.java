@@ -48,7 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/update",
             "/auth",
             "/cards/person",
-            "/payments/receipt"
+            "/payments/receipt",
+            "/notifications",
+            "/notifications/check",
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -90,6 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "https://auction-app-test.netlify.app",
                 "https://auction-app-master.netlify.app"
         ));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
