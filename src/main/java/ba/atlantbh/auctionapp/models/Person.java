@@ -90,6 +90,10 @@ public class Person {
         this.password = password;
     }
 
+    public Person(UUID id) {
+        this.id = id;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName.trim().replaceAll("\\s+"," ");
     }
