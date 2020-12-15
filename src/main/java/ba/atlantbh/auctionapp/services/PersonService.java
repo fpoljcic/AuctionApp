@@ -9,10 +9,7 @@ import ba.atlantbh.auctionapp.models.Person;
 import ba.atlantbh.auctionapp.models.Product;
 import ba.atlantbh.auctionapp.models.Token;
 import ba.atlantbh.auctionapp.projections.PersonInfoProj;
-import ba.atlantbh.auctionapp.repositories.CardRepository;
-import ba.atlantbh.auctionapp.repositories.PersonRepository;
-import ba.atlantbh.auctionapp.repositories.ProductRepository;
-import ba.atlantbh.auctionapp.repositories.TokenRepository;
+import ba.atlantbh.auctionapp.repositories.*;
 import ba.atlantbh.auctionapp.requests.*;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import ba.atlantbh.auctionapp.utilities.UpdateMapper;
@@ -39,6 +36,7 @@ public class PersonService {
     private final ProductRepository productRepository;
     private final CardRepository cardRepository;
     private final TokenRepository tokenRepository;
+    private final NotificationRepository notificationRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final UpdateMapper updateMapper;
@@ -250,6 +248,7 @@ public class PersonService {
         for (Product product : notPaidProducts)
             product.setNotified(false);
         productRepository.saveAll(notPaidProducts);
+        notificationRepository.deleteAllByProductFromUser(personId.toString());
         person.setActive(false);
         personRepository.save(person);
     }

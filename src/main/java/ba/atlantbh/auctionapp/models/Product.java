@@ -22,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Product {
     @Id
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -111,5 +111,10 @@ public class Product {
         this.phone = phone;
         this.person = person;
         this.subcategory = subcategory;
+    }
+
+    public Product(UUID id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

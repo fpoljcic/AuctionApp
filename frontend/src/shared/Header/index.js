@@ -6,6 +6,7 @@ import { FormControl, Image, ListGroup, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { removeSession, getUser } from 'utilities/localStorage';
 import { homeUrl, loginUrl, myAccountUrl, registerUrl, shopUrl, myAccountSellerUrl, myAccountBidsUrl, myAccountWishlistUrl, myAccountSettingsUrl, forgotPasswordUrl, resetPasswordUrl, aboutUrl, termsUrl, privacyUrl } from 'utilities/appUrls';
+import NotificationBell from 'shared/NotificationBell';
 import { useUserContext } from 'AppContext';
 import * as qs from 'query-string';
 
@@ -124,7 +125,7 @@ const Header = () => {
                         SHOP
                     </NavLink>
                     <NavLink
-                        style={{ paddingRight: 0, paddingTop: 28, paddingBottom: 28 }}
+                        style={{ paddingTop: 28, paddingBottom: 28, paddingRight: loggedIn ? '1rem' : 0 }}
                         className={"black-nav-link nav-link"}
                         activeClassName="black-active-nav-link"
                         to={myAccountUrl}
@@ -146,6 +147,7 @@ const Header = () => {
                             <ListGroup.Item onClick={() => history.push(myAccountWishlistUrl)}>Wishlist</ListGroup.Item>
                             <ListGroup.Item onClick={() => history.push(myAccountSettingsUrl)}>Settings</ListGroup.Item>
                         </ListGroup> : null}
+                    {loggedIn ? <NotificationBell /> : null}
                 </Nav>
             </div>
         </>

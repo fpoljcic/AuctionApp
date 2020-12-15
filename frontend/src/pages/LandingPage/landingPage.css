@@ -117,6 +117,9 @@
     }
     .featured-product-container-inner {
         margin-bottom: 10px;
+        margin-left: unset;
+        width: 100%;
+        max-width: unset;
     }
     .list-group-categories {
         width: 50%;
@@ -124,9 +127,6 @@
 }
 
 @media (max-width: 767px) {
-    .featured-product-container-inner {
-        max-width: 100%;
-    }
     .landing-page-top-container {
         flex-wrap: wrap;
     }

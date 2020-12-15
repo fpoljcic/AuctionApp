@@ -218,6 +218,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT p.id productId, p.name productName, " +
             "(SELECT max(b2.price) FROM bid b2 INNER JOIN person p5 on b2.person_id = p5.id WHERE p5.active AND b2.product_id = p.id) maxBid, " +
+            "(SELECT p1.id FROM bid b1 INNER JOIN person p1 on p1.id = b1.person_id WHERE b1.product_id = p.id " +
+            "AND p1.active ORDER BY b1.price DESC, b1.date LIMIT 1) id," +
             "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id WHERE b2.product_id = p.id " +
             "AND p2.active ORDER BY b2.price DESC, b2.date LIMIT 1) email," +
             "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id WHERE b3.product_id = p.id " +

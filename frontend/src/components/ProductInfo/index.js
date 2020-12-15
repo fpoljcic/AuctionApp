@@ -113,7 +113,7 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
                             <span style={{ color: 'var(--text-secondary)' }}>
                                 Seller:
                             </span>
-                            <Image style={{ marginLeft: 5 }} className="avatar-image-small-2" src={seller.photo} roundedCircle />
+                            <Image style={{ marginLeft: 10, marginRight: 5 }} className="avatar-image-small-2" src={seller.photo} roundedCircle />
                             {seller.name}
                             <GoStar style={{ marginLeft: 20, color: 'var(--primary)', fontSize: 22, marginRight: 5 }} />
                             {seller.rating !== 0 ? (Math.round((seller.rating + Number.EPSILON) * 100) / 100 + "/5") : "No ratings"}

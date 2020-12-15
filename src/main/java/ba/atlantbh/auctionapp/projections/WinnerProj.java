@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface WinnerProj {
+    UUID getId();
     UUID getProductId();
     String getProductName();
     BigDecimal getMaxBid();
