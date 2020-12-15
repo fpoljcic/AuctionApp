@@ -39,6 +39,7 @@ const NotificationBell = () => {
         if (page !== 0) {
             const fetchData = async () => {
                 try {
+                    setLoading(true);
                     let newPage = page;
                     let newSize = size;
                     if (newNotifCount !== 0) {
@@ -49,11 +50,18 @@ const NotificationBell = () => {
                         newNotifCount = 0;
                     }
                     const data = await getNotifications(newPage, newSize);
-                    const uncheckedCount = data.notifications.filter(notif => !notif.checked).length;
+                    const uncheckedIds = data.notifications
+                        .filter(notif => !notif.checked)
+                        .map(notif => notif.id);
                     setNotifications([...notifications, ...data.notifications]);
                     setLastPage(data.lastPage);
-                    setCount(count + uncheckedCount);
-                } catch (e) { }
+                    setCount(count + uncheckedIds.length);
+                    setLoading(false);
+                    if (uncheckedIds.length !== 0)
+                        await checkNotifications(uncheckedIds);
+                } catch (e) {
+                    setLoading(false);
+                }
             }
             fetchData();
         }
@@ -73,15 +81,15 @@ const NotificationBell = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                setLoading(true);
                 const data = await getNotifications(page, size);
                 const uncheckedCount = data.notifications.filter(notif => !notif.checked).length;
                 setNotifications(data.notifications);
                 setLastPage(data.lastPage);
                 setCount(uncheckedCount);
-                setLoading(false);
             } catch (e) { }
+            setLoading(false);
         }
 
         const socket = new SockJS(hostUrl + '/push');
@@ -102,14 +110,18 @@ const NotificationBell = () => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (myRef.current && !myRef.current.contains(event.target) && document.body.contains(event.target))
+            if (myRef.current && !myRef.current.contains(event.target) && document.body.contains(event.target) && menuVisible) {
+                setCount(0);
                 setMenuVisible(false);
+            }
         }
 
         document.addEventListener("mousedown", handleClickOutside);
 
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [myRef])
+
+        // eslint-disable-next-line
+    }, [myRef, menuVisible, count, notifications])
 
     const itemClick = (notification) => {
         notification.checked = true;
@@ -119,16 +131,21 @@ const NotificationBell = () => {
 
     const bellClick = async () => {
         const isOpened = !menuVisible;
-        setMenuVisible(!menuVisible);
+        setMenuVisible(isOpened);
         if (count > 0 && isOpened) {
             const uncheckedIds = notifications
-                .filter(notif => notif.checked === false)
+                .filter(notif => !notif.checked)
                 .map(notif => notif.id);
             try {
                 await checkNotifications(uncheckedIds);
                 setCount(0);
             } catch (e) { }
         }
+    }
+
+    const nextPage = () => {
+        if (!loading)
+            setPage(page + 1);
     }
 
     return (
@@ -174,8 +191,8 @@ const NotificationBell = () => {
                                 </ListGroup.Item>
                             ))}
                             {!lastPage ?
-                                <ListGroup.Item className="notif-load-more" onClick={() => setPage(page + 1)}>
-                                    Load more
+                                <ListGroup.Item className={"notif-load-more " + (loading ? "notif-loading" : "")} onClick={nextPage}>
+                                    {loading ? <Spinner className="notif-spinner" animation="border" size="sm" /> : "Load more"}
                                 </ListGroup.Item> : null}
                         </>
                         :
