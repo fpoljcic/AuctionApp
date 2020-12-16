@@ -170,4 +170,15 @@ public class ProductController {
         productService.rate(rateRequest.getProductId(), rateRequest.getRating());
         return ResponseEntity.ok("Product rated");
     }
+
+    @PostMapping("/remove")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+            @ApiResponse(code = 422, message = "Unprocessable entity", response = UnprocessableException.class),
+    })
+    public ResponseEntity<String> remove(@RequestBody @Valid WishlistRequest productRequest) {
+        productService.remove(productRequest.getProductId());
+        return ResponseEntity.ok("Product removed");
+    }
 }
