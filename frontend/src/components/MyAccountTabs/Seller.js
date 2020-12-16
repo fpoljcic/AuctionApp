@@ -18,11 +18,14 @@ const Seller = () => {
     const [activeProducts, setActiveProducts] = useState([]);
     const [soldProducts, setSoldProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [schSort, setSchSort] = useState("defaultSort");
+    const [actSort, setActSort] = useState("defaultSort");
+    const [solSort, setSolSort] = useState("defaultSort");
 
     const tabs = [
-        <ProductTable type="scheduled" products={scheduledProducts} setProducts={setScheduledProducts} />,
-        <ProductTable type="active" products={activeProducts} setProducts={setActiveProducts} />,
-        <ProductTable type="sold" products={soldProducts} setProducts={setSoldProducts} />
+        <ProductTable sort={schSort} setSort={setSchSort} type="scheduled" products={scheduledProducts} setProducts={setScheduledProducts} />,
+        <ProductTable sort={actSort} setSort={setActSort} type="active" products={activeProducts} setProducts={setActiveProducts} />,
+        <ProductTable sort={solSort} setSort={setSolSort} type="sold" products={soldProducts} setProducts={setSoldProducts} />
     ];
 
     useEffect(() => {

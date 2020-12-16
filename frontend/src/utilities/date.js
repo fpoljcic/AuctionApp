@@ -55,5 +55,6 @@ export const getDate = (day, month, year) => {
 }
 
 export const dateCompare = (d1, d2, order) => {
-    return order ? moment.utc(d1).isAfter(moment.utc(d2)) : moment.utc(d2).isAfter(moment.utc(d1));
+    const diff = moment.utc(d1).diff(moment.utc(d2));
+    return order ? diff : -diff;
 }

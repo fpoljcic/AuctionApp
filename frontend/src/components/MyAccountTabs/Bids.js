@@ -16,6 +16,7 @@ const Bids = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [sort, setSort] = useState("defaultSort");
 
     const urlParams = qs.parse(history.location.search);
 
@@ -38,7 +39,7 @@ const Bids = () => {
 
     return (
         <>
-            <ProductTable type="bids" products={products} id={urlParams.id} setProducts={setProducts} />
+            <ProductTable sort={sort} setSort={setSort} type="bids" products={products} id={urlParams.id} setProducts={setProducts} />
             {loading || products.length === 0 ?
                 <div className="no-table-items font-18">
                     {loading ? <Spinner className="table-spinner" animation="border" /> : "No bids found"}

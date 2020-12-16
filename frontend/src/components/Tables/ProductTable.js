@@ -13,14 +13,13 @@ import moment from 'moment';
 
 import './tables.css';
 
-const ProductTable = ({ products, type, id, setProducts }) => {
+const ProductTable = ({ products, type, id, setProducts, sort, setSort }) => {
     const { showMessage } = useAlertContext();
     const history = useHistory();
     const userId = getUserId();
 
-    const [showModal, setShowModal] = useState(false);
     const [productId, setProductId] = useState(null);
-    const [active, setActive] = useState("defaultSort");
+    const [showModal, setShowModal] = useState(false);
 
     const getTimeColumnName = () => {
         switch (type) {
@@ -114,13 +113,13 @@ const ProductTable = ({ products, type, id, setProducts }) => {
                             <th style={{ width: 142 }}>
                                 Item
                             </th> :
-                            <SortTh style={{ width: 142 }} active={active} setActive={setActive} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
+                            <SortTh style={{ width: 142 }} active={sort} setActive={setSort} data={products} setData={setProducts} name="defaultSort" type="date">Item</SortTh>
                         }
-                        <SortTh active={active} setActive={setActive} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
-                        <SortTh desc={type === "bids"} style={{ minWidth: 178 }} active={active} setActive={setActive} data={products} setData={setProducts} name={type === "bids" ? "defaultSort" : "endDate"} type="date">{getTimeColumnName()}</SortTh>
-                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="price" type="number">Your Price</SortTh>
-                        <SortTh style={{ minWidth: 96 }} active={active} setActive={setActive} data={products} setData={setProducts} name="bidCount" type="number">No. Bids</SortTh>
-                        <SortTh style={{ minWidth: 135 }} active={active} setActive={setActive} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
+                        <SortTh active={sort} setActive={setSort} data={products} setData={setProducts} name="name" type="string">Name</SortTh>
+                        <SortTh desc={type === "bids"} style={{ minWidth: 178 }} active={sort} setActive={setSort} data={products} setData={setProducts} name={type === "bids" ? "defaultSort" : "endDate"} type="date">{getTimeColumnName()}</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={sort} setActive={setSort} data={products} setData={setProducts} name="price" type="number">Your Price</SortTh>
+                        <SortTh style={{ minWidth: 96 }} active={sort} setActive={setSort} data={products} setData={setProducts} name="bidCount" type="number">No. Bids</SortTh>
+                        <SortTh style={{ minWidth: 135 }} active={sort} setActive={setSort} data={products} setData={setProducts} name="maxBid" type="number">Highest Bid</SortTh>
                         <th></th>
                     </tr>
                 </thead>
