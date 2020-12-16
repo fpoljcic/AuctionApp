@@ -57,10 +57,10 @@ const Register = () => {
             setLoggedIn(true);
             showMessage("success", "Account created successfully");
         } catch (e) {
-            if (e.response.data.status === 409)
+            if (e.response !== undefined && e.response.data.status === 409)
                 setEmailError(true);
+            setLoading(false);
         }
-        setLoading(false);
     }
 
     return (
