@@ -113,7 +113,7 @@ const ProductTable = ({ products, type, id, setProducts, sort, setSort }) => {
         setProductId(id);
         setMessage(
             <div style={{ textAlign: 'center' }}>
-                {type === "scheduled" ? "Are you sure you want to delete this product: " : "Are you sure you want to delete your bids for this product:"}
+                {type === "scheduled" ? "Are you sure you want to delete this product:" : "Are you sure you want to delete your bids for this product:"}
                 <div className="alert-product-name">
                     {name + ' '}({id})
                 </div>
