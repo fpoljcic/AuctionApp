@@ -10,6 +10,7 @@ import MyScrollToTop from 'components/MyScrollToTop';
 import Confirm from 'components/Modals/Confirm';
 import { useAlertContext } from 'AppContext';
 import { removeBid } from 'api/bid';
+import { removeProduct } from 'api/product';
 import SortTh from './SortTh';
 import moment from 'moment';
 
@@ -112,7 +113,7 @@ const ProductTable = ({ products, type, id, setProducts, sort, setSort }) => {
         setProductId(id);
         setMessage(
             <div style={{ textAlign: 'center' }}>
-                Are you sure you want to delete your bids for this product:
+                {type === "scheduled" ? "Are you sure you want to delete this product: " : "Are you sure you want to delete your bids for this product:"}
                 <div className="alert-product-name">
                     {name + ' '}({id})
                 </div>
@@ -123,8 +124,13 @@ const ProductTable = ({ products, type, id, setProducts, sort, setSort }) => {
 
     const onConfirm = async () => {
         try {
-            await removeBid(null, productId);
-            showMessage("success", "You have successfully deleted your bids for this product");
+            if (type === "scheduled") {
+                await removeProduct(productId);
+                showMessage("success", "You have successfully deleted a product");
+            } else {
+                await removeBid(null, productId);
+                showMessage("success", "You have successfully deleted your bids for this product");
+            }
             setProducts([...products].filter(product => product.id !== productId));
             setProductId(null);
         } catch (e) { }
@@ -204,7 +210,7 @@ const ProductTable = ({ products, type, id, setProducts, sort, setSort }) => {
                                             {type === "sold" && product.paid ? "RECEIPT" : "VIEW"}
                                         </Button>
                                     }
-                                    {type === "bids" && moment().isBefore(moment.utc(product.endDate)) ?
+                                    {(type === "bids" && moment().isBefore(moment.utc(product.endDate))) || type === "scheduled" ?
                                         <IoMdRemoveCircleOutline
                                             className="table-remove-btn"
                                             onClick={() => removeClick(product.name, product.id)}

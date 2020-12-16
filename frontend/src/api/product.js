@@ -66,3 +66,7 @@ export const pay = async (data) => {
 export const rate = async (productId, rating) => {
     return (await axios.post(hostUrl + '/products/rate', { productId, rating }, defaultHeader())).data;
 };
+
+export const removeProduct = async (productId) => {
+    return (await axios.post(hostUrl + '/products/remove', { productId }, defaultHeader())).data;
+};
