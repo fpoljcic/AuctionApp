@@ -54,7 +54,7 @@ const RateUser = ({ onDone, showModal, personAddedId }) => {
                         size="xxl"
                         className="sell-submit-button"
                         variant="fill-purple-shadow"
-                        disabled={loading}
+                        disabled={loading || rating === 0}
                         onClick={() => handleClick(rating)}
                     >
                         DONE
