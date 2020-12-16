@@ -8,3 +8,7 @@ export const getBidsForProduct = async (id) => {
 export const bidForProduct = async (price, productId) => {
     return (await axios.post(hostUrl + '/bids/add', { price, productId }, defaultHeader())).data;
 };
+
+export const removeBid = async (bidId, productId) => {
+    return (await axios.post(hostUrl + '/bids/remove', { bidId, productId }, defaultHeader())).data;
+};

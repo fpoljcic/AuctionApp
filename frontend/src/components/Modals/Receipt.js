@@ -10,7 +10,7 @@ const Receipt = ({ showModal, setShowModal, productId }) => {
     const [receipt, setReceipt] = useState({});
 
     useEffect(() => {
-        if (productId === null)
+        if (!showModal || productId === null)
             return;
         const fetchData = async () => {
             try {
@@ -19,7 +19,7 @@ const Receipt = ({ showModal, setShowModal, productId }) => {
         }
         fetchData();
 
-    }, [productId])
+    }, [productId, showModal])
 
     return (
         <Modal size="xl" centered show={showModal} onHide={() => setShowModal(false)}>

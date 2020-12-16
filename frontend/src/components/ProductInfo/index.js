@@ -73,6 +73,8 @@ const ProductInfo = ({ product, bid, wishlist, bids, minPrice, ownProduct, activ
     }
 
     const handleBid = async () => {
+        if (ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice || bidPrice > maxPrice)
+            return;
         setLoading(true);
         await bid(bidPrice);
         setBidPrice("");

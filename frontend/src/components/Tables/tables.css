@@ -43,7 +43,6 @@
 .product-table-header>th.sortable-th {
     cursor: pointer;
     position: relative;
-    left: -0.5px;
     padding-right: 26px;
 }
 
@@ -64,4 +63,30 @@
     right: 10px;
     font-size: 16px;
     color: var(--primary);
+}
+
+.product-table-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-remove-btn {
+    font-size: 30px;
+    color: var(--alert);
+    cursor: pointer;
+    margin: 0 20px;
+}
+
+.alert-product-name {
+    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    margin-top: 20px;
+}
+
+.bid-table-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
