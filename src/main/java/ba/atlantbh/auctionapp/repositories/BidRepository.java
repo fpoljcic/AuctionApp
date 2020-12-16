@@ -30,4 +30,12 @@ public interface BidRepository extends JpaRepository<Bid, UUID> {
             "FROM bid b INNER JOIN person p on b.person_id = p.id " +
             "WHERE p.active AND product_id = :product_id ORDER BY b.price DESC, b.date LIMIT 1", nativeQuery = true)
     Optional<BidderProj> getHighestBidder(@Param("product_id") String productId);
+
+    @Query(value = "SELECT * FROM bid b inner join product p on p.id = b.product_id " +
+            "WHERE b.id = :id and p.start_date <= now() AND p.end_date > now()", nativeQuery = true)
+    Optional<Bid> findByIdAndActive(String id);
+
+    @Query(value = "SELECT * FROM bid b inner join product p on p.id = b.product_id WHERE b.person_id = :person_id " +
+            "AND b.product_id = :product_id and p.start_date <= now() AND p.end_date > now()", nativeQuery = true)
+    List<Bid> findAllByProductId(@Param("person_id") String personId, @Param("product_id") String productId);
 }
