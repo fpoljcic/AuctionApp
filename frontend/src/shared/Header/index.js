@@ -22,6 +22,7 @@ const Header = () => {
     const [accountListVisible, setAccountListVisible] = useState(false);
 
     const handleLogout = () => {
+        document.title = "Auction app";
         setLoggedIn(false);
         removeSession();
     };

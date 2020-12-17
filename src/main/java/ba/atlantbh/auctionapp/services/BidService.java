@@ -11,6 +11,7 @@ import ba.atlantbh.auctionapp.projections.SimpleBidProj;
 import ba.atlantbh.auctionapp.repositories.BidRepository;
 import ba.atlantbh.auctionapp.repositories.PersonRepository;
 import ba.atlantbh.auctionapp.repositories.ProductRepository;
+import ba.atlantbh.auctionapp.requests.BidDeleteRequest;
 import ba.atlantbh.auctionapp.requests.BidRequest;
 import ba.atlantbh.auctionapp.security.JwtTokenUtil;
 import ba.atlantbh.auctionapp.utilities.StringUtil;
@@ -102,5 +103,27 @@ public class BidService {
                 .replace("productId", product.getId().toString())
                 .replace("productPageUrl", StringUtil.getProductPageUrl(product, hostUrl))
                 .replace("settingsUrl", hostUrl + "/my_account/settings");
+    }
+
+    public void remove(BidDeleteRequest bidDeleteRequest) {
+        UUID personId = JwtTokenUtil.getRequestPersonId();
+
+        if (bidDeleteRequest.getBidId() == null && bidDeleteRequest.getProductId() == null)
+            throw new BadRequestException("A bid or product id have to be supplied");
+        if (bidDeleteRequest.getBidId() != null && bidDeleteRequest.getProductId() != null)
+            throw new BadRequestException("You can't supply both a bid and a product id");
+
+        if (bidDeleteRequest.getBidId() != null) {
+            Bid bid = bidRepository.findByIdAndActive(bidDeleteRequest.getBidId().toString())
+                    .orElseThrow(() -> new UnprocessableException("Wrong bid id or the auction has finished"));
+            if (!bid.getPerson().getId().equals(personId))
+                throw new UnauthorizedException("You can't remove this bid");
+            bidRepository.delete(bid);
+        } else {
+            List<Bid> bids = bidRepository.findAllByProductId(personId.toString(), bidDeleteRequest.getProductId().toString());
+            if (bids.size() == 0)
+                throw new BadRequestException("No bids found for this product or the auction has finished");
+            bidRepository.deleteAll(bids);
+        }
     }
 }

@@ -123,6 +123,13 @@ const NotificationBell = () => {
         // eslint-disable-next-line
     }, [myRef, menuVisible, count, notifications])
 
+    useEffect(() => {
+        if (count === 0)
+            document.title = "Auction app";
+        else
+            document.title = "(" + count + ") Auction app";
+    }, [count, personId])
+
     const itemClick = (notification) => {
         notification.checked = true;
         history.push(notification.url);

@@ -25,7 +25,8 @@ const LandingPage = () => {
     removeBreadcrumb();
     const fetchData = async () => {
       try {
-        setCategories(await getCategories());
+        const categories = (await getCategories()).filter(category => category.count > 0);
+        setCategories(categories);
         setFeaturedProducts(await getFeaturedProducts());
         setFeaturedSubcategories(await getFeaturedSubcategories());
         const newProducts = await getNewProducts();

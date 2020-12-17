@@ -1,7 +1,7 @@
 package ba.atlantbh.auctionapp.services;
 
-import ba.atlantbh.auctionapp.models.Category;
 import ba.atlantbh.auctionapp.repositories.CategoryRepository;
+import ba.atlantbh.auctionapp.projections.CategoryProj;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryProj> getCategories() {
+        return categoryRepository.getAll();
     }
 }

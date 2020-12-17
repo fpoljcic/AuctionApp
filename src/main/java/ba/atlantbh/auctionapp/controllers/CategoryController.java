@@ -1,6 +1,6 @@
 package ba.atlantbh.auctionapp.controllers;
 
-import ba.atlantbh.auctionapp.models.Category;
+import ba.atlantbh.auctionapp.projections.CategoryProj;
 import ba.atlantbh.auctionapp.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories() {
+    public ResponseEntity<List<CategoryProj>> getCategories() {
         return ResponseEntity.ok(categoryService.getCategories());
     }
 }

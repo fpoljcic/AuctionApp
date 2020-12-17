@@ -13,6 +13,8 @@ const Settings = () => {
     const [emailLoading, setEmailLoading] = useState(false);
     const [pushLoading, setPushLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [emailChecked, setEmailChecked] = useState(user.emailNotify);
+    const [pushChecked, setPushChecked] = useState(user.pushNotify);
 
     const handleEmailClick = async (emailNotify) => {
         setEmailLoading(true);
@@ -20,10 +22,12 @@ const Settings = () => {
             await updateNotifications(emailNotify, user.pushNotify);
             user.emailNotify = emailNotify;
         } catch (e) {
+            setEmailChecked(user.emailNotify);
             setEmailLoading(false);
             return;
         }
         setUser(user);
+        setEmailChecked(user.emailNotify);
         setEmailLoading(false);
     }
 
@@ -33,10 +37,12 @@ const Settings = () => {
             await updateNotifications(user.emailNotify, pushNotify);
             user.pushNotify = pushNotify;
         } catch (e) {
+            setPushChecked(user.pushNotify);
             setPushLoading(false);
             return;
         }
         setUser(user);
+        setPushChecked(user.pushNotify);
         setPushLoading(false);
     }
 
@@ -54,7 +60,7 @@ const Settings = () => {
                         id="custom-email-checkbox"
                         label="Email"
                         style={{ marginTop: 22 }}
-                        defaultChecked={user.emailNotify}
+                        checked={emailChecked}
                         disabled={emailLoading}
                         onChange={e => handleEmailClick(e.target.checked)}
                     />
@@ -64,7 +70,7 @@ const Settings = () => {
                         id="custom-push-checkbox"
                         label="Push Notifications"
                         style={{ marginTop: 22 }}
-                        defaultChecked={user.pushNotify}
+                        checked={pushChecked}
                         disabled={pushLoading}
                         onChange={e => handlePushClick(e.target.checked)}
                     />

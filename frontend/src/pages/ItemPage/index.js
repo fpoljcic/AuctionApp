@@ -29,6 +29,7 @@ const ItemPage = ({ match, location }) => {
     const [wished, setWished] = useState(false);
     const [minPrice, setMinPrice] = useState(0);
     const [seller, setSeller] = useState(null);
+    const [sort, setSort] = useState("price");
 
     const withMessage = location.state != null && location.state.withMessage;
 
@@ -65,6 +66,14 @@ const ItemPage = ({ match, location }) => {
         // eslint-disable-next-line
     }, [match.params.id])
 
+    useEffect(() => {
+        if (product !== null) {
+            const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.price : 0), 0);
+            const minPrice = highestBidFromUser === 0 ? product.startPrice : highestBidFromUser + 0.01;
+            setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
+        }
+    }, [bids, personId, product])
+
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1, -1);
         setBreadcrumb("SINGLE PRODUCT", [...urlElements.map((el, i) => {
@@ -83,8 +92,8 @@ const ItemPage = ({ match, location }) => {
         try {
             await bidForProduct(parseFloat(price), product.id);
             const newBids = await getBidsForProduct(product.id);
-            const minPrice = Math.max(...newBids.map(bid => bid.personId === personId ? bid.price : 0), 0) + 0.01;
-            setMinPrice(Math.round((minPrice + Number.EPSILON) * 100) / 100);
+            if (sort !== "price")
+                setSort("price");
             if (personId === newBids[0].personId)
                 showMessage("success", "Congratulations! You are the highest bidder!");
             else
@@ -131,7 +140,7 @@ const ItemPage = ({ match, location }) => {
                 </div>
             ) : null}
             {personId !== null && bids.length !== 0 ? (
-                <BidTable bids={bids} setBids={setBids} />
+                <BidTable active={active} bids={bids} setBids={setBids} sort={sort} setSort={setSort} />
             ) : null}
             {personId === null && product !== null ? (
                 <div style={{ marginTop: 150 }} className="featured-container">

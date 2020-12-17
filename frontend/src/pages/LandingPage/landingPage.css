@@ -1,12 +1,12 @@
 .landing-page-top-container {
     background: var(--secondary-background);
-    min-height: 563px;
     margin-left: -14.3%;
     margin-right: -14.3%;
     padding-left: 14.3%;
     padding-right: 14.3%;
     display: flex;
     margin-top: -40px;
+    padding-bottom: 3px;
 }
 
 .list-group-categories {
@@ -17,6 +17,7 @@
     height: max-content;
     max-height: 99%;
     overflow-y: auto;
+    max-height: 612px;
 }
 
 .list-group-categories>.list-group-item {
@@ -26,7 +27,7 @@
     border-left: none;
     border-right: none;
     border-top: none;
-    height: 51px;
+    min-height: 51px;
 }
 
 .list-group-categories>.categories-list-title {
