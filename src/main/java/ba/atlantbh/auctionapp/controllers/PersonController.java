@@ -38,6 +38,17 @@ public class PersonController {
         return ResponseEntity.ok(new LoginResponse(person, token));
     }
 
+    @PostMapping("/social/login")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = UnauthorizedException.class),
+    })
+    public ResponseEntity<LoginResponse> socialLogin(@RequestBody @Valid SocialLoginRequest socialLoginRequest) {
+        final Person person = personService.socialLogin(socialLoginRequest);
+        final String token = jwtTokenUtil.generateToken(person);
+        return ResponseEntity.ok(new LoginResponse(person, token));
+    }
+
     @PostMapping("/register")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),

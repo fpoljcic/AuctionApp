@@ -41,6 +41,7 @@ public class PersonService {
     private final PasswordEncoder passwordEncoder;
     private final UpdateMapper updateMapper;
     private final StripeService stripeService;
+    private final SocialService socialService;
 
     private String hostUrl;
 
@@ -70,6 +71,36 @@ public class PersonService {
         if (!person.getActive())
             throw new UnauthorizedException("User account is deactivated");
         person.setPassword(null); // No need to return password
+        return person;
+    }
+
+    public Person socialLogin(SocialLoginRequest socialLoginRequest) {
+        if (socialLoginRequest.getType() == null)
+            throw new BadRequestException("Type is required (e.g. Facebook or Google)");
+
+        if (!socialService.validToken(socialLoginRequest.getType(), socialLoginRequest.getId(), socialLoginRequest.getToken()))
+            throw new UnauthorizedException("Invalid token");
+
+        Person person = personRepository.findByEmail(socialLoginRequest.getEmail())
+                .orElse(new Person());
+
+        if (person.getId() == null) {
+            if (socialLoginRequest.getFirstName() == null || socialLoginRequest.getLastName() == null)
+                throw new BadRequestException("New users need to have a first and last name");
+
+            person.setEmail(socialLoginRequest.getEmail());
+            person.setFirstName(socialLoginRequest.getFirstName());
+            person.setLastName(socialLoginRequest.getLastName());
+            String profilePicUrl = socialService.getProfilePicUrl(
+                    socialLoginRequest.getType(),
+                    socialLoginRequest.getId(),
+                    socialLoginRequest.getToken()
+            );
+            person.setPhoto(profilePicUrl);
+            person = personRepository.save(person);
+        }
+
+        person.setPassword(null);
         return person;
     }
 
