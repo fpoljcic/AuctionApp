@@ -98,9 +98,9 @@ public class PersonService {
             );
             person.setPhoto(profilePicUrl);
             person = personRepository.save(person);
-        }
+        } else if (!person.getActive())
+            throw new UnauthorizedException("User account is deactivated");
 
-        person.setPassword(null);
         return person;
     }
 
@@ -120,9 +120,7 @@ public class PersonService {
             stripeService.updateCustomer(person);
         } catch (StripeException ignore) {
         }
-        Person savedPerson = personRepository.save(person);
-        savedPerson.setPassword(null);
-        return savedPerson;
+        return personRepository.save(person);
     }
 
     private void updateCard(CardRequest updatedCard, Person person) {
@@ -273,7 +271,9 @@ public class PersonService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        if (!passwordEncoder.matches(password, person.getPassword()))
+        if (person.getPassword() == null && !person.getEmail().equals(password))
+            throw new UnauthorizedException("Wrong email address");
+        else if (person.getPassword() != null && !passwordEncoder.matches(password, person.getPassword()))
             throw new UnauthorizedException("Wrong password");
         List<Product> notPaidProducts = productRepository.getNotPaidProducts(person.getId().toString());
         for (Product product : notPaidProducts)

@@ -9,4 +9,5 @@ import lombok.Data;
 public class LoginResponse {
     private Person person;
     private String token;
+    private String type;
 }

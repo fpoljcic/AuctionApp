@@ -35,7 +35,7 @@ public class PersonController {
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         final Person person = personService.login(loginRequest);
         final String token = jwtTokenUtil.generateToken(person);
-        return ResponseEntity.ok(new LoginResponse(person, token));
+        return ResponseEntity.ok(new LoginResponse(person, token, null));
     }
 
     @PostMapping("/social/login")
@@ -46,7 +46,9 @@ public class PersonController {
     public ResponseEntity<LoginResponse> socialLogin(@RequestBody @Valid SocialLoginRequest socialLoginRequest) {
         final Person person = personService.socialLogin(socialLoginRequest);
         final String token = jwtTokenUtil.generateToken(person);
-        return ResponseEntity.ok(new LoginResponse(person, token));
+        final String type = person.getPassword() == null ? "social" : null;
+        person.setPassword(null);
+        return ResponseEntity.ok(new LoginResponse(person, token, type));
     }
 
     @PostMapping("/register")
@@ -67,7 +69,9 @@ public class PersonController {
     })
     public ResponseEntity<LoginResponse> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
         Person person = personService.update(updateProfileRequest);
-        return ResponseEntity.ok(new LoginResponse(person, jwtTokenUtil.generateToken(person)));
+        final String type = person.getPassword() == null ? "social" : null;
+        person.setPassword(null);
+        return ResponseEntity.ok(new LoginResponse(person, jwtTokenUtil.generateToken(person), type));
     }
 
     @PostMapping("/forgot_password")
