@@ -1,5 +1,6 @@
 .images-container {
     position: relative;
+    text-align: left;
 }
 
 .product-image-big {

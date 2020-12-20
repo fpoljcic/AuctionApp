@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Image, Modal } from 'react-bootstrap';
 import { AiOutlineFullscreen } from "react-icons/ai";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import ShareButtons from 'components/ShareButtons';
 
 import './productPhotos.css';
 
-const ProductPhotos = ({ photos }) => {
+const ProductPhotos = ({ photos, url, title }) => {
 
     const [activePhoto, setActivePhoto] = useState(0);
     const [showFullscreen, setShowFullscreen] = useState(false);
@@ -78,6 +79,7 @@ const ProductPhotos = ({ photos }) => {
                         />
                     ))}
                 </div> : null}
+            <ShareButtons url={url} title={title} />
         </div>
     );
 }
