@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useUserContext } from 'AppContext';
-import { removeSession } from 'utilities/localStorage';
+import { getUserType, removeSession } from 'utilities/localStorage';
 import { homeUrl } from 'utilities/appUrls';
 import { deactivate } from 'api/auth';
 
@@ -11,6 +11,7 @@ import './modal.css';
 const DeactivateAcc = ({ showModal, setShowModal }) => {
     const { setLoggedIn } = useUserContext();
     const history = useHistory();
+    const userType = getUserType();
 
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -39,7 +40,9 @@ const DeactivateAcc = ({ showModal, setShowModal }) => {
     return (
         <Modal size="lg" centered show={showModal} onHide={() => setShowModal(false)}>
             <div style={{ padding: 40 }}>
-                Please, enter your password below to confirm this action.
+                {userType === null ?
+                    "Please, enter your password below to confirm this action. " :
+                    "Please, enter your associated email address below to confirm this action. "}
                 After deactivating your account,
                 <span style={{ fontWeight: 'bold' }}>
                     {' '}you won't be able to regain access to it anymore.
@@ -48,10 +51,10 @@ const DeactivateAcc = ({ showModal, setShowModal }) => {
                     <Form.Control
                         className="form-control-gray"
                         size="xl-18"
-                        type="password"
+                        type={userType === null ? "password" : "email"}
                         style={{ marginTop: 20 }}
                         value={password}
-                        placeholder="Password"
+                        placeholder={userType === null ? "Password" : "Email address"}
                         maxLength={255}
                         onChange={e => {
                             setError(false);

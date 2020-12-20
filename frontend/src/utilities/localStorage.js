@@ -12,13 +12,13 @@ export const setSession = (user, token) => {
 // set user to local storage
 export const setUser = (user) => {
     localStorage.setItem(userItem, JSON.stringify(user));
-};
+}
 
 // remove token and user from local storage
 export const removeSession = () => {
     localStorage.removeItem(tokenItem);
     localStorage.removeItem(userItem);
-};
+}
 
 // remember email & password info with local storage
 export const setRememberInfo = (email, password) => {
@@ -43,13 +43,21 @@ export const removeRememberInfo = () => {
 export const getUser = () => {
     const user = localStorage.getItem(userItem);
     return user ? JSON.parse(user) : null;
-};
+}
 
 // return user id from local storage
 export const getUserId = () => {
     const user = localStorage.getItem(userItem);
     return user ? JSON.parse(user).id : null;
-};
+}
+
+// return user type (facebook, google, null) from local storage
+export const getUserType = () => {
+    const user = localStorage.getItem(userItem);
+    if (user)
+        return JSON.parse(user).type || null;
+    return null;
+}
 
 // return token from local storage
 export const getToken = () => {

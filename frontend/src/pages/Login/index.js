@@ -23,6 +23,8 @@ const Login = () => {
 
     const [loginError, setLoginError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [fbKeyNumber, setFbKeyNumber] = useState(1);
+    const [goKeyNumber, setGoKeyNumber] = useState(0);
 
     useEffect(() => {
         setBreadcrumb("LOGIN", []);
@@ -62,12 +64,12 @@ const Login = () => {
                 token: response.token.accessToken
             };
             const data = await socialLogin(user);
+            data.person.type = data.type;
             setSession(data.person, data.token);
             setLoading(false);
             history.goBack();
             setLoggedIn(true);
         } catch (e) {
-            setLoginError(true);
             setLoading(false);
         }
     }
@@ -154,9 +156,10 @@ const Login = () => {
                                 provider="facebook"
                                 appId={facebookAppId}
                                 onLoginSuccess={user => handleSocial(user)}
-                                onLoginFailure={() => showMessage("warning", "Error while logging in with Facebook")}
+                                onLoginFailure={() => setFbKeyNumber(fbKeyNumber + 1)}
                                 variant="fb-button"
                                 disabled={loading}
+                                key={fbKeyNumber}
                             >
                                 <SiFacebook style={{ fontSize: 25, margin: '0 5px' }} />
                                 <span style={{ margin: '0 5px' }}>
@@ -167,9 +170,10 @@ const Login = () => {
                                 provider="google"
                                 appId={googleAppId}
                                 onLoginSuccess={user => handleSocial(user)}
-                                onLoginFailure={() => showMessage("warning", "Error while logging in with Google")}
+                                onLoginFailure={() => setGoKeyNumber(goKeyNumber - 1)}
                                 variant="google-button"
                                 disabled={loading}
+                                key={goKeyNumber}
                             >
                                 <SiGmail style={{ fontSize: 25, margin: '0 5px' }} />
                                 <span style={{ margin: '0 5px' }}>
