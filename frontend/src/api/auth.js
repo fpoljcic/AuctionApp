@@ -9,6 +9,10 @@ export const loginUser = async (user) => {
     return (await axios.post(hostUrl + '/auth/login', user)).data;
 };
 
+export const socialLogin = async (user) => {
+    return (await axios.post(hostUrl + '/auth/social/login', user)).data;
+};
+
 export const updateUser = async (user) => {
     return (await axios.put(hostUrl + '/auth/update', user, defaultHeader())).data;
 };
