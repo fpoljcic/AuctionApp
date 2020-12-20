@@ -25,7 +25,7 @@ const ProductPhotos = ({ photos, url, title }) => {
                     break;
                 case 'Right':
                 case 'ArrowRight':
-                    setActivePhoto(activePhoto !== photos.length - 1 ? activePhoto + 1 : activePhoto);
+                    setActivePhoto(photos.length !== 0 && activePhoto !== photos.length - 1 ? activePhoto + 1 : activePhoto);
                     break;
                 default:
                     return;
@@ -46,7 +46,7 @@ const ProductPhotos = ({ photos, url, title }) => {
                     <MdKeyboardArrowLeft onClick={() => setActivePhoto(activePhoto - 1)} className="fullsceen-left-arrow" />
                     : null}
                 <Image onClick={() => setShowFullscreen(false)} width="100%" src={imagePath} />
-                {activePhoto !== photos.length - 1 ?
+                {photos.length !== 0 && activePhoto !== photos.length - 1 ?
                     <MdKeyboardArrowRight onClick={() => setActivePhoto(activePhoto + 1)} className="fullsceen-right-arrow" />
                     : null}
             </Modal>
