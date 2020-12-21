@@ -124,7 +124,7 @@ const ItemPage = ({ match, location }) => {
         <>
             {product !== null ? (
                 <div className="product-container">
-                    <ProductPhotos photos={product.photos} />
+                    <ProductPhotos photos={product.photos} url={window.location.href} title={product.name + " | Auction app"} />
                     <ProductInfo
                         product={product}
                         bid={bid}

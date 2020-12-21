@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Image, Modal } from 'react-bootstrap';
 import { AiOutlineFullscreen } from "react-icons/ai";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import ShareButtons from 'components/ShareButtons';
 
 import './productPhotos.css';
 
-const ProductPhotos = ({ photos }) => {
+const ProductPhotos = ({ photos, url, title }) => {
 
     const [activePhoto, setActivePhoto] = useState(0);
     const [showFullscreen, setShowFullscreen] = useState(false);
@@ -24,7 +25,7 @@ const ProductPhotos = ({ photos }) => {
                     break;
                 case 'Right':
                 case 'ArrowRight':
-                    setActivePhoto(activePhoto !== photos.length - 1 ? activePhoto + 1 : activePhoto);
+                    setActivePhoto(photos.length !== 0 && activePhoto !== photos.length - 1 ? activePhoto + 1 : activePhoto);
                     break;
                 default:
                     return;
@@ -45,7 +46,7 @@ const ProductPhotos = ({ photos }) => {
                     <MdKeyboardArrowLeft onClick={() => setActivePhoto(activePhoto - 1)} className="fullsceen-left-arrow" />
                     : null}
                 <Image onClick={() => setShowFullscreen(false)} width="100%" src={imagePath} />
-                {activePhoto !== photos.length - 1 ?
+                {photos.length !== 0 && activePhoto !== photos.length - 1 ?
                     <MdKeyboardArrowRight onClick={() => setActivePhoto(activePhoto + 1)} className="fullsceen-right-arrow" />
                     : null}
             </Modal>
@@ -78,6 +79,7 @@ const ProductPhotos = ({ photos }) => {
                         />
                     ))}
                 </div> : null}
+            <ShareButtons url={url} title={title} />
         </div>
     );
 }

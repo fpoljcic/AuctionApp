@@ -31,6 +31,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-scroll-up": "^1.3.7",
+    "react-share": "^4.3.1",
     "react-social-login": "^3.4.10",
     "sockjs-client": "^1.5.0",
     "stompjs": "^2.3.3",
