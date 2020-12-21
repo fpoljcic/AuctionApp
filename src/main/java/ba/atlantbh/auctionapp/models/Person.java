@@ -45,9 +45,6 @@ public class Person {
     @Column(nullable = false, unique = true)
     @Size(max = 100)
     private String email;
-
-    @NotBlank
-    @Column(nullable = false)
     private String password;
 
     private String photo = "https://i.imgur.com/O0O16un.gif";

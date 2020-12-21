@@ -258,6 +258,8 @@ h3 {
 
 .form-row {
   justify-content: space-between;
+  margin-left: unset;
+  margin-right: unset;
 }
 
 .input-group-text {

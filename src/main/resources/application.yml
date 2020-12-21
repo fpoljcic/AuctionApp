@@ -21,6 +21,7 @@ app:
   hostUrl: ${HOST_URL}
   stripeApiKey: ${STRIPE_API_KEY}
   scheduleRate: ${SCHEDULE_RATE}
+  googleAppKey: ${GOOGLE_APP_KEY}
 server:
   error:
     include-message: always

@@ -30,7 +30,7 @@
 }
 
 .btn-fb-button:hover, .btn-google-button:hover {
-    color: var(--light-silver);
+    color: var(--white);
 }
 
 .btn-fb-button {

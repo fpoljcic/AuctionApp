@@ -41,6 +41,7 @@ public class PersonService {
     private final PasswordEncoder passwordEncoder;
     private final UpdateMapper updateMapper;
     private final StripeService stripeService;
+    private final SocialService socialService;
 
     private String hostUrl;
 
@@ -73,6 +74,36 @@ public class PersonService {
         return person;
     }
 
+    public Person socialLogin(SocialLoginRequest socialLoginRequest) {
+        if (socialLoginRequest.getType() == null)
+            throw new BadRequestException("Type is required (e.g. Facebook or Google)");
+
+        if (!socialService.validToken(socialLoginRequest.getType(), socialLoginRequest.getId(), socialLoginRequest.getToken()))
+            throw new UnauthorizedException("Invalid token");
+
+        Person person = personRepository.findByEmail(socialLoginRequest.getEmail())
+                .orElse(new Person());
+
+        if (person.getId() == null) {
+            if (socialLoginRequest.getFirstName() == null || socialLoginRequest.getLastName() == null)
+                throw new BadRequestException("New users need to have a first and last name");
+
+            person.setEmail(socialLoginRequest.getEmail());
+            person.setFirstName(socialLoginRequest.getFirstName());
+            person.setLastName(socialLoginRequest.getLastName());
+            String profilePicUrl = socialService.getProfilePicUrl(
+                    socialLoginRequest.getType(),
+                    socialLoginRequest.getId(),
+                    socialLoginRequest.getToken()
+            );
+            person.setPhoto(profilePicUrl);
+            person = personRepository.save(person);
+        } else if (!person.getActive())
+            throw new UnauthorizedException("User account is deactivated");
+
+        return person;
+    }
+
     public Person update(UpdateProfileRequest updateProfileRequest) {
         if (updateProfileRequest.getDateOfBirth().isAfter(LocalDateTime.now()))
             throw new BadRequestException("Date of birth can't be after current date");
@@ -89,9 +120,7 @@ public class PersonService {
             stripeService.updateCustomer(person);
         } catch (StripeException ignore) {
         }
-        Person savedPerson = personRepository.save(person);
-        savedPerson.setPassword(null);
-        return savedPerson;
+        return personRepository.save(person);
     }
 
     private void updateCard(CardRequest updatedCard, Person person) {
@@ -242,7 +271,9 @@ public class PersonService {
         UUID personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        if (!passwordEncoder.matches(password, person.getPassword()))
+        if (person.getPassword() == null && !person.getEmail().equals(password))
+            throw new UnauthorizedException("Wrong email address");
+        else if (person.getPassword() != null && !passwordEncoder.matches(password, person.getPassword()))
             throw new UnauthorizedException("Wrong password");
         List<Product> notPaidProducts = productRepository.getNotPaidProducts(person.getId().toString());
         for (Product product : notPaidProducts)
